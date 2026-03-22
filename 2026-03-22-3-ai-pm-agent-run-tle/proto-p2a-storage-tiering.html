@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctolib — TLE: Storage Tiering (P2A)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ─── Reset ─── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ─── Design Tokens ─── */
+  :root {
+    /* Primary palette — extracted from real Doctolib product */
+    --dtl-navy:        #1B2A4A;
+    --dtl-navy-light:  #243557;
+    --dtl-navy-hover:  #2D4068;
+    --dtl-navy-active: #1A3A6A;
+    --dtl-blue:        #0596DE;
+    --dtl-blue-dark:   #0080C5;
+    --dtl-blue-light:  #E8F4FD;
+    --dtl-green:       #00C48C;
+    --dtl-success-bg:  #E8F5E9;
+    --dtl-success-border: #4CAF50;
+    --dtl-success-text: #2E7D32;
+    --dtl-progress:    #0596DE;
+
+    /* Avatar colors */
+    --dtl-avatar-tan:  #B8907C;
+    --dtl-avatar-purple: #9370DB;
+
+    /* Neutrals */
+    --dtl-white:       #FFFFFF;
+    --dtl-gray-50:     #F7F8FA;
+    --dtl-gray-100:    #F0F2F5;
+    --dtl-gray-200:    #E4E7EB;
+    --dtl-gray-300:    #CDD1D8;
+    --dtl-gray-400:    #9BA3AE;
+    --dtl-gray-500:    #6B7280;
+    --dtl-gray-600:    #4B5563;
+    --dtl-gray-700:    #374151;
+    --dtl-gray-800:    #1F2937;
+
+    /* Spacing */
+    --sidebar-width:   76px;
+    --header-height:   52px;
+    --sub-sidebar-width: 230px;
+
+    /* Typography */
+    --font-family:     'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-xs:         11px;
+    --font-sm:         13px;
+    --font-base:       14px;
+    --font-md:         15px;
+    --font-lg:         18px;
+    --font-xl:         22px;
+
+    /* Elevation */
+    --shadow-sm:       0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md:       0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-lg:       0 4px 12px rgba(0,0,0,0.1);
+
+    /* Borders */
+    --radius-sm:       4px;
+    --radius-md:       8px;
+    --radius-lg:       12px;
+    --radius-full:     9999px;
+    --border-color:    var(--dtl-gray-200);
+  }
+
+  body {
+    font-family: var(--font-family);
+    font-size: var(--font-base);
+    color: var(--dtl-gray-800);
+    background: var(--dtl-gray-50);
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  a {
+    color: var(--dtl-blue);
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* ═══════════ MAIN SIDEBAR (dark navy icon rail) ═══════════ */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    background: var(--dtl-navy);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    z-index: 110;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .sidebar-logo {
+    width: 100%;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .sidebar-logo-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 2px 0;
+    gap: 0;
+    flex: 1;
+  }
+
+  .sidebar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    padding: 7px 4px 5px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-decoration: none;
+    color: rgba(255,255,255,0.65);
+    position: relative;
+    transition: background 0.15s, color 0.15s;
+    margin: 1px 0;
+  }
+  .sidebar-item:hover {
+    background: var(--dtl-navy-hover);
+    color: rgba(255,255,255,0.9);
+  }
+  .sidebar-item.active {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+  .sidebar-item svg {
+    margin-bottom: 2px;
+    flex-shrink: 0;
+  }
+  .sidebar-item span {
+    font-size: 9.5px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .sidebar-badge {
+    position: absolute;
+    top: 1px;
+    right: 0px;
+    min-width: 18px;
+    height: 18px;
+    background: var(--dtl-blue);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    border: 2px solid var(--dtl-navy);
+  }
+
+  .sidebar-spacer { flex: 1; }
+
+  .sidebar-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 16px;
+  }
+
+  .sidebar-avatar-bottom {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+  }
+
+  /* ═══════════ HEADER BAR (dark navy, flush with sidebar) ═══════════ */
+  .header {
+    position: fixed;
+    top: 0;
+    left: var(--sidebar-width);
+    right: 0;
+    height: var(--header-height);
+    background: var(--dtl-navy);
+    border-bottom: none;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    z-index: 100;
+    gap: 8px;
+  }
+
+  .header-search {
+    flex: 0 1 520px;
+    height: 36px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    gap: 8px;
+    color: rgba(255,255,255,0.45);
+    font-size: var(--font-sm);
+    cursor: text;
+  }
+  .header-search svg { flex-shrink: 0; stroke: rgba(255,255,255,0.45); }
+
+  .header-shortcut {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    margin-left: auto;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: auto;
+  }
+
+  .header-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: var(--radius-full);
+    font-size: var(--font-sm);
+    color: rgba(255,255,255,0.85);
+    background: transparent;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .header-chip:hover { background: rgba(255,255,255,0.08); }
+  .header-chip svg { stroke: rgba(255,255,255,0.7); }
+
+  .header-icon-btn {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+  }
+  .header-icon-btn:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9); }
+
+  .header-separator {
+    width: 1px;
+    height: 24px;
+    background: rgba(255,255,255,0.15);
+    margin: 0 4px;
+    flex-shrink: 0;
+  }
+
+  .header-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.25);
+    cursor: pointer;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .header-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .header-locale {
+    font-size: var(--font-sm);
+    color: rgba(255,255,255,0.5);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  /* ═══════════ SUB-SIDEBAR (Connect section nav) ═══════════ */
+  .sub-sidebar {
+    position: fixed;
+    top: var(--header-height);
+    left: var(--sidebar-width);
+    bottom: 0;
+    width: var(--sub-sidebar-width);
+    background: var(--dtl-white);
+    border-right: 1px solid var(--dtl-gray-200);
+    padding: 20px 0;
+    z-index: 80;
+  }
+
+  .sub-sidebar-title {
+    font-size: var(--font-lg);
+    font-weight: 700;
+    color: var(--dtl-gray-800);
+    padding: 0 20px;
+    margin-bottom: 14px;
+  }
+
+  .sub-sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    font-size: var(--font-base);
+    color: var(--dtl-gray-600);
+    cursor: pointer;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+  .sub-sidebar-item:hover {
+    background: var(--dtl-gray-50);
+    color: var(--dtl-gray-800);
+  }
+  .sub-sidebar-item.active {
+    background: var(--dtl-blue-light);
+    color: var(--dtl-blue);
+    border-left-color: var(--dtl-blue);
+    font-weight: 600;
+  }
+
+  .sub-sidebar-tag {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--dtl-blue);
+    background: var(--dtl-blue-light);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    margin-left: auto;
+  }
+
+  /* ═══════════ CONTENT AREA ═══════════ */
+  .content {
+    position: fixed;
+    top: var(--header-height);
+    left: calc(var(--sidebar-width) + var(--sub-sidebar-width));
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    background: var(--dtl-gray-50);
+    z-index: 50;
+  }
+
+  .content.discussions-mode {
+    display: flex;
+    flex-direction: row;
+    background: var(--dtl-white);
+    overflow: hidden;
+  }
+
+  .content-inner {
+    padding: 24px 32px;
+    max-width: 1200px;
+  }
+
+  .content-section-label {
+    font-size: var(--font-lg);
+    font-weight: 700;
+    color: var(--dtl-navy);
+    margin-bottom: 16px;
+  }
+
+  /* ─── REUSABLE COMPONENTS ─── */
+  .hero-banner {
+    background: var(--dtl-white);
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .hero-banner h1 {
+    font-size: var(--font-xl);
+    font-weight: 700;
+    color: var(--dtl-gray-800);
+    margin-bottom: 6px;
+  }
+
+  .hero-banner .count {
+    font-weight: 700;
+    color: var(--dtl-gray-800);
+  }
+
+  .hero-banner p {
+    color: var(--dtl-gray-500);
+    font-size: var(--font-base);
+    line-height: 1.5;
+  }
+
+  .progress-bar {
+    width: 120px;
+    height: 4px;
+    background: var(--dtl-gray-200);
+    border-radius: 2px;
+    margin-top: 10px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--dtl-progress);
+    border-radius: 2px;
+  }
+
+  /* ─── STORAGE TIERING SPECIFIC STYLES ─── */
+  .storage-layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 24px;
+  }
+
+  .conversation-thread {
+    background: var(--dtl-white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+  }
+
+  .thread-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--dtl-gray-50);
+  }
+
+  .thread-title {
+    font-size: var(--font-base);
+    font-weight: 600;
+    color: var(--dtl-gray-800);
+  }
+
+  .thread-subtitle {
+    font-size: var(--font-sm);
+    color: var(--dtl-gray-500);
+    margin-top: 2px;
+  }
+
+  .messages-container {
+    padding: 16px 20px;
+    max-height: 500px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .message-with-tier {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background: var(--dtl-gray-50);
+    border-radius: var(--radius-md);
+  }
+
+  .message-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+  }
+
+  .message-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .message-sender {
+    font-size: var(--font-sm);
+    font-weight: 600;
+    color: var(--dtl-gray-800);
+  }
+
+  .message-time {
+    font-size: var(--font-xs);
+    color: var(--dtl-gray-400);
+    margin-left: 6px;
+  }
+
+  .message-text {
+    font-size: var(--font-sm);
+    color: var(--dtl-gray-700);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  .tier-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    margin-top: 8px;
+    margin-right: 6px;
+  }
+
+  .tier-hot {
+    background: #DCFCE7;
+    color: #166534;
+  }
+
+  .tier-warm {
+    background: #FEF3C7;
+    color: #92400E;
+  }
+
+  .tier-cold {
+    background: #F3F4F6;
+    color: #4B5563;
+  }
+
+  .load-older-btn {
+    display: block;
+    margin: 16px auto;
+    padding: 10px 24px;
+    background: var(--dtl-blue);
+    color: white;
+    border: none;
+    border-radius: var(--radius-full);
+    font-size: var(--font-sm);
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font-family);
+  }
+  .load-older-btn:hover {
+    background: var(--dtl-blue-dark);
+  }
+
+  /* ─── STORAGE STATS SIDEBAR ─── */
+  .storage-stats-panel {
+    background: var(--dtl-white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    position: sticky;
+    top: 24px;
+  }
+
+  .stats-title {
+    font-size: var(--font-base);
+    font-weight: 700;
+    color: var(--dtl-gray-800);
+    margin-bottom: 16px;
+  }
+
+  .stat-item {
+    margin-bottom: 20px;
+  }
+  .stat-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .stat-label {
+    font-size: var(--font-sm);
+    font-weight: 600;
+    color: var(--dtl-gray-700);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+
+  .stat-value {
+    font-size: 12px;
+    color: var(--dtl-gray-600);
+  }
+
+  .stat-gauge {
+    width: 100%;
+    height: 8px;
+    background: var(--dtl-gray-200);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+
+  .stat-gauge-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width 0.3s ease;
+  }
+
+  .gauge-hot {
+    background: #22C55E;
+  }
+
+  .gauge-warm {
+    background: #FBBF24;
+  }
+
+  .gauge-cold {
+    background: #9CA3AE;
+  }
+
+  .stat-capacity {
+    font-size: 12px;
+    color: var(--dtl-gray-500);
+    margin-top: 6px;
+  }
+
+  .total-storage {
+    border-top: 1px solid var(--dtl-gray-200);
+    padding-top: 16px;
+    margin-top: 16px;
+  }
+
+  .total-label {
+    font-size: var(--font-sm);
+    font-weight: 600;
+    color: var(--dtl-gray-700);
+    margin-bottom: 4px;
+  }
+
+  .total-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--dtl-navy);
+  }
+</style>
+</head>
+
+<body>
+
+<!-- ═══════════ MAIN SIDEBAR (dark navy icon rail) ═══════════ -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon">
+      <svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="18" stroke="white" stroke-width="2.5" fill="none"/>
+        <path d="M14 20h12M20 14v12" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="sidebar-nav">
+    <a class="sidebar-item" href="#" title="Home">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </a>
+    <a class="sidebar-item" href="#" title="Messages">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>Messages</span>
+    </a>
+    <a class="sidebar-item" href="#" title="Patients">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Patients</span>
+    </a>
+  </div>
+
+  <div class="sidebar-spacer"></div>
+
+  <div class="sidebar-bottom">
+    <div class="sidebar-avatar-bottom" style="background: #9370DB;">JD</div>
+    <div class="sidebar-avatar-bottom" style="background: #B8907C;">MP</div>
+  </div>
+
+</nav>
+
+<!-- ═══════════ HEADER BAR (dark navy, flush with sidebar) ═══════════ -->
+<header class="header">
+  <div class="header-search">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <span>Search for a patient</span>
+    <div class="header-shortcut">&#8984;+K</div>
+  </div>
+
+  <div class="header-actions">
+    <div class="header-chip">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Insurance card
+    </div>
+    <button type="button" class="header-icon-btn" title="Video">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+    </button>
+
+    <div class="header-separator"></div>
+
+    <button type="button" class="header-icon-btn" title="Dictation">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+    </button>
+
+    <div class="header-chip">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Help and contact
+    </div>
+
+    <button type="button" class="header-icon-btn" title="Visibility">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    </button>
+    <button type="button" class="header-icon-btn" title="Notifications">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    </button>
+    <button type="button" class="header-icon-btn" title="Team">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    </button>
+    <button type="button" class="header-icon-btn" title="Lock">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </button>
+    <button type="button" class="header-icon-btn" title="Settings">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+    <div class="header-avatar"><img src="https://i.pravatar.cc/64?img=68" alt="User"></div>
+    <span class="header-locale">Locales</span>
+  </div>
+</header>
+
+<!-- ═══════════ SUB-SIDEBAR (Connect section) ═══════════ -->
+<aside class="sub-sidebar">
+  <div class="sub-sidebar-title">Connect</div>
+
+  <a class="sub-sidebar-item" href="discussions.html">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    Discussions
+  </a>
+
+  <a class="sub-sidebar-item active" href="tle-flow.html">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="9" y1="6" x2="9" y2="6.01"/><line x1="15" y1="6" x2="15" y2="6.01"/><line x1="9" y1="10" x2="9" y2="10.01"/><line x1="15" y1="10" x2="15" y2="10.01"/><line x1="9" y1="14" x2="9" y2="14.01"/><line x1="15" y1="14" x2="15" y2="14.01"/><path d="M10 22v-4h4v4"/></svg>
+    Tele-expertise
+    <span class="sub-sidebar-tag">New</span>
+  </a>
+</aside>
+
+<!-- ═══════════ CONTENT AREA ═══════════ -->
+<main class="content">
+  <div class="content-inner">
+    <div class="content-section-label">Tele-expertise — Message Storage</div>
+
+    <div class="hero-banner">
+      <h1>Smart Message Storage</h1>
+      <p>Automatic tiering keeps your conversations fast and your storage efficient.</p>
+    </div>
+
+    <div class="storage-layout">
+      <!-- Main conversation thread -->
+      <div>
+        <div class="conversation-thread">
+          <div class="thread-header">
+            <div class="thread-title">Consultation: Patient #42891</div>
+            <div class="thread-subtitle">Dr. Marie Dupont & Dr. Jean Martin</div>
+          </div>
+
+          <div class="messages-container">
+            <!-- Hot tier messages -->
+            <div class="message-with-tier">
+              <div class="message-avatar" style="background: #0596DE;">MD</div>
+              <div class="message-content">
+                <div class="message-sender">Dr. Marie Dupont <span class="message-time">Now</span></div>
+                <div class="message-text">Patient presented with elevated blood pressure. Recommend checking thyroid function.</div>
+                <span class="tier-badge tier-hot">🔥 Hot (Recent)</span>
+              </div>
+            </div>
+
+            <div class="message-with-tier">
+              <div class="message-avatar" style="background: #9370DB;">JM</div>
+              <div class="message-content">
+                <div class="message-sender">Dr. Jean Martin <span class="message-time">2 min ago</span></div>
+                <div class="message-text">Good catch. I'll order TSH and free T4 tests. Will follow up with patient tomorrow.</div>
+                <span class="tier-badge tier-hot">🔥 Hot (Recent)</span>
+              </div>
+            </div>
+
+            <!-- Warm tier messages -->
+            <div class="message-with-tier">
+              <div class="message-avatar" style="background: #0596DE;">MD</div>
+              <div class="message-content">
+                <div class="message-sender">Dr. Marie Dupont <span class="message-time">45 days ago</span></div>
+                <div class="message-text">Initial consultation completed. Patient history reviewed. Baseline labs ordered.</div>
+                <span class="tier-badge tier-warm">⏱️ Warm (30-90d)</span>
+              </div>
+            </div>
+
+            <div class="message-with-tier">
+              <div class="message-avatar" style="background: #9370DB;">JM</div>
+              <div class="message-content">
+                <div class="message-sender">Dr. Jean Martin <span class="message-time">44 days ago</span></div>
+                <div class="message-text">Lab results show normal values. Continue current medication regimen.</div>
+                <span class="tier-badge tier-warm">⏱️ Warm (30-90d)</span>
+              </div>
+            </div>
+
+            <button class="load-older-btn" onclick="loadColdTier()">Load older messages</button>
+
+            <!-- Cold tier messages (hidden initially) -->
+            <div id="coldMessages" style="display:none;">
+              <div class="message-with-tier">
+                <div class="message-avatar" style="background: #0596DE;">MD</div>
+                <div class="message-content">
+                  <div class="message-sender">Dr. Marie Dupont <span class="message-time">120 days ago</span></div>
+                  <div class="message-text">Initial intake questionnaire sent to patient. Awaiting responses.</div>
+                  <span class="tier-badge tier-cold">❄️ Cold (90+ days)</span>
+                </div>
+              </div>
+
+              <div class="message-with-tier">
+                <div class="message-avatar" style="background: #9370DB;">JM</div>
+                <div class="message-content">
+                  <div class="message-sender">Dr. Jean Martin <span class="message-time">119 days ago</span></div>
+                  <div class="message-text">Case assignment confirmed. Will review patient file before consultation.</div>
+                  <span class="tier-badge tier-cold">❄️ Cold (90+ days)</span>
+                </div>
+              </div>
+
+              <div class="message-with-tier">
+                <div class="message-avatar" style="background: #0596DE;">MD</div>
+                <div class="message-content">
+                  <div class="message-sender">Dr. Marie Dupont <span class="message-time">125 days ago</span></div>
+                  <div class="message-text">Case discussion request created. Seeking specialist opinion on persistent symptoms.</div>
+                  <span class="tier-badge tier-cold">❄️ Cold (90+ days)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Storage stats sidebar -->
+      <div class="storage-stats-panel">
+        <div class="stats-title">Storage Allocation</div>
+
+        <div class="stat-item">
+          <div class="stat-label">
+            <span>🔥 Hot Storage</span>
+            <span class="stat-value">12 GB / 50 GB</span>
+          </div>
+          <div class="stat-gauge">
+            <div class="stat-gauge-fill gauge-hot" style="width: 24%;"></div>
+          </div>
+          <div class="stat-capacity">24% used • Fast access</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-label">
+            <span>⏱️ Warm Storage</span>
+            <span class="stat-value">45 GB / 150 GB</span>
+          </div>
+          <div class="stat-gauge">
+            <div class="stat-gauge-fill gauge-warm" style="width: 30%;"></div>
+          </div>
+          <div class="stat-capacity">30% used • Standard access</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-label">
+            <span>❄️ Cold Storage</span>
+            <span class="stat-value">230 GB / 500 GB</span>
+          </div>
+          <div class="stat-gauge">
+            <div class="stat-gauge-fill gauge-cold" style="width: 46%;"></div>
+          </div>
+          <div class="stat-capacity">46% used • Archived</div>
+        </div>
+
+        <div class="stat-item total-storage">
+          <div class="total-label">Total Used</div>
+          <div class="total-value">287 GB</div>
+          <div class="stat-capacity" style="margin-top: 6px;">of 700 GB capacity (41%)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1B2A4A;border-radius:24px;padding:12px 24px;box-shadow:0 4px 12px rgba(0,0,0,0.15);display:flex;gap:16px;align-items:center;z-index:9999;font-family:'Open Sans',sans-serif;font-size:14px;font-weight:500;">
+  <div style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.6);"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#F59E0B;"></span>P2</div>
+  <a href="index.html" style="color:white;text-decoration:none;padding:6px 12px;border-radius:6px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">← Home</a>
+  <div style="display:flex;gap:8px;">
+    <a href="proto-p2a-storage-tiering.html" style="padding:6px 12px;border-radius:6px;text-decoration:none;color:#5BC0F0;background:rgba(5,150,222,0.3);">A</a>
+    <a href="proto-p2b-monitoring-dashboard.html" style="padding:6px 12px;border-radius:6px;text-decoration:none;color:rgba(255,255,255,0.6);background:transparent;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">B</a>
+    <a href="proto-p2c-query-optimization.html" style="padding:6px 12px;border-radius:6px;text-decoration:none;color:rgba(255,255,255,0.6);background:transparent;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">C</a>
+  </div>
+</div>
+
+<script>
+function loadColdTier() {
+  const coldMessages = document.getElementById('coldMessages');
+  const btn = event.target;
+
+  if (coldMessages.style.display === 'none') {
+    btn.style.opacity = '0.5';
+    btn.disabled = true;
+    setTimeout(() => {
+      coldMessages.style.display = 'block';
+      btn.remove();
+    }, 800);
+  }
+}
+</script>
+
+</body>
+</html>

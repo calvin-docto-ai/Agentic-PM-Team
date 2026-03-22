@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctolib — Connect / Discussions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ─── Reset ─── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ─── Design Tokens ─── */
+  :root {
+    --dtl-navy:        #1B2A4A;
+    --dtl-navy-light:  #243557;
+    --dtl-navy-hover:  #2D4068;
+    --dtl-navy-active: #1A3A6A;
+    --dtl-blue:        #0596DE;
+    --dtl-blue-dark:   #0080C5;
+    --dtl-blue-light:  #E8F4FD;
+    --dtl-green:       #00C48C;
+    --dtl-green-bar:   #2ECC71;
+    --dtl-progress:    #0596DE;
+
+    --dtl-white:       #FFFFFF;
+    --dtl-gray-50:     #F7F8FA;
+    --dtl-gray-100:    #F0F2F5;
+    --dtl-gray-200:    #E4E7EB;
+    --dtl-gray-300:    #CDD1D8;
+    --dtl-gray-400:    #9BA3AE;
+    --dtl-gray-500:    #6B7280;
+    --dtl-gray-600:    #4B5563;
+    --dtl-gray-700:    #374151;
+    --dtl-gray-800:    #1F2937;
+
+    --sidebar-width:   76px;
+    --header-height:   52px;
+    --sub-sidebar-width: 230px;
+
+    --font-family:     'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-xs:         11px;
+    --font-sm:         13px;
+    --font-base:       14px;
+    --font-md:         15px;
+    --font-lg:         18px;
+    --font-xl:         22px;
+
+    --shadow-sm:       0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md:       0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-lg:       0 4px 12px rgba(0,0,0,0.1);
+
+    --radius-sm:       4px;
+    --radius-md:       8px;
+    --radius-lg:       12px;
+    --radius-full:     9999px;
+    --border-color:    var(--dtl-gray-200);
+  }
+
+  body {
+    font-family: var(--font-family);
+    font-size: var(--font-base);
+    color: var(--dtl-gray-800);
+    background: var(--dtl-gray-50);
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ═══════════ MAIN SIDEBAR (dark navy icon rail) ═══════════ */
+  .sidebar {
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: var(--sidebar-width);
+    background: var(--dtl-navy);
+    display: flex; flex-direction: column; align-items: center;
+    padding: 0; z-index: 110;
+    overflow-y: auto; overflow-x: hidden;
+  }
+
+  .sidebar-logo {
+    width: 100%; height: 52px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    text-decoration: none; cursor: pointer;
+  }
+  .sidebar-logo-icon {
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .sidebar-nav {
+    display: flex; flex-direction: column; align-items: center;
+    width: 100%; padding: 2px 0; gap: 0; flex: 1;
+  }
+
+  .sidebar-item {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 68px; padding: 7px 4px 5px; border-radius: var(--radius-md);
+    cursor: pointer; text-decoration: none;
+    color: rgba(255,255,255,0.65); position: relative;
+    transition: background 0.15s, color 0.15s; margin: 1px 0;
+  }
+  .sidebar-item:hover { background: var(--dtl-navy-hover); color: rgba(255,255,255,0.9); }
+  .sidebar-item.active { background: rgba(255,255,255,0.1); color: #fff; }
+  .sidebar-item svg { margin-bottom: 2px; flex-shrink: 0; }
+  .sidebar-item span { font-size: 9.5px; font-weight: 500; line-height: 1.2; text-align: center; white-space: normal; }
+
+  .sidebar-badge {
+    position: absolute; top: 1px; right: 0px;
+    min-width: 18px; height: 18px; background: var(--dtl-blue); color: white;
+    font-size: 9px; font-weight: 700; border-radius: var(--radius-full);
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 4px; border: 2px solid var(--dtl-navy);
+  }
+
+  .sidebar-spacer { flex: 1; }
+
+  .sidebar-bottom {
+    display: flex; flex-direction: column; align-items: center; gap: 8px; padding-bottom: 16px;
+  }
+
+  .sidebar-avatar-bottom {
+    width: 34px; height: 34px; border-radius: 50%; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: white;
+  }
+
+  /* ═══════════ HEADER BAR (dark navy) ═══════════ */
+  .header {
+    position: fixed; top: 0; left: var(--sidebar-width); right: 0;
+    height: var(--header-height); background: var(--dtl-navy);
+    border-bottom: none; display: flex; align-items: center;
+    padding: 0 16px; z-index: 100; gap: 8px;
+  }
+
+  .header-search {
+    flex: 0 1 520px; height: 36px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius-full); display: flex; align-items: center;
+    padding: 0 14px; gap: 8px; color: rgba(255,255,255,0.45); font-size: var(--font-sm); cursor: text;
+  }
+  .header-search svg { flex-shrink: 0; stroke: rgba(255,255,255,0.45); }
+
+  .header-shortcut {
+    display: inline-flex; align-items: center; gap: 2px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 4px; padding: 1px 5px; font-size: 10px;
+    color: rgba(255,255,255,0.4); margin-left: auto;
+  }
+
+  .header-actions { display: flex; align-items: center; gap: 2px; margin-left: auto; }
+
+  .header-chip {
+    display: flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px;
+    border: 1px solid rgba(255,255,255,0.18); border-radius: var(--radius-full);
+    font-size: var(--font-sm); color: rgba(255,255,255,0.85);
+    background: transparent; cursor: pointer; white-space: normal;
+  }
+  .header-chip:hover { background: rgba(255,255,255,0.08); }
+  .header-chip svg { stroke: rgba(255,255,255,0.7); }
+
+  .header-icon-btn {
+    width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+    border-radius: var(--radius-full); border: none; background: transparent;
+    color: rgba(255,255,255,0.6); cursor: pointer;
+  }
+  .header-icon-btn:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9); }
+
+  .header-separator { width: 1px; height: 24px; background: rgba(255,255,255,0.15); margin: 0 4px; flex-shrink: 0; }
+
+  .header-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.25);
+    cursor: pointer; flex-shrink: 0;
+  }
+
+  .header-locale { font-size: var(--font-sm); color: rgba(255,255,255,0.5); white-space: normal; cursor: pointer; }
+
+  /* ═══════════ SUB-SIDEBAR (Connect section nav) ═══════════ */
+  .sub-sidebar {
+    position: fixed; top: var(--header-height); left: var(--sidebar-width); bottom: 0;
+    width: var(--sub-sidebar-width); background: var(--dtl-white);
+    border-right: 1px solid var(--dtl-gray-200); padding: 20px 0; z-index: 80;
+  }
+
+  .sub-sidebar-title { font-size: 16px; font-weight: 700; color: var(--dtl-gray-800); padding: 0 20px; margin-bottom: 14px; }
+
+  .sub-sidebar-item {
+    display: flex; align-items: center; gap: 10px; padding: 9px 20px;
+    font-size: var(--font-base); color: var(--dtl-gray-600);
+    cursor: pointer; text-decoration: none;
+    border-left: 3px solid transparent; transition: all 0.15s;
+  }
+  .sub-sidebar-item:hover { background: var(--dtl-gray-50); color: var(--dtl-gray-800); }
+  .sub-sidebar-item.active { background: var(--dtl-blue-light); color: var(--dtl-blue); border-left-color: var(--dtl-blue); font-weight: 600; }
+
+  .sub-sidebar-tag {
+    font-size: 10px; font-weight: 600; color: var(--dtl-blue);
+    background: var(--dtl-blue-light); padding: 2px 6px;
+    border-radius: var(--radius-sm); margin-left: auto;
+  }
+
+  /* ═══════════ CONTENT AREA — TWO-PANEL DISCUSSIONS ═══════════ */
+  .content {
+    position: fixed; top: var(--header-height);
+    left: calc(var(--sidebar-width) + var(--sub-sidebar-width));
+    right: 0; bottom: 0; background: var(--dtl-white);
+    display: flex; flex-direction: row; z-index: 50;
+  }
+
+  /* ─── LEFT PANEL: CONVERSATION LIST ─── */
+  .conversation-list {
+    width: 340px; background: var(--dtl-white);
+    border-right: 1px solid var(--dtl-gray-200);
+    display: flex; flex-direction: column; position: relative;
+  }
+
+  .conversation-header { padding: 16px 16px 0; border-bottom: none; }
+
+  .conversation-title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+
+  .conversation-title { font-size: 18px; font-weight: 700; color: var(--dtl-gray-800); }
+
+  .conversation-badge {
+    background: var(--dtl-blue); color: white;
+    font-size: 11px; font-weight: 700; padding: 2px 8px;
+    border-radius: var(--radius-full);
+  }
+
+  .conversation-menu-btn {
+    margin-left: auto; background: none; border: none;
+    color: var(--dtl-gray-400); cursor: pointer; padding: 4px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .conversation-search-container { padding: 0 16px 14px; }
+
+  /* FIX #4: Search input with search icon, pill-shaped */
+  .conversation-search-wrap {
+    display: flex; align-items: center; gap: 8px;
+    width: 100%; padding: 8px 14px;
+    border: 1px solid var(--dtl-gray-200);
+    border-radius: var(--radius-full);
+    background: var(--dtl-gray-50);
+  }
+  .conversation-search-wrap svg { flex-shrink: 0; stroke: var(--dtl-gray-400); }
+  .conversation-search-wrap input {
+    flex: 1; border: none; background: transparent;
+    font-family: var(--font-family); font-size: 13px;
+    color: var(--dtl-gray-600); outline: none;
+  }
+  .conversation-search-wrap input::placeholder { color: var(--dtl-gray-400); }
+
+  .filter-tabs {
+    display: flex; gap: 8px; padding: 12px 16px;
+    border-bottom: 1px solid var(--dtl-gray-200);
+  }
+
+  /* FIX #12: Inactive filter tabs have border */
+  .filter-tab {
+    padding: 6px 14px; border-radius: var(--radius-full);
+    border: 1px solid var(--dtl-gray-200);
+    background: var(--dtl-white); color: var(--dtl-gray-600);
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    transition: all 0.15s; white-space: normal;
+    font-family: var(--font-family);
+  }
+  .filter-tab:hover { background: var(--dtl-gray-50); color: var(--dtl-gray-800); }
+  .filter-tab.active { background: var(--dtl-blue); color: white; border-color: var(--dtl-blue); }
+
+  .conversations-scroll { flex: 1; overflow-y: auto; padding: 0; }
+
+  /* FIX #11: Conversation item dividers use gray-200 */
+  .conversation-item {
+    display: flex; align-items: center; padding: 12px 12px;
+    border-bottom: 1px solid var(--dtl-gray-200);
+    cursor: pointer; transition: background 0.15s;
+    gap: 12px; position: relative;
+  }
+  .conversation-item:hover { background: var(--dtl-gray-50); }
+  /* FIX #5: Active conversation has blue left border */
+  .conversation-item.active { background: var(--dtl-blue-light); border-left: 3px solid var(--dtl-blue); }
+
+  .conversation-avatar {
+    width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 600; color: white; overflow: hidden;
+  }
+  .conversation-avatar img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+
+  .conversation-content { flex: 1; min-width: 0; }
+
+  .conversation-names {
+    font-size: 14px; font-weight: 600; color: var(--dtl-gray-800);
+    white-space: normal; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px;
+  }
+
+  .conversation-preview {
+    font-size: 13px; color: var(--dtl-gray-500);
+    white-space: normal; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px;
+    display: flex; align-items: center; gap: 4px;
+  }
+
+  .conversation-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .conversation-tag {
+    font-size: 11px; padding: 2px 6px; border-radius: 3px;
+    background: transparent; color: var(--dtl-gray-600);
+    border: 1px solid var(--dtl-gray-300);
+  }
+  .conversation-tag.status-badge {
+    background: var(--dtl-blue-light); color: var(--dtl-blue); border: none; font-weight: 500;
+  }
+  /* FIX #2 partial: Patient badge uses SVG icon instead of emoji */
+  .conversation-tag.patient-badge {
+    background: var(--dtl-gray-100); color: var(--dtl-gray-700); border: none;
+    display: flex; align-items: center; gap: 3px;
+  }
+
+  .conversation-meta {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0;
+  }
+
+  .conversation-date { font-size: 12px; color: var(--dtl-gray-400); flex-shrink: 0; text-align: right; }
+
+  .conversation-unread-badge {
+    width: 20px; height: 20px; background: var(--dtl-blue); color: white;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+  }
+
+  .conversation-item-menu {
+    position: absolute; top: 8px; right: 8px; background: none; border: none;
+    color: var(--dtl-gray-400); cursor: pointer; padding: 4px; opacity: 0;
+    transition: opacity 0.15s; display: flex; align-items: center;
+  }
+  .conversation-item:hover .conversation-item-menu { opacity: 1; }
+
+  /* FIX #18: New button with SVG plus icon */
+  .new-conversation-btn {
+    position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+    padding: 10px 20px; background: var(--dtl-blue); color: white; border: none;
+    border-radius: var(--radius-full); font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: var(--font-family);
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    box-shadow: var(--shadow-md);
+  }
+  .new-conversation-btn:hover { background: var(--dtl-blue-dark); }
+
+  /* ─── RIGHT PANEL: MESSAGE DETAIL ─── */
+  .message-detail { flex: 1; display: flex; flex-direction: column; background: var(--dtl-white); overflow: hidden; }
+
+  .message-detail-header {
+    padding: 16px; border-bottom: 1px solid var(--dtl-gray-200);
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .message-detail-avatar {
+    width: 36px; height: 36px; border-radius: 50%; background: #2ECC71; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 600; color: white; overflow: hidden;
+  }
+  .message-detail-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+  .message-detail-title-section { flex: 1; }
+
+  .message-detail-title { font-size: 14px; font-weight: 600; color: var(--dtl-gray-800); }
+
+  .message-detail-avatars { display: flex; align-items: center; margin-left: auto; }
+
+  .message-detail-avatar-stack { display: flex; margin-left: -8px; }
+
+  .avatar-in-stack {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 2px solid white; background: var(--dtl-gray-300); flex-shrink: 0; overflow: hidden;
+  }
+  .avatar-in-stack img { width: 100%; height: 100%; object-fit: cover; }
+  .avatar-in-stack:first-child { margin-left: 0; }
+
+  .message-detail-badge { font-size: 12px; color: var(--dtl-gray-500); margin-left: 6px; }
+
+  .message-detail-menu {
+    background: none; border: none; color: var(--dtl-gray-400);
+    cursor: pointer; padding: 4px; display: flex; align-items: center;
+  }
+
+  .messages-area {
+    flex: 1; overflow-y: auto; padding: 20px 16px;
+    display: flex; flex-direction: column;
+  }
+
+  /* FIX #6: Date separator with horizontal lines */
+  .message-date-separator {
+    display: flex; align-items: center; gap: 12px;
+    color: var(--dtl-gray-400); font-size: 12px; margin: 16px 0;
+    white-space: normal;
+  }
+  .message-date-separator::before,
+  .message-date-separator::after {
+    content: ''; flex: 1; height: 1px; background: var(--dtl-gray-200);
+  }
+
+  .message-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+
+  .message-sent { display: flex; justify-content: flex-end; align-items: flex-end; gap: 6px; }
+
+  .message-sent-content { max-width: 60%; text-align: right; }
+
+  /* FIX #1: Sent messages have blue bubble background */
+  .message-sent-bubble {
+    background: var(--dtl-blue-light); color: var(--dtl-gray-800);
+    padding: 10px 14px; border-radius: 12px 12px 0 12px;
+    font-size: 14px; line-height: 1.4; display: inline-block; text-align: left;
+  }
+
+  .message-time { font-size: 11px; color: var(--dtl-gray-400); text-align: right; }
+
+  /* FIX #7: Read status uses Doctolib blue */
+  .message-read-status { color: var(--dtl-blue); font-size: 12px; font-weight: 600; margin-top: 2px; }
+
+  .message-received { display: flex; justify-content: flex-start; align-items: flex-end; gap: 8px; margin-bottom: 12px; }
+
+  .message-sender-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #FF8A3D; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; color: white; overflow: hidden;
+  }
+  .message-sender-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+  .message-received-content { max-width: 60%; display: flex; flex-direction: column; gap: 4px; }
+
+  .message-received-bubble {
+    background: var(--dtl-gray-100); padding: 10px 12px; border-radius: 12px 12px 12px 0;
+    color: var(--dtl-gray-800); font-size: 14px; line-height: 1.4;
+  }
+
+  /* FIX #9: File attachment with SVG icon */
+  .message-attachment-card {
+    background: var(--dtl-gray-50); border: 1px solid var(--dtl-gray-200);
+    border-radius: var(--radius-md); padding: 10px 12px;
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--dtl-gray-700);
+  }
+  .message-attachment-icon {
+    width: 28px; height: 28px; background: var(--dtl-gray-200);
+    border-radius: 4px; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .message-image { max-width: 200px; height: auto; border-radius: var(--radius-md); margin-top: 4px; }
+
+  /* FIX #14: Reaction in styled chip */
+  .message-reaction {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--dtl-gray-100); border: 1px solid var(--dtl-gray-200);
+    border-radius: var(--radius-full); padding: 2px 8px;
+    font-size: 14px; margin-top: 4px;
+  }
+
+  /* FIX #8: Message input pill-shaped */
+  .message-input-area {
+    padding: 12px 16px; border-top: 1px solid var(--dtl-gray-200);
+    display: flex; align-items: center; gap: 12px; background: var(--dtl-white);
+  }
+
+  .input-icons { display: flex; gap: 4px; flex-shrink: 0; }
+
+  .input-icon-btn {
+    background: none; border: none; color: var(--dtl-gray-400);
+    cursor: pointer; padding: 4px; display: flex; align-items: center;
+  }
+  .input-icon-btn:hover { color: var(--dtl-gray-600); }
+
+  .message-input {
+    flex: 1; padding: 10px 16px;
+    border: 1px solid var(--dtl-gray-200);
+    border-radius: var(--radius-full);
+    font-family: var(--font-family); font-size: 14px; color: var(--dtl-gray-800);
+    outline: none;
+  }
+  .message-input::placeholder { color: var(--dtl-gray-400); }
+  .message-input:focus { border-color: var(--dtl-blue); }
+
+  /* FIX #15: Send button with proper SVG */
+  .send-btn {
+    background: none; border: none; color: var(--dtl-blue); cursor: pointer;
+    padding: 4px; flex-shrink: 0; display: flex; align-items: center;
+  }
+  .send-btn:hover { color: var(--dtl-blue-dark); }
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════ MAIN SIDEBAR (dark navy icon rail) ═══════════ -->
+<nav class="sidebar">
+  <a href="index.html" class="sidebar-logo">
+    <div class="sidebar-logo-icon">
+      <!-- Doctolib "D" brandmark — stylized italic serif -->
+      <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
+        <path d="M13 7h7c7 0 11.5 4.5 11.5 11.5S27 30 20 30h-7V7zm3.8 3.5v16h3c4.8 0 7.5-3.2 7.5-8s-2.7-8-7.5-8h-3z" fill="white" opacity="0.95"/>
+      </svg>
+    </div>
+  </a>
+
+  <div class="sidebar-nav">
+    <a class="sidebar-item" href="agenda.html">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span>Calendar</span>
+    </a>
+
+    <div class="sidebar-item">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <span>Tasks</span>
+    </div>
+
+    <a class="sidebar-item active" href="discussions.html">
+      <span class="sidebar-badge">99+</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Connect</span>
+    </a>
+
+    <div class="sidebar-item">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>Patient Messaging</span>
+    </div>
+
+    <div class="sidebar-item">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M2 8h20"/><path d="M12 8v13"/><circle cx="7" cy="14" r="2"/></svg>
+      <span>Patient Management</span>
+    </div>
+
+    <div class="sidebar-item">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      <span>Emails</span>
+    </div>
+
+    <div class="sidebar-item">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      <span>Import of documents</span>
+    </div>
+
+    <div class="sidebar-item">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span>Billing</span>
+    </div>
+
+    <div class="sidebar-item">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+      <span>Others</span>
+    </div>
+  </div>
+
+  <div class="sidebar-spacer"></div>
+
+  <div class="sidebar-bottom">
+    <div class="sidebar-avatar-bottom" style="background: #B8907C;">AP</div>
+    <div class="sidebar-avatar-bottom" style="background: #B8907C;">MP</div>
+  </div>
+
+</nav>
+
+<!-- ═══════════ HEADER BAR (dark navy) ═══════════ -->
+<header class="header">
+  <div class="header-search">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <span>Search for a patient</span>
+    <div class="header-shortcut">&#8984;+K</div>
+  </div>
+
+  <div class="header-actions">
+    <div class="header-chip">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Carte Vitale
+    </div>
+    <button class="header-icon-btn" title="Video">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+    </button>
+
+    <div class="header-separator"></div>
+
+    <button class="header-icon-btn" title="Dictation">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+    </button>
+
+    <div class="header-chip">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Help and contact
+    </div>
+
+    <button class="header-icon-btn" title="Visibility">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    </button>
+    <button class="header-icon-btn" title="Notifications">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    </button>
+    <button class="header-icon-btn" title="Team">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    </button>
+    <button class="header-icon-btn" title="Lock">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </button>
+    <button class="header-icon-btn" title="Settings">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+    <div class="header-avatar"></div>
+    <span class="header-locale">Locales</span>
+  </div>
+</header>
+
+<!-- ═══════════ SUB-SIDEBAR (Connect section) ═══════════ -->
+<aside class="sub-sidebar">
+  <div class="sub-sidebar-title">Connect</div>
+
+  <a class="sub-sidebar-item active" href="discussions.html">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    Discussions
+  </a>
+
+  <a class="sub-sidebar-item" href="tle-flow.html">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="9" y1="6" x2="9" y2="6.01"/><line x1="15" y1="6" x2="15" y2="6.01"/><line x1="9" y1="10" x2="9" y2="10.01"/><line x1="15" y1="10" x2="15" y2="10.01"/><line x1="9" y1="14" x2="9" y2="14.01"/><line x1="15" y1="14" x2="15" y2="14.01"/><path d="M10 22v-4h4v4"/></svg>
+    Tele-expertise
+    <span class="sub-sidebar-tag">New</span>
+  </a>
+</aside>
+
+<!-- ═══════════ CONTENT AREA — TWO-PANEL DISCUSSIONS ═══════════ -->
+<main class="content">
+  <!-- LEFT PANEL: CONVERSATION LIST -->
+  <div class="conversation-list">
+    <div class="conversation-header">
+      <div class="conversation-title-row">
+        <div class="conversation-title">Discussions</div>
+        <div class="conversation-badge">99+</div>
+        <!-- FIX #3/#16: SVG three-dot menu -->
+        <button class="conversation-menu-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+        </button>
+      </div>
+      <!-- FIX #4: Search with icon, pill-shaped -->
+      <div class="conversation-search-container">
+        <div class="conversation-search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Search">
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-tabs">
+      <button class="filter-tab active">All</button>
+      <button class="filter-tab">Unread</button>
+      <button class="filter-tab">Favorites</button>
+    </div>
+
+    <div class="conversations-scroll">
+      <!-- Conversation 1: Mario Mario, Laure SEUGE, Pas... (ACTIVE) -->
+      <div class="conversation-item active">
+        <div class="conversation-avatar"><img src="https://i.pravatar.cc/80?img=14" alt="MM"></div>
+        <div class="conversation-content">
+          <div class="conversation-names">Mario Mario, Laure SEUGE, Pas...</div>
+          <div class="conversation-preview">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Image
+          </div>
+        </div>
+        <div class="conversation-date">Today</div>
+        <button class="conversation-item-menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>
+      </div>
+
+      <!-- Conversation 2: Laure, Lucia -->
+      <div class="conversation-item">
+        <div class="conversation-avatar"><img src="https://i.pravatar.cc/80?img=5" alt="LL"></div>
+        <div class="conversation-content">
+          <div class="conversation-names">Laure, Lucia</div>
+          <div class="conversation-preview">Laure SEUGE has created this group with Luc...</div>
+        </div>
+        <div class="conversation-date">20/03/2026</div>
+        <button class="conversation-item-menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>
+      </div>
+
+      <!-- Conversation 3: Elisabetta CASINI -->
+      <div class="conversation-item">
+        <div class="conversation-avatar"><img src="https://i.pravatar.cc/80?img=9" alt="EC"></div>
+        <div class="conversation-content">
+          <div class="conversation-names">Elisabetta CASINI</div>
+          <div class="conversation-preview"><span style="color: var(--dtl-blue);">&#10003;&#10003;</span>&nbsp; hey</div>
+        </div>
+        <div class="conversation-date">19/03/2026</div>
+        <button class="conversation-item-menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>
+      </div>
+
+      <!-- Conversation 4: Load Test #4 -->
+      <div class="conversation-item">
+        <div class="conversation-avatar"><img src="https://i.pravatar.cc/80?img=33" alt="LT"></div>
+        <div class="conversation-content">
+          <div class="conversation-names">Load Test #4 - 17690781...</div>
+          <div class="conversation-preview">hey</div>
+          <div class="conversation-tags">
+            <div class="conversation-tag patient-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              OLIVIA JOHNSON
+            </div>
+          </div>
+        </div>
+        <div class="conversation-date">17/03/2026</div>
+        <button class="conversation-item-menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>
+      </div>
+
+      <!-- Conversation 5: azaerty uaiojd iuazhd -->
+      <div class="conversation-item">
+        <div class="conversation-avatar"><img src="https://i.pravatar.cc/80?img=47" alt="AU"></div>
+        <div class="conversation-content">
+          <div class="conversation-names">azaerty uaiojd iuazhd</div>
+          <div class="conversation-preview">Laure SEUGE created this tele-expertise with...</div>
+          <div class="conversation-tags">
+            <div class="conversation-tag">Tele-expertise</div>
+            <div class="conversation-tag status-badge">In progress</div>
+          </div>
+        </div>
+        <div class="conversation-date">16/03/2026</div>
+        <button class="conversation-item-menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>
+      </div>
+
+      <!-- Conversation 6: Pascal WINTRINGER, Paul team -->
+      <div class="conversation-item">
+        <div class="conversation-avatar"><img src="https://i.pravatar.cc/80?img=12" alt="PW"></div>
+        <div class="conversation-content">
+          <div class="conversation-names">Pascal WINTRINGER, Paul team</div>
+          <div class="conversation-preview">Lucia MUSINI: rerghjgfd</div>
+          <div class="conversation-tags">
+            <div class="conversation-tag patient-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Andre Adam
+            </div>
+          </div>
+        </div>
+        <div class="conversation-meta">
+          <div class="conversation-date">16/03/2026</div>
+          <div class="conversation-unread-badge">14</div>
+        </div>
+        <button class="conversation-item-menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>
+      </div>
+
+      <!-- Conversation 7: caner caner test -->
+      <div class="conversation-item">
+        <div class="conversation-avatar"><img src="https://i.pravatar.cc/80?img=51" alt="CC"></div>
+        <div class="conversation-content">
+          <div class="conversation-names">caner caner test</div>
+          <div class="conversation-preview">P.</div>
+          <div class="conversation-tags">
+            <div class="conversation-tag">Tele-expertise</div>
+            <div class="conversation-tag status-badge">In progress</div>
+          </div>
+        </div>
+        <div class="conversation-date">13/03/2026</div>
+        <button class="conversation-item-menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>
+      </div>
+    </div>
+
+    <!-- FIX #18: New button with SVG plus icon -->
+    <button class="new-conversation-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New
+    </button>
+  </div>
+
+  <!-- RIGHT PANEL: MESSAGE DETAIL -->
+  <div class="message-detail">
+    <div class="message-detail-header">
+      <div class="message-detail-avatar"><img src="https://i.pravatar.cc/72?img=14" alt="MM"></div>
+      <div class="message-detail-title-section">
+        <div class="message-detail-title">Mario Mario, Laure SEUGE, Pas...</div>
+      </div>
+      <div class="message-detail-avatars">
+        <div class="message-detail-avatar-stack">
+          <div class="avatar-in-stack"><img src="https://i.pravatar.cc/56?img=14" alt=""></div>
+          <div class="avatar-in-stack"><img src="https://i.pravatar.cc/56?img=5" alt=""></div>
+          <div class="avatar-in-stack"><img src="https://i.pravatar.cc/56?img=33" alt=""></div>
+        </div>
+        <div class="message-detail-badge">+1</div>
+      </div>
+      <!-- FIX #3/#17: SVG three-dot menu -->
+      <button class="message-detail-menu">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+      </button>
+    </div>
+
+    <div class="messages-area">
+      <!-- FIX #6: Date separator with lines -->
+      <div class="message-date-separator">Tue, 3 March</div>
+
+      <!-- Sent messages with FIX #1: blue bubble backgrounds -->
+      <div class="message-group">
+        <div class="message-sent">
+          <div class="message-sent-content">
+            <div class="message-sent-bubble">ets</div>
+            <div class="message-time">10:40 <span class="message-read-status">&#10003;&#10003;</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="message-group">
+        <div class="message-sent">
+          <div class="message-sent-content">
+            <div class="message-sent-bubble">test</div>
+            <div class="message-time">10:40 <span class="message-read-status">&#10003;&#10003;</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="message-group">
+        <div class="message-sent">
+          <div class="message-sent-content">
+            <div class="message-sent-bubble">est</div>
+            <div class="message-time">10:40 <span class="message-read-status">&#10003;&#10003;</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="message-group">
+        <div class="message-sent">
+          <div class="message-sent-content">
+            <div class="message-sent-bubble">est</div>
+            <div class="message-time">10:40 <span class="message-read-status">&#10003;&#10003;</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FIX #6: Date separator with lines -->
+      <div class="message-date-separator">Fri, 20 March</div>
+
+      <!-- Received messages from Mario Mario -->
+      <div class="message-group">
+        <div class="message-received">
+          <div class="message-sender-avatar"><img src="https://i.pravatar.cc/56?img=14" alt="MM"></div>
+          <div class="message-received-content">
+            <!-- FIX #9: File attachment with SVG icon -->
+            <div class="message-attachment-card">
+              <div class="message-attachment-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--dtl-gray-500)" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <div>Carnet_de_Vaccination_NAYMAR_Jean.txt</div>
+            </div>
+            <div class="message-time">13:41</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="message-group">
+        <div class="message-received">
+          <div class="message-sender-avatar"><img src="https://i.pravatar.cc/56?img=14" alt="MM"></div>
+          <div class="message-received-content">
+            <!-- FIX #10: Realistic image placeholder -->
+            <img class="message-image" src="https://i.pravatar.cc/400?img=60" alt="Shared image" style="width: 200px; height: auto; border-radius: 8px;">
+            <div class="message-time">13:41</div>
+            <!-- FIX #14: Reaction in styled chip -->
+            <div class="message-reaction">&#128077;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message input area -->
+    <div class="message-input-area">
+      <div class="input-icons">
+        <!-- FIX #2: SVG smiley icon -->
+        <button class="input-icon-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        </button>
+        <!-- FIX #2: SVG paperclip icon -->
+        <button class="input-icon-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+        </button>
+      </div>
+      <input type="text" class="message-input" placeholder="Type your message">
+      <!-- FIX #15: SVG send icon -->
+      <button class="send-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI PM Pipeline — Prototype Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --dtl-gray-50: #F7F8FA;
+            --dtl-gray-100: #EFF0F3;
+            --dtl-gray-200: #E4E7EB;
+            --dtl-gray-600: #4B5563;
+            --dtl-gray-800: #1F2937;
+            --dtl-blue: #0596DE;
+            --dtl-red: #EF4444;
+            --dtl-amber: #F59E0B;
+        }
+
+        html, body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--dtl-gray-50);
+            color: var(--dtl-gray-800);
+        }
+
+        body {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Section */
+        .header {
+            margin-bottom: 48px;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: baseline;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--dtl-gray-800);
+            line-height: 1.2;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: var(--dtl-gray-100);
+            color: var(--dtl-gray-600);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .header-description {
+            font-size: 16px;
+            color: var(--dtl-gray-600);
+            line-height: 1.5;
+        }
+
+        /* Summary Table */
+        .summary-section {
+            margin-bottom: 48px;
+        }
+
+        .summary-section h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dtl-gray-800);
+            margin-bottom: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border: 1px solid var(--dtl-gray-200);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        thead {
+            background-color: var(--dtl-gray-100);
+            border-bottom: 1px solid var(--dtl-gray-200);
+        }
+
+        th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--dtl-gray-800);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid var(--dtl-gray-200);
+            font-size: 14px;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .priority-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .priority-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .priority-p1 {
+            background-color: var(--dtl-red);
+        }
+
+        .priority-p2 {
+            background-color: var(--dtl-amber);
+        }
+
+        .priority-p3 {
+            background-color: var(--dtl-blue);
+        }
+
+        .options-cell {
+            display: flex;
+            gap: 8px;
+        }
+
+        .option-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background-color: var(--dtl-blue);
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .option-badge:hover {
+            opacity: 0.9;
+        }
+
+        /* Priority Sections */
+        .priorities-section {
+            margin-bottom: 24px;
+        }
+
+        .priority-section {
+            margin-bottom: 40px;
+        }
+
+        .priority-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dtl-gray-800);
+        }
+
+        .priority-header-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Option Cards */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 16px;
+        }
+
+        .option-card {
+            background-color: white;
+            border: 1px solid var(--dtl-gray-200);
+            border-radius: 8px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .option-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: var(--dtl-blue);
+        }
+
+        .option-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .option-letter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background-color: var(--dtl-blue);
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .option-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dtl-gray-800);
+        }
+
+        .option-description {
+            font-size: 14px;
+            color: var(--dtl-gray-600);
+            line-height: 1.5;
+            margin-bottom: 16px;
+            flex-grow: 1;
+        }
+
+        .option-link {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: var(--dtl-blue);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            transition: background-color 0.2s ease;
+        }
+
+        .option-link:hover {
+            background-color: #0481c7;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 24px 16px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
+            }
+
+            .header-description {
+                font-size: 14px;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            td, th {
+                padding: 12px;
+            }
+
+            .priority-header {
+                font-size: 16px;
+            }
+        }
+
+        /* Utility */
+        .spacing-top {
+            margin-top: 32px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <h1>AI PM Pipeline — Prototype Hub</h1>
+            <span class="badge">2026-03-22-3 — TLE</span>
+        </div>
+        <p class="header-description">Explore all 10 prototype options across 3 priorities</p>
+    </div>
+
+    <!-- Summary Table -->
+    <div class="summary-section">
+        <h2>Overview</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Priority</th>
+                    <th>Problem</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="priority-cell">
+                            <span class="priority-dot priority-p1"></span>
+                            <span>P1</span>
+                        </div>
+                    </td>
+                    <td>Fix Email Validation Blocker</td>
+                    <td>
+                        <div class="options-cell">
+                            <span class="option-badge">A</span>
+                            <span class="option-badge">B</span>
+                            <span class="option-badge">C</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="priority-cell">
+                            <span class="priority-dot priority-p2"></span>
+                            <span>P2</span>
+                        </div>
+                    </td>
+                    <td>Message Storage Tiering & Monitoring</td>
+                    <td>
+                        <div class="options-cell">
+                            <span class="option-badge">A</span>
+                            <span class="option-badge">B</span>
+                            <span class="option-badge">C</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="priority-cell">
+                            <span class="priority-dot priority-p3"></span>
+                            <span>P3</span>
+                        </div>
+                    </td>
+                    <td>Engagement Levers Bundle (45% → 55% Completion)</td>
+                    <td>
+                        <div class="options-cell">
+                            <span class="option-badge">A</span>
+                            <span class="option-badge">B</span>
+                            <span class="option-badge">C</span>
+                            <span class="option-badge">D</span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Priority 1 -->
+    <div class="priorities-section">
+        <div class="priority-section">
+            <div class="priority-header">
+                <span class="priority-header-dot priority-p1"></span>
+                <span>Priority 1 — Fix Email Validation Blocker (IAM-1990)</span>
+            </div>
+            <div class="options-grid">
+                <!-- P1 Option A -->
+                <div class="option-card">
+                    <div class="option-card-header">
+                        <span class="option-letter">A</span>
+                        <span class="option-title">Direct IAM-1990 Hotfix</span>
+                    </div>
+                    <p class="option-description">Email validation popup fix — Before/After toggle showing working vs broken states</p>
+                    <a href="proto-p1a-hotfix-popup.html" class="option-link">View Prototype</a>
+                </div>
+
+                <!-- P1 Option B -->
+                <div class="option-card">
+                    <div class="option-card-header">
+                        <span class="option-letter">B</span>
+                        <span class="option-title">SMS/2FA Bypass</span>
+                    </div>
+                    <p class="option-description">Dual-path verification with SMS fallback when email delivery fails</p>
+                    <a href="proto-p1b-sms-fallback.html" class="option-link">View Prototype</a>
+                </div>
+
+                <!-- P1 Option C -->
+                <div class="option-card">
+                    <div class="option-card-header">
+                        <span class="option-letter">C</span>
+                        <span class="option-title">TLE Pre-Validation</span>
+                    </div>
+                    <p class="option-description">Step-by-step enrollment with email validation before TLE signup</p>
+                    <a href="proto-p1c-tle-prevalidation.html" class="option-link">View Prototype</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Priority 2 -->
+        <div class="priority-section">
+            <div class="priority-header">
+                <span class="priority-header-dot priority-p2"></span>
+                <span>Priority 2 — Message Storage Tiering & Monitoring</span>
+            </div>
+            <div class="options-grid">
+                <!-- P2 Option A -->
+                <div class="option-card">
+                    <div class="option-card-header">
+                        <span class="option-letter">A</span>
+                        <span class="option-title">Storage Tiering</span>
+                    </div>
+                    <p class="option-description">Hot-warm-cold storage with tier indicators and lazy-loaded archives</p>
+                    <a href="proto-p2a-storage-tiering.html" class="option-link">View Prototype</a>
+                </div>
+
+                <!-- P2 Option B -->
+                <div class="option-card">
+                    <div class="option-card-header">
+                        <span class="option-letter">B</span>
+                        <span class="option-title">Monitoring Dashboard</span>
+                    </div>
+                    <p class="option-description">DevOps-style monitoring with latency metrics and alert panels</p>
+                    <a href="proto-p2b-monitoring-dashboard.html" class="option-link">View Prototype</a>
+                </div>
+
+                <!-- P2 Option C -->
+                <div class="option-card">
+                    <div class="option-card-header">
+                        <span class="option-letter">C</span>
+                        <span class="option-title">Query Optimization</span>
+                    </div>
+                    <p class="option-description">Before/after query performance comparison with optimization recommendations</p>
+                    <a href="proto-p2c-query-optimization.html" class="option-link">View Prototype</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Priority 3 -->
+        <div class="priority-section">
+            <div class="priority-header">
+                <span class="priority-header-dot priority-p3"></span>
+                <span>Priority 3 — Engagement Levers Bundle (45% → 55% Completion)</span>
+            </div>
+            <div class="options-grid">
+                <!-- P3 Option A -->
+                <div class="option-card">
+                    <div class="option-card-header">
+                        <span class="option-letter">A</span>
+                        <span class="option-title">Full Stack Bundle</span>
+                    </div>
+                    <p class="option-description">Combined badging, push notifications, and specialist campaign features</p>
+                    <a href="proto-p3a-full-bundle.html" class="option-link">View Prototype</a>
+                </div>
+
+                <!-- P3 Option B -->
+                <div class="option-card">
+                    <div class="option-card-header">
+                        <span class="option-letter">B</span>
+                        <span class="option-title">Badging Only</span>
+                    </div>
+                    <p class="option-description">Lightweight TLE Accepted badges with directory filter</p>
+                    <a href="proto-p3b-badging-only.html" class="option-link">View Prototype</a>
+                </div>
+
+                <!-- P3 Option C -->
+                <div class="option-card">
+                    <div class="option-card-header">
+                        <span class="option-letter">C</span>
+                        <span class="option-title">Campaign-First</span>
+                    </div>
+                    <p class="option-description">Specialist onboarding campaign management dashboard</p>
+                    <a href="proto-p3c-campaign-first.html" class="option-link">View Prototype</a>
+                </div>
+
+                <!-- P3 Option D -->
+                <div class="option-card">
+                    <div class="option-card-header">
+                        <span class="option-letter">D</span>
+                        <span class="option-title">Phased Rollout</span>
+                    </div>
+                    <p class="option-description">Visual roadmap with metric gates for staged deployment</p>
+                    <a href="proto-p3d-phased-rollout.html" class="option-link">View Prototype</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
