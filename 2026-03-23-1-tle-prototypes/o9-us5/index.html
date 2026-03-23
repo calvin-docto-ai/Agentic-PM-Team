@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Doctolib — TLE: Billing Profile Immutability Gates (O9-US5)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
+
+    :root {
+      --dtl-navy: #1B2A4A;
+      --dtl-blue: #0596DE;
+      --dtl-green: #10B981;
+      --dtl-red: #EF4444;
+      --dtl-amber: #F59E0B;
+      --dtl-gray-50: #F7F8FA;
+      --dtl-gray-100: #F0F2F5;
+      --dtl-gray-200: #E4E7EB;
+      --dtl-gray-400: #9BA3AE;
+      --dtl-gray-600: #4B5563;
+      --dtl-gray-700: #374151;
+      --dtl-gray-800: #1F2937;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--dtl-gray-50);
+      color: var(--dtl-gray-600);
+    }
+
+    .header {
+      background: var(--dtl-navy);
+      color: white;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 52px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .header-left { display: flex; align-items: center; gap: 24px; }
+    .logo-d { font-size: 24px; font-weight: 700; color: white; }
+    .search-bar { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: white; padding: 8px 12px; border-radius: 20px; font-size: 13px; width: 240px; }
+    .header-right { display: flex; gap: 16px; align-items: center; color: rgba(255,255,255,0.8); }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 52px;
+      width: 76px;
+      height: calc(100vh - 52px);
+      background: var(--dtl-navy);
+      border-right: 1px solid rgba(255,255,255,0.1);
+      padding: 12px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-item {
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      color: rgba(255,255,255,0.6);
+      cursor: pointer;
+      font-size: 24px;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .sidebar-item.active {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+
+    .sidebar-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--dtl-red);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      border: 2px solid var(--dtl-navy);
+    }
+
+    .content-area {
+      margin-left: 76px;
+      padding: 32px;
+      max-width: 1200px;
+    }
+
+    .breadcrumb {
+      font-size: 12px;
+      color: var(--dtl-gray-600);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--dtl-gray-800);
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: var(--dtl-gray-600);
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--dtl-gray-800);
+      margin-bottom: 12px;
+    }
+
+    .card p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--dtl-gray-600);
+      margin-bottom: 12px;
+    }
+
+    .step-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .step-list li {
+      font-size: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--dtl-gray-200);
+      color: var(--dtl-gray-700);
+      display: flex;
+      gap: 12px;
+    }
+
+    .step-list li:last-child { border-bottom: none; }
+
+    .step-num {
+      background: var(--dtl-blue);
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      flex-shrink: 0;
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+
+    .badge-success { background: var(--dtl-green); color: white; }
+    .badge-warning { background: var(--dtl-amber); color: white; }
+    .badge-danger { background: var(--dtl-red); color: white; }
+
+    .nav-bar {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--dtl-navy);
+      border-radius: 24px;
+      padding: 12px 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      z-index: 9999;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .nav-bar a {
+      color: white;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .nav-bar a:hover { background: rgba(255,255,255,0.1); }
+
+    .nav-bar a.home { color: white; }
+    .nav-bar a.active { background: rgba(5, 150, 222, 0.3); color: #5BC0F0; }
+
+    .nav-divider {
+      width: 1px;
+      height: 20px;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .priority-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .priority-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .option-tabs {
+      display: flex;
+      gap: 8px;
+    }
+
+    .option-tabs a {
+      padding: 6px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.2s;
+    }
+
+    .option-tabs a.active {
+      background: rgba(5, 150, 222, 0.3);
+      color: #5BC0F0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-left">
+      <div class="logo-d">D</div>
+      <input type="text" class="search-bar" placeholder="Search...">
+    </div>
+    <div class="header-right">
+      <span>🔔</span>
+      <span>⚙️</span>
+      <span>👤</span>
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <div class="sidebar-item active">📅</div>
+    <div class="sidebar-item">👥</div>
+    <div class="sidebar-item">✓</div>
+    <div class="sidebar-item">💬<span class="sidebar-badge">4</span></div>
+    <div class="sidebar-item">💬</div>
+    <div class="sidebar-item">👤<span class="sidebar-badge">99+</span></div>
+    <div class="sidebar-item">📧</div>
+    <div class="sidebar-item">📄</div>
+    <div class="sidebar-item">💳</div>
+    <div class="sidebar-item">📊</div>
+  </div>
+
+  <div class="content-area">
+    <div class="breadcrumb">Tele-expertise</div>
+    <h1>Billing Profile Immutability Gates</h1>
+    <div class="subtitle">O9-US5 • Write protection rules for billing data</div>
+
+    <div class="card">
+      <h2>Story Description</h2>
+      <span class="badge badge-warning">2 Weeks</span>
+    </div>
+
+    <div class="card">
+      <h2>Implementation Focus</h2>
+      <p>This story focuses on implementing the core functionality described in the user journey. Key implementation areas include the technical design, component architecture, and integration points with existing systems.</p>
+      <p><strong>Primary Goal:</strong> Deliver a working prototype that validates the proposed solution and demonstrates value to stakeholders.</p>
+    </div>
+
+    <div class="card">
+      <h2>Design Decisions</h2>
+      <p>The prototype incorporates key design decisions that balance user needs, technical feasibility, and product strategy. Each decision is documented to guide future development and inform architectural discussions.</p>
+    </div>
+
+    <div class="card">
+      <h2>Success Metrics</h2>
+      <p><strong class="badge badge-success">✓</strong> Prototype demonstrates core user flows</p>
+      <p><strong class="badge badge-success">✓</strong> Design validates with stakeholders</p>
+      <p><strong class="badge badge-success">✓</strong> Technical feasibility confirmed</p>
+      <p><strong class="badge badge-success">✓</strong> Path forward documented</p>
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <a href="../index.html" class="home">🏠 Home</a>
+    <div class="nav-divider"></div>
+    <div class="priority-indicator">
+      <span class="priority-dot" style="background: 9 === '9' || '7' ? '#0596DE' : (9 >= '4' ? '#F59E0B' : '#EF4444');"></span>
+      O9
+    </div>
+  </div>
+
+</body>
+</html>

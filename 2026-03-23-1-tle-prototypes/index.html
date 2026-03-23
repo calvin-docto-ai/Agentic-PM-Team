@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2026-03-23-1 — TLE Prototypes Hub</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
+
+    :root {
+      --dtl-navy: #1B2A4A;
+      --dtl-blue: #0596DE;
+      --dtl-green: #10B981;
+      --dtl-amber: #F59E0B;
+      --dtl-red: #EF4444;
+      --dtl-gray-50: #F7F8FA;
+      --dtl-gray-200: #E4E7EB;
+      --dtl-gray-400: #9BA3AE;
+      --dtl-gray-600: #4B5563;
+      --dtl-gray-800: #1F2937;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--dtl-gray-50);
+      color: var(--dtl-gray-600);
+      line-height: 1.6;
+    }
+
+    .header-bar {
+      background: var(--dtl-navy);
+      color: white;
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--dtl-gray-200);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .badge {
+      background: var(--dtl-blue);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+      margin-top: 4px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 32px;
+    }
+
+    .overview-section {
+      background: white;
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 40px;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      margin-top: 16px;
+    }
+
+    .stat-card {
+      background: var(--dtl-gray-50);
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--dtl-navy);
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--dtl-gray-500);
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .opportunities {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .opportunity {
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .opportunity-header {
+      background: var(--dtl-gray-50);
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--dtl-gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .opportunity-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .opportunity-title h2 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--dtl-gray-800);
+      margin: 0;
+    }
+
+    .opportunity-id {
+      background: var(--dtl-navy);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .story-count {
+      background: var(--dtl-blue);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .opportunity-content {
+      padding: 24px;
+    }
+
+    .opportunity-description {
+      font-size: 14px;
+      color: var(--dtl-gray-600);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .stories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .story-card {
+      background: white;
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 8px;
+      padding: 16px;
+      transition: all 0.15s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .story-card:hover {
+      border-color: var(--dtl-blue);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+
+    .story-id {
+      font-weight: 600;
+      color: var(--dtl-blue);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .story-title {
+      font-weight: 600;
+      color: var(--dtl-gray-800);
+      font-size: 15px;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .story-effort {
+      font-size: 12px;
+      color: var(--dtl-gray-500);
+      display: inline-block;
+      background: var(--dtl-gray-50);
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-top: 8px;
+    }
+
+    .effort-small { background: var(--dtl-green); color: white; }
+    .effort-medium { background: var(--dtl-amber); color: white; }
+    .effort-large { background: var(--dtl-red); color: white; }
+
+    footer {
+      background: var(--dtl-gray-50);
+      border-top: 1px solid var(--dtl-gray-200);
+      padding: 24px 32px;
+      margin-top: 60px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--dtl-gray-600);
+    }
+  </style>
+</head>
+<body>
+  <div class="header-bar">
+    <div class="header-content">
+      <span class="badge">Agent 5</span>
+      <div>
+        <h1>2026-03-23-1 — TLE Prototypes</h1>
+        <div class="subtitle">19 Approved User Stories • Interactive HTML Prototypes</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Overview Stats -->
+    <div class="overview-section">
+      <h3 style="color: var(--dtl-gray-800); margin-bottom: 0;">Run Summary</h3>
+      <div class="overview-grid">
+        <div class="stat-card">
+          <div class="stat-value">19</div>
+          <div class="stat-label">Stories</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">6</div>
+          <div class="stat-label">Opportunities</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">19+</div>
+          <div class="stat-label">HTML Pages</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">2026-03-23</div>
+          <div class="stat-label">Run Date</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Opportunities & Stories -->
+    <div class="opportunities">
+
+      <!-- Opportunity 1: TLE Preference Default Bug -->
+      <div class="opportunity">
+        <div class="opportunity-header">
+          <div class="opportunity-title">
+            <span class="opportunity-id">O1</span>
+            <h2>TLE Preference Default Value Bug</h2>
+          </div>
+          <span class="story-count">5 Stories</span>
+        </div>
+        <div class="opportunity-content">
+          <div class="opportunity-description">
+            The allow_tele_expertise_request field defaults to false instead of true, blocking eligible experts from search results. Includes data correction, user preference UI, audit dashboard, and endpoint standardization.
+          </div>
+          <div class="stories-grid">
+            <a href="o1-us1/index.html" class="story-card">
+              <div class="story-id">O1-US1</div>
+              <div class="story-title">Quick-Fix Sync Data Correction</div>
+              <span class="story-effort effort-small">1 Week</span>
+            </a>
+            <a href="o1-us2/index.html" class="story-card">
+              <div class="story-id">O1-US2</div>
+              <div class="story-title">Real-Time Preference Override in Search</div>
+              <span class="story-effort effort-medium">2 Weeks</span>
+            </a>
+            <a href="o1-us3/index.html" class="story-card">
+              <div class="story-id">O1-US3</div>
+              <div class="story-title">User-Facing Eligibility Toggle UI</div>
+              <span class="story-effort effort-medium">2 Weeks</span>
+            </a>
+            <a href="o1-us4/index.html" class="story-card">
+              <div class="story-id">O1-US4</div>
+              <div class="story-title">Systematic Preference Audit & Dashboard</div>
+              <span class="story-effort effort-medium">2 Weeks</span>
+            </a>
+            <a href="o1-us5/index.html" class="story-card">
+              <div class="story-id">O1-US5</div>
+              <div class="story-title">Sync Endpoint Standardization</div>
+              <span class="story-effort effort-large">3 Weeks</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opportunity 2: Database Load Spike -->
+      <div class="opportunity">
+        <div class="opportunity-header">
+          <div class="opportunity-title">
+            <span class="opportunity-id">O2</span>
+            <h2>Database Load Spike Investigation & Resolution</h2>
+          </div>
+          <span class="story-count">4 Stories</span>
+        </div>
+        <div class="opportunity-content">
+          <div class="opportunity-description">
+            7,000 eligibility check logs on 2026-03-20 indicate database scaling or query efficiency issues. Includes query performance audit, load testing framework, retry tuning, and real-time alerting.
+          </div>
+          <div class="stories-grid">
+            <a href="o2-us2/index.html" class="story-card">
+              <div class="story-id">O2-US2</div>
+              <div class="story-title">Query Performance Audit & Index Analysis</div>
+              <span class="story-effort effort-medium">2 Weeks</span>
+            </a>
+            <a href="o2-us3/index.html" class="story-card">
+              <div class="story-id">O2-US3</div>
+              <div class="story-title">Load Testing Scenario Framework</div>
+              <span class="story-effort effort-medium">2 Weeks</span>
+            </a>
+            <a href="o2-us4/index.html" class="story-card">
+              <div class="story-id">O2-US4</div>
+              <div class="story-title">Real-Time Alerting & Circuit Breaker</div>
+              <span class="story-effort effort-medium">2 Weeks</span>
+            </a>
+            <a href="o2-us5/index.html" class="story-card">
+              <div class="story-id">O2-US5</div>
+              <div class="story-title">Caching Layer for Eligibility Checks</div>
+              <span class="story-effort effort-large">3 Weeks</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opportunity 4: Mobile TLE Support -->
+      <div class="opportunity">
+        <div class="opportunity-header">
+          <div class="opportunity-title">
+            <span class="opportunity-id">O4</span>
+            <h2>Mobile TLE Support</h2>
+          </div>
+          <span class="story-count">5 Stories</span>
+        </div>
+        <div class="opportunity-content">
+          <div class="opportunity-description">
+            Extend TLE capabilities to mobile platforms with responsive web, native iOS/Android apps, cross-platform notifications, and mobile-first document attachment workflows.
+          </div>
+          <div class="stories-grid">
+            <a href="o4-us1/index.html" class="story-card">
+              <div class="story-id">O4-US1</div>
+              <div class="story-title">Mobile Web Responsive TLE Inbox</div>
+              <span class="story-effort effort-medium">2 Weeks</span>
+            </a>
+            <a href="o4-us2/index.html" class="story-card">
+              <div class="story-id">O4-US2</div>
+              <div class="story-title">iOS Native TLE Case Management</div>
+              <span class="story-effort effort-large">4 Weeks</span>
+            </a>
+            <a href="o4-us3/index.html" class="story-card">
+              <div class="story-id">O4-US3</div>
+              <div class="story-title">Android Native TLE Case Management</div>
+              <span class="story-effort effort-large">4 Weeks</span>
+            </a>
+            <a href="o4-us4/index.html" class="story-card">
+              <div class="story-id">O4-US4</div>
+              <div class="story-title">Cross-Platform Notification Unification</div>
+              <span class="story-effort effort-medium">2 Weeks</span>
+            </a>
+            <a href="o4-us5/index.html" class="story-card">
+              <div class="story-id">O4-US5</div>
+              <div class="story-title">Mobile-First Document Attachment Flow</div>
+              <span class="story-effort effort-medium">2 Weeks</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opportunity 6: Eligibility Status Visibility -->
+      <div class="opportunity">
+        <div class="opportunity-header">
+          <div class="opportunity-title">
+            <span class="opportunity-id">O6</span>
+            <h2>Eligibility Status Visibility</h2>
+          </div>
+          <span class="story-count">1 Story</span>
+        </div>
+        <div class="opportunity-content">
+          <div class="opportunity-description">
+            Provide admin tools to debug eligibility status, allowing support teams to systematically identify and resolve eligibility-related issues.
+          </div>
+          <div class="stories-grid">
+            <a href="o6-us1/index.html" class="story-card">
+              <div class="story-id">O6-US1</div>
+              <div class="story-title">Admin Eligibility Status Debugger</div>
+              <span class="story-effort effort-medium">2 Weeks</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opportunity 7: Document Attachment Friction -->
+      <div class="opportunity">
+        <div class="opportunity-header">
+          <div class="opportunity-title">
+            <span class="opportunity-id">O7</span>
+            <h2>Document Attachment Friction</h2>
+          </div>
+          <span class="story-count">1 Story</span>
+        </div>
+        <div class="opportunity-content">
+          <div class="opportunity-description">
+            Reduce friction in document attachment workflows with format auto-conversion, supporting various file types seamlessly.
+          </div>
+          <div class="stories-grid">
+            <a href="o7-us5/index.html" class="story-card">
+              <div class="story-id">O7-US5</div>
+              <div class="story-title">Document Format Auto-Conversion</div>
+              <span class="story-effort effort-large">3 Weeks</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opportunity 9: Billing Profile Sync -->
+      <div class="opportunity">
+        <div class="opportunity-header">
+          <div class="opportunity-title">
+            <span class="opportunity-id">O9</span>
+            <h2>Billing Profile Sync & Integrity</h2>
+          </div>
+          <span class="story-count">3 Stories</span>
+        </div>
+        <div class="opportunity-content">
+          <div class="opportunity-description">
+            Ensure billing profile integrity and synchronization with audit logs, real-time event streams, and immutability gates to protect financial data consistency.
+          </div>
+          <div class="stories-grid">
+            <a href="o9-us1/index.html" class="story-card">
+              <div class="story-id">O9-US1</div>
+              <div class="story-title">Billing Sync Audit Log & Dashboard</div>
+              <span class="story-effort effort-medium">2 Weeks</span>
+            </a>
+            <a href="o9-us2/index.html" class="story-card">
+              <div class="story-id">O9-US2</div>
+              <div class="story-title">Real-Time Billing Profile Event Stream</div>
+              <span class="story-effort effort-medium">2 Weeks</span>
+            </a>
+            <a href="o9-us5/index.html" class="story-card">
+              <div class="story-id">O9-US5</div>
+              <div class="story-title">Billing Profile Immutability Gates</div>
+              <span class="story-effort effort-medium">2 Weeks</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <p>Agent 5 — Prototype Builder | Run ID: 2026-03-23-1 | Product Area: Tele-expertise (TLE) | Generated: 2026-03-23</p>
+  </footer>
+</body>
+</html>
