@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent 6 Prototypes — Run 4 TLE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dtl-navy: #1B2A4A;
+      --dtl-blue: #0596DE;
+      --dtl-blue-dark: #0080C5;
+      --dtl-blue-light: #E8F4FD;
+      --dtl-gray-50: #F7F8FA;
+      --dtl-gray-100: #F0F2F5;
+      --dtl-gray-200: #E4E7EB;
+      --dtl-gray-400: #9BA3AE;
+      --dtl-gray-500: #6B7280;
+      --dtl-gray-600: #4B5563;
+      --dtl-gray-700: #374151;
+      --dtl-gray-800: #1F2937;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--dtl-gray-50);
+      color: var(--dtl-gray-600);
+      padding: 40px 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .run-header {
+      margin-bottom: 48px;
+    }
+    .run-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--dtl-gray-800);
+      margin-bottom: 8px;
+    }
+    .run-header .meta {
+      font-size: 14px;
+      color: var(--dtl-gray-400);
+    }
+
+    .opportunity {
+      background: white;
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 32px;
+    }
+
+    .opportunity-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .priority-badge {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 4px;
+      color: white;
+      flex-shrink: 0;
+    }
+    .priority-badge.p1 { background: #EF4444; }
+    .priority-badge.p2 { background: #F59E0B; }
+    .priority-badge.p3 { background: #0596DE; }
+
+    .opportunity h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--dtl-gray-800);
+    }
+
+    .problem-statement {
+      font-size: 15px;
+      color: var(--dtl-gray-600);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      padding: 16px;
+      background: var(--dtl-gray-50);
+      border-radius: 8px;
+      border-left: 4px solid var(--dtl-blue);
+    }
+
+    .option-section {
+      margin-bottom: 20px;
+      padding: 20px;
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 8px;
+    }
+
+    .option-section h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--dtl-gray-800);
+      margin-bottom: 4px;
+    }
+
+    .option-desc {
+      font-size: 14px;
+      color: var(--dtl-gray-600);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .user-story {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+      gap: 16px;
+    }
+    .user-story:hover {
+      border-color: var(--dtl-blue);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .user-story-id {
+      font-weight: 700;
+      color: var(--dtl-blue);
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
+
+    .user-story-text {
+      font-size: 14px;
+      color: var(--dtl-gray-600);
+      line-height: 1.4;
+    }
+
+    .user-story-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      background: var(--dtl-blue);
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13px;
+      white-space: nowrap;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .user-story-link:hover {
+      background: var(--dtl-blue-dark);
+    }
+
+    .user-story-link.disabled {
+      background: var(--dtl-gray-200);
+      color: var(--dtl-gray-400);
+      cursor: not-allowed;
+    }
+    .user-story-link.disabled:hover {
+      background: var(--dtl-gray-200);
+    }
+
+    .coming-soon {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--dtl-gray-400);
+      background: var(--dtl-gray-100);
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="run-header">
+    <h1>Prototypes — Tele-expertise (TLE)</h1>
+    <div class="meta">Run 4 · Generated March 23, 2026 · Agent 6 — Prototype Builder</div>
+  </div>
+
+  <!-- ITEM 1: Low TLE Completion Rate -->
+  <div class="opportunity">
+    <div class="opportunity-header">
+      <span class="priority-badge p1">P1</span>
+      <h2>Low TLE Completion Rate</h2>
+    </div>
+    <div class="problem-statement">
+      TLEs initiated are not reaching resolution at expected rates. Current completion rate is 45% vs 55% target. This indicates workflow friction, expert availability issues, or unclear escalation criteria. Achieving the Q2 target of 10K TLE/month requires 6.6x growth with significantly improved completion rates. With 1.8K MAU specialists, the system must route cases more intelligently and ensure specialists can respond promptly.
+    </div>
+
+    <!-- Option A -->
+    <div class="option-section">
+      <h3>Option A: Expert Assignment Triage Gateway with On-Call Routing</h3>
+      <div class="option-desc">A real-time triage system evaluates case complexity and assigns to the most appropriate available expert using on-call rotation logic. Practitioners receive transparent assignment confirmation with expected response time SLA.</div>
+
+      <div class="user-story">
+        <div>
+          <div class="user-story-id">US-A1</div>
+          <div class="user-story-text">As a referring practitioner, I want to know which specialist has accepted my TLE case immediately after submission, so that I can inform the patient about expected response timing and adjust clinical workflow accordingly.</div>
+        </div>
+        <a href="us-a1/tle-dashboard.html" class="user-story-link">View Prototype &rarr;</a>
+      </div>
+
+      <div class="user-story">
+        <div>
+          <div class="user-story-id">US-A2</div>
+          <div class="user-story-text">As a specialist, I want TLE cases to be automatically routed to me only when I'm marked as on-call and available, so that I don't receive cases I cannot prioritize or respond to promptly.</div>
+        </div>
+        <a class="user-story-link disabled">Coming Soon</a>
+      </div>
+
+      <div class="user-story">
+        <div>
+          <div class="user-story-id">US-A3</div>
+          <div class="user-story-text">As a Doctolib TLE product manager, I want visibility into expert availability patterns and assignment completion rates by specialist, so that I can identify capacity constraints and rebalance workload distribution.</div>
+        </div>
+        <a class="user-story-link disabled">Coming Soon</a>
+      </div>
+
+      <div class="user-story">
+        <div>
+          <div class="user-story-id">US-A4</div>
+          <div class="user-story-text">As an emergency medicine specialist, I want urgent cases flagged as high-priority to appear at the top of my queue, so that I can address time-sensitive clinical questions first and improve response SLA compliance.</div>
+        </div>
+        <a class="user-story-link disabled">Coming Soon</a>
+      </div>
+    </div>
+
+    <!-- Option B -->
+    <div class="option-section">
+      <h3>Option B: Smart Fallback &amp; Auto-Escalation Engine</h3>
+      <div class="option-desc">Automated escalation rules monitor TLE case progress and intelligently escalate stalled or incomplete cases. When a TLE receives no response within a configurable SLA window, the system automatically escalates to a backup specialist or review pool.</div>
+
+      <div class="user-story">
+        <div>
+          <div class="user-story-id">US-B1</div>
+          <div class="user-story-text">As a referring practitioner, I want incomplete TLEs to automatically escalate to a senior specialist or backup expert after 24 hours without response, so that my patient's clinical question doesn't remain unanswered indefinitely.</div>
+        </div>
+        <a class="user-story-link disabled">Coming Soon</a>
+      </div>
+
+      <div class="user-story">
+        <div>
+          <div class="user-story-id">US-B2</div>
+          <div class="user-story-text">As a specialist, I want to see auto-reminders for incomplete cases I've marked "Awaiting Practitioner Info," so that I'm prompted to follow up when additional details arrive.</div>
+        </div>
+        <a class="user-story-link disabled">Coming Soon</a>
+      </div>
+
+      <div class="user-story">
+        <div>
+          <div class="user-story-id">US-B3</div>
+          <div class="user-story-text">As a TLE escalation coordinator, I want visibility into all escalated cases with escalation reason, so that I can manually intervene on edge cases and track systemic blockers.</div>
+        </div>
+        <a class="user-story-link disabled">Coming Soon</a>
+      </div>
+
+      <div class="user-story">
+        <div>
+          <div class="user-story-id">US-B4</div>
+          <div class="user-story-text">As a patient care team member, I want automated notifications when a TLE case is escalated due to delayed response, so that I can proactively communicate with the patient.</div>
+        </div>
+        <a class="user-story-link disabled">Coming Soon</a>
+      </div>
+    </div>
+
+    <!-- Option C -->
+    <div class="option-section">
+      <h3>Option C: Completion Incentive Badge System</h3>
+      <div class="option-desc">A gamification layer that rewards specialists for consistent, timely TLE completions with visible badges, leaderboard positioning, and profile recognition to drive engagement and reduce abandonment.</div>
+
+      <div class="user-story">
+        <div>
+          <div class="user-story-id">US-C1 – US-C4</div>
+          <div class="user-story-text">User stories covering specialist badge earning, leaderboard visibility, practitioner trust signals, and admin badge program management.</div>
+        </div>
+        <a class="user-story-link disabled">Coming Soon</a>
+      </div>
+    </div>
+
+    <!-- Option D -->
+    <div class="option-section">
+      <h3>Option D: Predictive Expert Recommendations via ML</h3>
+      <div class="option-desc">Machine learning model predicts the best specialist match for each TLE case based on historical response quality, specialty depth, case complexity, and past collaboration patterns.</div>
+
+      <div class="user-story">
+        <div>
+          <div class="user-story-id">US-D1 – US-D4</div>
+          <div class="user-story-text">User stories covering ML-powered specialist matching, confidence scoring, practitioner recommendation transparency, and model performance monitoring.</div>
+        </div>
+        <a class="user-story-link disabled">Coming Soon</a>
+      </div>
+    </div>
+
+    <!-- Option E -->
+    <div class="option-section">
+      <h3>Option E: Structured Follow-Up Workflow with Automated Reminders</h3>
+      <div class="option-desc">A structured follow-up system that tracks incomplete TLE responses, sends automated reminders at configurable intervals, and provides practitioners with status visibility throughout the process.</div>
+
+      <div class="user-story">
+        <div>
+          <div class="user-story-id">US-E1 – US-E4</div>
+          <div class="user-story-text">User stories covering automated reminder cadences, specialist follow-up prompts, practitioner status dashboards, and completion rate analytics.</div>
+        </div>
+        <a class="user-story-link disabled">Coming Soon</a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

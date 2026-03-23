@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctolib — Case Assigned (US-A1, Option A)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ─── Reset ─── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ─── Design Tokens ─── */
+  :root {
+    /* Primary palette — extracted from real Doctolib product */
+    --dtl-navy:        #1B2A4A;
+    --dtl-navy-light:  #243557;
+    --dtl-navy-hover:  #2D4068;
+    --dtl-navy-active: #1A3A6A;
+    --dtl-blue:        #0596DE;
+    --dtl-blue-dark:   #0080C5;
+    --dtl-blue-light:  #E8F4FD;
+    --dtl-green:       #00C48C;
+    --dtl-green-bar:   #2ECC71;
+    --dtl-progress:    #0596DE;
+
+    /* Neutrals */
+    --dtl-white:       #FFFFFF;
+    --dtl-gray-50:     #F7F8FA;
+    --dtl-gray-100:    #F0F2F5;
+    --dtl-gray-200:    #E4E7EB;
+    --dtl-gray-300:    #CDD1D8;
+    --dtl-gray-400:    #9BA3AE;
+    --dtl-gray-500:    #6B7280;
+    --dtl-gray-600:    #4B5563;
+    --dtl-gray-700:    #374151;
+    --dtl-gray-800:    #1F2937;
+
+    /* Spacing */
+    --sidebar-width:   76px;
+    --header-height:   52px;
+    --sub-sidebar-width: 230px;
+
+    /* Typography */
+    --font-family:     'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-xs:         11px;
+    --font-sm:         13px;
+    --font-base:       14px;
+    --font-md:         15px;
+    --font-lg:         18px;
+    --font-xl:         22px;
+
+    /* Elevation */
+    --shadow-sm:       0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md:       0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-lg:       0 4px 12px rgba(0,0,0,0.1);
+
+    /* Borders */
+    --radius-sm:       4px;
+    --radius-md:       8px;
+    --radius-lg:       12px;
+    --radius-full:     9999px;
+    --border-color:    var(--dtl-gray-200);
+  }
+
+  body {
+    font-family: var(--font-family);
+    font-size: var(--font-base);
+    color: var(--dtl-gray-800);
+    background: var(--dtl-gray-50);
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ═══════════ MAIN SIDEBAR (dark navy icon rail) ═══════════ */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    background: var(--dtl-navy);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    z-index: 110;
+    overflow-y: auto;
+    overflow-x: hidden;
+    /* No right border — seamlessly merges with dark header */
+  }
+
+  /* Doctolib "D" brandmark — large italic serif style */
+  .sidebar-logo {
+    width: 100%;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .sidebar-logo-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 2px 0;
+    gap: 0;
+    flex: 1;
+  }
+
+  .sidebar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    padding: 7px 4px 5px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-decoration: none;
+    color: rgba(255,255,255,0.65);
+    position: relative;
+    transition: background 0.15s, color 0.15s;
+    margin: 1px 0;
+  }
+  .sidebar-item:hover {
+    background: var(--dtl-navy-hover);
+    color: rgba(255,255,255,0.9);
+  }
+  .sidebar-item.active {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+  .sidebar-item svg {
+    margin-bottom: 2px;
+    flex-shrink: 0;
+  }
+  .sidebar-item span {
+    font-size: 9.5px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .sidebar-badge {
+    position: absolute;
+    top: 1px;
+    right: 0px;
+    min-width: 18px;
+    height: 18px;
+    background: var(--dtl-blue);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    border: 2px solid var(--dtl-navy);
+  }
+
+  .sidebar-spacer { flex: 1; }
+
+  .sidebar-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 16px;
+  }
+
+  .sidebar-avatar-bottom {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+  }
+
+  /* ═══════════ HEADER BAR (dark navy, flush with sidebar) ═══════════ */
+  .header {
+    position: fixed;
+    top: 0;
+    left: var(--sidebar-width);
+    right: 0;
+    height: var(--header-height);
+    background: var(--dtl-navy);
+    border-bottom: none;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    z-index: 100;
+    gap: 8px;
+  }
+
+  .header-search {
+    flex: 0 1 520px;
+    height: 36px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    gap: 8px;
+    color: rgba(255,255,255,0.45);
+    font-size: var(--font-sm);
+    cursor: text;
+  }
+  .header-search svg { flex-shrink: 0; stroke: rgba(255,255,255,0.45); }
+
+  .header-shortcut {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    margin-left: auto;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: auto;
+  }
+
+  .header-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: var(--radius-full);
+    font-size: var(--font-sm);
+    color: rgba(255,255,255,0.85);
+    background: transparent;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .header-chip:hover { background: rgba(255,255,255,0.08); }
+  .header-chip svg { stroke: rgba(255,255,255,0.7); }
+
+  .header-icon-btn {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+  }
+  .header-icon-btn:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9); }
+
+  .header-separator {
+    width: 1px;
+    height: 24px;
+    background: rgba(255,255,255,0.15);
+    margin: 0 4px;
+    flex-shrink: 0;
+  }
+
+  .header-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.25);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .header-locale {
+    font-size: var(--font-sm);
+    color: rgba(255,255,255,0.5);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  /* ═══════════ SUB-SIDEBAR (Connect section nav) ═══════════ */
+  .sub-sidebar {
+    position: fixed;
+    top: var(--header-height);
+    left: var(--sidebar-width);
+    bottom: 0;
+    width: var(--sub-sidebar-width);
+    background: var(--dtl-white);
+    border-right: 1px solid var(--dtl-gray-200);
+    padding: 20px 0;
+    z-index: 80;
+  }
+
+  .sub-sidebar-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--dtl-gray-800);
+    padding: 0 20px;
+    margin-bottom: 14px;
+  }
+
+  .sub-sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    font-size: var(--font-base);
+    color: var(--dtl-gray-600);
+    cursor: pointer;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+  .sub-sidebar-item:hover {
+    background: var(--dtl-gray-50);
+    color: var(--dtl-gray-800);
+  }
+  .sub-sidebar-item.active {
+    background: var(--dtl-blue-light);
+    color: var(--dtl-blue);
+    border-left-color: var(--dtl-blue);
+    font-weight: 600;
+  }
+
+  .sub-sidebar-tag {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--dtl-blue);
+    background: var(--dtl-blue-light);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    margin-left: auto;
+  }
+
+  /* ═══════════ CONTENT AREA ═══════════ */
+  .content {
+    position: fixed;
+    top: var(--header-height);
+    left: calc(var(--sidebar-width) + var(--sub-sidebar-width));
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    background: var(--dtl-gray-50);
+  }
+
+  .content-inner {
+    padding: 24px 32px;
+    max-width: 1200px;
+  }
+
+  /* Content breadcrumb/section label */
+  .content-section-label {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--dtl-navy);
+    margin-bottom: 16px;
+  }
+
+  /* ─── REUSABLE COMPONENTS ─── */
+  /* Hero banner — no visible border (matches real product) */
+  .hero-banner {
+    background: var(--dtl-white);
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .hero-banner h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--dtl-gray-800);
+    margin-bottom: 6px;
+  }
+
+  .hero-banner .count {
+    font-weight: 700;
+    color: var(--dtl-gray-800);
+  }
+
+  .hero-banner p {
+    color: var(--dtl-gray-500);
+    font-size: var(--font-base);
+    line-height: 1.5;
+  }
+
+  .progress-bar {
+    width: 320px;
+    height: 4px;
+    background: var(--dtl-gray-200);
+    border-radius: 2px;
+    margin-top: 10px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--dtl-progress);
+    border-radius: 2px;
+  }
+
+  /* Search bar (inside hero) */
+  .search-bar {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--dtl-white);
+    margin-top: 20px;
+    overflow: hidden;
+  }
+  .search-bar-field {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-right: 1px solid var(--border-color);
+  }
+  .search-bar-field:last-of-type { border-right: none; }
+  .search-bar-field label {
+    font-size: var(--font-sm);
+    font-weight: 600;
+    color: var(--dtl-gray-700);
+    white-space: nowrap;
+  }
+  .search-bar-field input {
+    border: none;
+    outline: none;
+    font-size: var(--font-sm);
+    color: var(--dtl-gray-400);
+    width: 100%;
+    font-family: var(--font-family);
+  }
+  .search-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    background: var(--dtl-white);
+    border: none;
+    border-left: 1px solid var(--border-color);
+    font-size: var(--font-base);
+    font-weight: 600;
+    color: var(--dtl-gray-700);
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: var(--font-family);
+  }
+  .search-btn:hover { background: var(--dtl-gray-50); }
+
+  /* Section header */
+  .section-header {
+    margin-top: 28px;
+    margin-bottom: 14px;
+  }
+  .section-header h2 {
+    font-size: var(--font-lg);
+    font-weight: 700;
+    color: var(--dtl-gray-800);
+    margin-bottom: 4px;
+  }
+  .section-header p {
+    font-size: var(--font-sm);
+    color: var(--dtl-gray-500);
+    line-height: 1.5;
+  }
+
+  /* Specialist cards */
+  .specialist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+    margin-top: 14px;
+  }
+
+  .specialist-card {
+    background: var(--dtl-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: box-shadow 0.15s, border-color 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .specialist-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--dtl-blue);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .specialist-card:hover {
+    border-color: var(--dtl-blue);
+    box-shadow: var(--shadow-md);
+  }
+  .specialist-card:hover::before { opacity: 1; }
+
+  .specialist-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--dtl-gray-200);
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .specialist-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .specialist-card h3 {
+    font-size: var(--font-base);
+    font-weight: 600;
+    color: var(--dtl-gray-800);
+    margin-bottom: 2px;
+  }
+
+  .specialist-card .specialty {
+    font-size: var(--font-sm);
+    color: var(--dtl-gray-500);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+
+  .specialist-card .location {
+    font-size: var(--font-sm);
+    color: var(--dtl-gray-400);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Category label */
+  .category-label {
+    font-size: var(--font-xs);
+    font-weight: 700;
+    color: var(--dtl-gray-400);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 24px;
+    margin-bottom: 10px;
+  }
+
+  /* "See more" button */
+  .see-more-btn {
+    display: block;
+    margin: 16px auto;
+    padding: 8px 24px;
+    background: var(--dtl-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    font-size: var(--font-sm);
+    font-weight: 500;
+    color: var(--dtl-gray-600);
+    cursor: pointer;
+    font-family: var(--font-family);
+  }
+  .see-more-btn:hover { background: var(--dtl-gray-50); }
+
+  /* Feedback widget */
+  .feedback-widget {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    float: right;
+    font-size: var(--font-sm);
+    color: var(--dtl-blue);
+  }
+
+  .feedback-widget .stars {
+    display: flex;
+    gap: 2px;
+    cursor: pointer;
+  }
+
+  .feedback-widget .star {
+    width: 22px;
+    height: 22px;
+    color: var(--dtl-gray-300);
+    transition: color 0.15s;
+  }
+  .feedback-widget .star:hover,
+  .feedback-widget .star.active { color: #F0B429; }
+
+  /* ─── CUSTOM STYLES FOR CONFIRMATION PAGE ─── */
+
+  .success-hero {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F0FDF4 100%);
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: 48px 32px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .success-hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dtl-gray-800);
+    margin-bottom: 8px;
+  }
+
+  .success-hero p {
+    font-size: 16px;
+    color: var(--dtl-gray-500);
+    margin-bottom: 0;
+  }
+
+  .details-card {
+    background: var(--dtl-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .details-card h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dtl-gray-800);
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--dtl-gray-100);
+  }
+
+  .detail-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .detail-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dtl-gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .detail-value {
+    font-size: 15px;
+    color: var(--dtl-gray-800);
+    font-weight: 500;
+  }
+
+  .specialist-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .specialist-info-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .specialist-info-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .specialist-info-content {
+    flex: 1;
+    text-align: left;
+  }
+
+  .specialist-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--dtl-gray-800);
+    margin-bottom: 2px;
+  }
+
+  .specialist-specialty {
+    font-size: 13px;
+    color: var(--dtl-gray-500);
+  }
+
+  .timeline-section {
+    background: var(--dtl-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .timeline-section h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dtl-gray-800);
+    margin-bottom: 24px;
+  }
+
+  .timeline-item {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-left: 2px solid var(--dtl-blue);
+    padding-left: 20px;
+    margin-left: -21px;
+    padding-left: 20px;
+  }
+
+  .timeline-item:last-child {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-left: 2px solid var(--dtl-gray-200);
+  }
+
+  .timeline-time {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dtl-blue);
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+
+  .timeline-content {
+    flex: 1;
+  }
+
+  .timeline-content p {
+    font-size: 14px;
+    color: var(--dtl-gray-700);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .timeline-content .detail-text {
+    font-size: 12px;
+    color: var(--dtl-gray-500);
+    margin-top: 4px;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    align-items: center;
+  }
+
+  .btn-primary {
+    padding: 12px 24px;
+    background: var(--dtl-blue);
+    color: white;
+    border: none;
+    border-radius: var(--radius-full);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-family);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .btn-primary:hover {
+    background: var(--dtl-blue-dark);
+  }
+
+  .btn-outline {
+    padding: 12px 24px;
+    background: var(--dtl-white);
+    color: var(--dtl-gray-700);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-family);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-outline:hover {
+    background: var(--dtl-gray-50);
+    border-color: var(--dtl-gray-300);
+  }
+
+  .btn-text {
+    padding: 0;
+    background: none;
+    color: var(--dtl-blue);
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-family);
+    cursor: pointer;
+    transition: color 0.2s;
+    text-decoration: none;
+  }
+
+  .btn-text:hover {
+    color: var(--dtl-blue-dark);
+  }
+
+  .info-box {
+    background: #E8F5FF;
+    border: 1px solid #B3E5FC;
+    border-left: 4px solid var(--dtl-blue);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    font-size: 14px;
+    color: var(--dtl-gray-700);
+    line-height: 1.6;
+  }
+</style>
+
+<style>
+  .nav-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 10px;
+    background: #1F2937;
+    color: white;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 8px 12px;
+    border-radius: 6px;
+    max-width: 300px;
+    width: max-content;
+    white-space: normal;
+    line-height: 1.4;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 10000;
+    text-align: left;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .nav-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #1F2937;
+  }
+  .nav-option-tab:hover .nav-tooltip {
+    opacity: 1;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ MAIN SIDEBAR (dark navy) ═══════════ -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon">
+      <!-- Doctolib "D" brandmark — stylized italic serif -->
+      <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
+        <path d="M13 7h7c7 0 11.5 4.5 11.5 11.5S27 30 20 30h-7V7zm3.8 3.5v16h3c4.8 0 7.5-3.2 7.5-8s-2.7-8-7.5-8h-3z" fill="white" opacity="0.95"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="sidebar-nav">
+    <a class="sidebar-item" href="#">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span>Agenda</span>
+    </a>
+
+    <a class="sidebar-item" href="#">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6"/><path d="M23 11h-6"/></svg>
+      <span>Patient Flow</span>
+    </a>
+
+    <a class="sidebar-item" href="#">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <span>Tasks</span>
+    </a>
+
+    <a class="sidebar-item active" href="#">
+      <span class="sidebar-badge">99+</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Connect</span>
+    </a>
+
+    <a class="sidebar-item" href="#">
+      <span class="sidebar-badge">40</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>Patient<br>Messaging</span>
+    </a>
+
+    <a class="sidebar-item" href="#">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+      <span>Patient<br>Management</span>
+    </a>
+
+    <a class="sidebar-item" href="#">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22 7 12 13 2 7"/></svg>
+      <span>E-mails</span>
+    </a>
+
+    <a class="sidebar-item" href="#">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+      <span>Document<br>Import</span>
+    </a>
+
+    <a class="sidebar-item" href="#">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span>Billing</span>
+    </a>
+
+    <a class="sidebar-item" href="#">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>Activity</span>
+    </a>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="sidebar-avatar-bottom" style="background: #E06B4B;">AP</div>
+    <div class="sidebar-avatar-bottom" style="background: #7C3AED;">MP</div>
+  </div>
+</nav>
+
+<!-- ═══════════ HEADER BAR (dark navy, flush with sidebar) ═══════════ -->
+<header class="header">
+  <div class="header-search">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <span>Search for a patient</span>
+    <div class="header-shortcut">&#8984;+K</div>
+  </div>
+
+  <div class="header-actions">
+    <div class="header-chip">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Carte Vitale
+    </div>
+    <button class="header-icon-btn" title="Video">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+    </button>
+
+    <div class="header-separator"></div>
+
+    <button class="header-icon-btn" title="Dictation">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+    </button>
+
+    <div class="header-chip">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Help and contact
+    </div>
+
+    <!-- Utility icons matching real product order -->
+    <button class="header-icon-btn" title="Visibility">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    </button>
+    <button class="header-icon-btn" title="Notifications">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    </button>
+    <button class="header-icon-btn" title="Team">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    </button>
+    <button class="header-icon-btn" title="Lock">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </button>
+    <button class="header-icon-btn" title="Settings">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+    <div class="header-avatar"></div>
+    <span class="header-locale">Locales</span>
+  </div>
+</header>
+
+<!-- ═══════════ SUB-SIDEBAR (Connect section) ═══════════ -->
+<aside class="sub-sidebar">
+  <div class="sub-sidebar-title">Connect</div>
+
+  <a class="sub-sidebar-item" href="#">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    Discussions
+  </a>
+
+  <a class="sub-sidebar-item active" href="tle-dashboard.html">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="9" y1="6" x2="9" y2="6.01"/><line x1="15" y1="6" x2="15" y2="6.01"/><line x1="9" y1="10" x2="9" y2="10.01"/><line x1="15" y1="10" x2="15" y2="10.01"/><line x1="9" y1="14" x2="9" y2="14.01"/><line x1="15" y1="14" x2="15" y2="14.01"/><path d="M10 22v-4h4v4"/></svg>
+    Tele-expertise
+    <span class="sub-sidebar-tag">New</span>
+  </a>
+
+  <a class="sub-sidebar-item" href="#">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    Networks
+  </a>
+</aside>
+
+<!-- ═══════════ CONTENT AREA ═══════════ -->
+<main class="content">
+  <div class="content-inner">
+    <div class="content-section-label">Tele-expertise</div>
+
+    <!-- ══ SAMPLE CONTENT -->
+
+    <!-- Success Hero Card -->
+    <div class="success-hero">
+      <div class="success-icon">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+          <circle cx="40" cy="40" r="40" fill="#00C48C" opacity="0.1"/>
+          <circle cx="40" cy="40" r="36" fill="none" stroke="#00C48C" stroke-width="2"/>
+          <path d="M30 40l8 8 16-16" stroke="#00C48C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+      <h1>Case Successfully Assigned</h1>
+      <p>Your tele-expertise request has been matched with a specialist.</p>
+    </div>
+
+    <!-- Assignment Details Card -->
+    <div class="details-card">
+      <h2>Assignment Details</h2>
+
+      <div class="detail-row">
+        <span class="detail-label">Assigned Specialist</span>
+        <div class="specialist-info">
+          <div class="specialist-info-avatar">
+            <img src="https://i.pravatar.cc/112?img=33" alt="Dr. Arthur CESCAU">
+          </div>
+          <div class="specialist-info-content">
+            <div class="specialist-name">Dr. Arthur CESCAU</div>
+            <div class="specialist-specialty">Cardiologist, 92200 - Neuilly-sur-Seine</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Expected Response Time</span>
+        <div class="detail-value">Within 48 hours (Standard priority)</div>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Case Reference</span>
+        <div class="detail-value">TLE-2026-04721</div>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Patient</span>
+        <div class="detail-value">Mme. Catherine DUBOIS</div>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Submitted</span>
+        <div class="detail-value">March 23, 2026 at 10:42 AM</div>
+      </div>
+    </div>
+
+    <!-- Assignment Timeline -->
+    <div class="timeline-section">
+      <h2>Assignment Timeline</h2>
+
+      <div class="timeline-item">
+        <div class="timeline-time">10:42 AM</div>
+        <div class="timeline-content">
+          <p>Request submitted by Dr. Antoine PETIT</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-time">10:42 AM</div>
+        <div class="timeline-content">
+          <p>Triage engine evaluated case</p>
+          <div class="detail-text">Complexity: Medium, Specialty: Cardiology</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-time">10:43 AM</div>
+        <div class="timeline-content">
+          <p>Matched with Dr. Arthur CESCAU</p>
+          <div class="detail-text">On-call, Queue depth: 2 cases</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-time">10:43 AM</div>
+        <div class="timeline-content">
+          <p>Assignment confirmed, SLA timer started</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="button-group">
+      <button class="btn-outline" onclick="copyLink()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+          <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+        </svg>
+        Copy Confirmation Link
+      </button>
+      <a href="tle-dashboard.html" class="btn-primary" style="text-decoration: none; display: inline-flex; align-items: center;">Return to Dashboard</a>
+      <a href="tle-case-form.html" class="btn-text">View Case Details</a>
+    </div>
+
+    <!-- Info Box -->
+    <div class="info-box">
+      You will receive a notification when Dr. CESCAU responds to your case. You can also check the status anytime from your TLE Dashboard.
+    </div>
+
+    <!-- ══ END SAMPLE CONTENT ══ -->
+
+  </div>
+</main>
+
+<script>
+function copyLink() {
+  const link = window.location.href;
+  navigator.clipboard.writeText(link).then(() => {
+    alert('Confirmation link copied to clipboard');
+  }).catch(() => {
+    alert('Failed to copy link');
+  });
+}
+</script>
+
+<div style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1B2A4A;border-radius:24px;padding:12px 24px;box-shadow:0 4px 12px rgba(0,0,0,0.15);display:flex;gap:16px;align-items:center;z-index:9999;font-family:'Open Sans',sans-serif;font-size:14px;font-weight:500;">
+  <a href="../index.html" style="color:white;text-decoration:none;padding:6px 12px;border-radius:6px;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Home</a>
+  <div style="width:1px;height:20px;background:rgba(255,255,255,0.2);"></div>
+  <div style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.6);"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#EF4444;"></span>P1</div>
+  <div style="width:1px;height:20px;background:rgba(255,255,255,0.2);"></div>
+  <div style="display:flex;gap:8px;">
+    <div style="position:relative;" class="nav-option-tab">
+      <a href="../us-a1/tle-dashboard.html" style="padding:6px 12px;border-radius:6px;text-decoration:none;color:#5BC0F0;background:rgba(5,150,222,0.3);display:block;">A</a>
+      <div class="nav-tooltip">As a referring practitioner, I want to know which specialist has accepted my TLE case immediately after submission, so that I can inform the patient about expected response timing and adjust clinical workflow accordingly.</div>
+    </div>
+    <div style="position:relative;" class="nav-option-tab">
+      <a href="#" style="padding:6px 12px;border-radius:6px;text-decoration:none;color:rgba(255,255,255,0.6);transition:background 0.2s;display:block;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">B</a>
+      <div class="nav-tooltip">As a referring practitioner, I want incomplete TLEs to automatically escalate to a senior specialist after 24 hours without response, so that my patient's clinical question doesn't remain unanswered indefinitely.</div>
+    </div>
+    <div style="position:relative;" class="nav-option-tab">
+      <a href="#" style="padding:6px 12px;border-radius:6px;text-decoration:none;color:rgba(255,255,255,0.6);transition:background 0.2s;display:block;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">C</a>
+      <div class="nav-tooltip">As a specialist, I want to earn completion badges and see my ranking among peers, so that I'm motivated to respond promptly and consistently to TLE cases.</div>
+    </div>
+    <div style="position:relative;" class="nav-option-tab">
+      <a href="#" style="padding:6px 12px;border-radius:6px;text-decoration:none;color:rgba(255,255,255,0.6);transition:background 0.2s;display:block;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">D</a>
+      <div class="nav-tooltip">As a referring practitioner, I want ML-powered specialist recommendations based on case complexity and historical match quality, so that my TLE reaches the most suitable expert.</div>
+    </div>
+    <div style="position:relative;" class="nav-option-tab">
+      <a href="#" style="padding:6px 12px;border-radius:6px;text-decoration:none;color:rgba(255,255,255,0.6);transition:background 0.2s;display:block;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">E</a>
+      <div class="nav-tooltip">As a referring practitioner, I want structured automated reminders sent to specialists who haven't responded, so that incomplete TLEs are followed up on systematically.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
