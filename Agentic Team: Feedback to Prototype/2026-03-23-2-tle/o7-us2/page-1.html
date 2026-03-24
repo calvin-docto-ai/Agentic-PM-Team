@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctolib — Billing Setup Wizard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dtl-navy: #1B2A4A;
+      --dtl-blue: #0596DE;
+      --dtl-blue-dark: #0080C5;
+      --dtl-gray-50: #F7F8FA;
+      --dtl-gray-100: #F0F2F5;
+      --dtl-gray-200: #E4E7EB;
+      --dtl-gray-400: #9BA3AE;
+      --dtl-gray-600: #4B5563;
+      --dtl-gray-800: #1F2937;
+      --dtl-green: #10B981;
+      --dtl-red: #EF4444;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--dtl-gray-50);
+      color: var(--dtl-gray-600);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: var(--dtl-navy);
+      color: white;
+      padding: 16px 24px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .header-user {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    .main {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 76px;
+      background: var(--dtl-navy);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 16px;
+      gap: 8px;
+      box-shadow: 1px 0 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar-item {
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s;
+      font-size: 24px;
+    }
+
+    .sidebar-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar-item.active {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .wizard-container {
+      width: 100%;
+      max-width: 640px;
+    }
+
+    .progress-bar {
+      margin-bottom: 40px;
+    }
+
+    .progress-steps {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .progress-steps::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--dtl-gray-200);
+      z-index: 0;
+    }
+
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 8px;
+      background: white;
+      border: 2px solid var(--dtl-gray-200);
+      color: var(--dtl-gray-600);
+    }
+
+    .progress-step.active .step-number {
+      background: var(--dtl-blue);
+      color: white;
+      border-color: var(--dtl-blue);
+    }
+
+    .progress-step.completed .step-number {
+      background: var(--dtl-green);
+      color: white;
+      border-color: var(--dtl-green);
+    }
+
+    .step-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--dtl-gray-600);
+      text-align: center;
+    }
+
+    .progress-step.active .step-label {
+      color: var(--dtl-navy);
+      font-weight: 600;
+    }
+
+    .progress-text {
+      font-size: 12px;
+      color: var(--dtl-gray-400);
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .hero {
+      background: white;
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 28px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .hero h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--dtl-navy);
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      font-size: 14px;
+      color: var(--dtl-gray-600);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .info-box {
+      background: #F0F9FF;
+      border-left: 4px solid var(--dtl-blue);
+      padding: 16px;
+      border-radius: 6px;
+      margin-bottom: 24px;
+      font-size: 13px;
+      color: #0369A1;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dtl-gray-800);
+      margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: 'Open Sans', sans-serif;
+      transition: all 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--dtl-blue);
+      box-shadow: 0 0 0 3px rgba(5, 150, 222, 0.1);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Open Sans', sans-serif;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: var(--dtl-blue);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--dtl-blue-dark);
+      box-shadow: 0 2px 8px rgba(5, 150, 222, 0.3);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--dtl-gray-800);
+      border: 1px solid var(--dtl-gray-200);
+    }
+
+    .btn-secondary:hover {
+      background: var(--dtl-gray-100);
+      border-color: var(--dtl-gray-400);
+    }
+
+    .nav-bar {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--dtl-navy);
+      border-radius: 24px;
+      padding: 12px 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      z-index: 9999;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .nav-bar a {
+      color: white;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .nav-bar a:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-opportunity {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .nav-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--dtl-red);
+    }
+
+    .nav-stories {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-story {
+      padding: 6px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.6);
+      transition: all 0.2s;
+    }
+
+    .nav-story:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-story.active {
+      color: #5BC0F0;
+      background: rgba(5, 150, 222, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">D</div>
+    <div class="header-user">
+      <span>Dr. Marie Dupont</span>
+      <div class="avatar">MD</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="sidebar">
+      <div class="sidebar-item active" title="Billing">💳</div>
+      <div class="sidebar-item" title="Tasks">✓</div>
+      <div class="sidebar-item" title="Agenda">📅</div>
+      <div class="sidebar-item" title="Messages">💬</div>
+      <div class="sidebar-item" title="Settings">⚙</div>
+    </div>
+
+    <div class="content">
+      <div class="wizard-container">
+        <div class="progress-bar">
+          <div class="progress-steps">
+            <div class="progress-step completed">
+              <div class="step-number">✓</div>
+              <div class="step-label">Account</div>
+            </div>
+            <div class="progress-step active">
+              <div class="step-number">2</div>
+              <div class="step-label">Billing Info</div>
+            </div>
+            <div class="progress-step">
+              <div class="step-number">3</div>
+              <div class="step-label">FSE Rules</div>
+            </div>
+            <div class="progress-step">
+              <div class="step-number">4</div>
+              <div class="step-label">Review</div>
+            </div>
+          </div>
+          <div class="progress-text">Step 2 of 4 — Billing Information</div>
+        </div>
+
+        <div class="hero">
+          <h1>Professional Billing Information</h1>
+          <p>Enter your billing details for specialist reimbursement through the French health system (SNCF).</p>
+
+          <div class="info-box">
+            <strong>💡 Tip:</strong> This information is required to receive payments for tele-expertise services. Your FSE (Feuille de Soins Électronique) number must be valid with French health authorities.
+          </div>
+
+          <div class="form-group">
+            <label>FSE (Feuille de Soins Électronique) Number *</label>
+            <input type="text" placeholder="e.g., 12345678901234" value="">
+          </div>
+
+          <div class="form-group">
+            <label>Professional Registration Number (RPPS) *</label>
+            <input type="text" placeholder="10-digit RPPS number" value="">
+          </div>
+
+          <div class="form-group">
+            <label>IBAN for Reimbursement *</label>
+            <input type="text" placeholder="e.g., FR1420041010050500013M02606" value="">
+          </div>
+
+          <div class="form-group">
+            <label>Professional Specialty *</label>
+            <select>
+              <option value="">Select your specialty</option>
+              <option value="cardiology">Cardiology</option>
+              <option value="dermatology">Dermatology</option>
+              <option value="orthopedics">Orthopedics</option>
+              <option value="neurology">Neurology</option>
+              <option value="psychiatry">Psychiatry</option>
+              <option value="ophthalmology">Ophthalmology</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <input type="checkbox"> I confirm these details are accurate and comply with French health regulations
+            </label>
+          </div>
+
+          <div class="button-group">
+            <button class="btn btn-secondary" onclick="goToPage('page-1.html')">Back</button>
+            <button class="btn btn-primary" onclick="goToPage('page-3.html')">Continue to FSE Rules</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <a href="../index.html">Home</a>
+    <div class="nav-divider"></div>
+    <div class="nav-opportunity">
+      <span class="nav-dot"></span>
+      O7
+    </div>
+    <div class="nav-divider"></div>
+    <div class="nav-stories">
+      <a href="../o7-us2/page-1.html" class="nav-story active">2</a>
+      <a href="../o2-us1/page-1.html" class="nav-story">1</a>
+      <a href="../o2-us3/page-1.html" class="nav-story">3</a>
+    </div>
+  </div>
+
+  <script>
+    function goToPage(page) {
+      window.location.href = page;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent 5 — Prototypes | Tele-expertise</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dtl-navy: #1B2A4A;
+      --dtl-blue: #0596DE;
+      --dtl-gray-50: #F7F8FA;
+      --dtl-gray-100: #F0F2F5;
+      --dtl-gray-200: #E4E7EB;
+      --dtl-gray-400: #9BA3AE;
+      --dtl-gray-600: #4B5563;
+      --dtl-gray-800: #1F2937;
+      --dtl-green: #10B981;
+      --dtl-amber: #F59E0B;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--dtl-gray-50);
+      color: var(--dtl-gray-600);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--dtl-navy);
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: var(--dtl-gray-600);
+      margin-bottom: 8px;
+    }
+
+    .metadata {
+      font-size: 13px;
+      color: var(--dtl-gray-400);
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--dtl-gray-200);
+      margin-bottom: 48px;
+    }
+
+    .opportunity {
+      background: white;
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 8px;
+      padding: 32px;
+      margin-bottom: 28px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .opportunity h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dtl-navy);
+      margin-bottom: 8px;
+    }
+
+    .story-count {
+      font-size: 13px;
+      color: var(--dtl-gray-400);
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+
+    .story-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .story {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--dtl-gray-100);
+      transition: background 0.2s;
+    }
+
+    .story:last-child {
+      border-bottom: none;
+    }
+
+    .story:hover {
+      background: rgba(5, 150, 222, 0.02);
+    }
+
+    .story-content {
+      flex: 1;
+    }
+
+    .story-id {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dtl-gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: inline-block;
+      margin-bottom: 4px;
+    }
+
+    .story-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--dtl-gray-800);
+      margin-bottom: 4px;
+    }
+
+    .story-note {
+      font-size: 13px;
+      color: var(--dtl-gray-600);
+    }
+
+    .story-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: var(--dtl-blue);
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .story-link:hover {
+      background: #0080C5;
+      box-shadow: 0 2px 4px rgba(5, 150, 222, 0.3);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 48px;
+      padding-top: 40px;
+      border-top: 1px solid var(--dtl-gray-200);
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--dtl-navy);
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--dtl-gray-600);
+      font-weight: 500;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 64px;
+      padding-top: 32px;
+      border-top: 1px solid var(--dtl-gray-200);
+      color: var(--dtl-gray-400);
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--dtl-navy);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-right: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .safety-badge {
+      display: inline-block;
+      background: #FEF3C7;
+      color: #92400E;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-left: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="badge">Agent 5</span>
+      <h1>Interactive Prototypes</h1>
+      <p class="subtitle">Tele-expertise (TLE) — 2026-03-23-2</p>
+      <div class="metadata">
+        <span>3 Prototypes</span>
+        <span>Product Area: TLE</span>
+        <span>Run: 2026-03-23-2</span>
+      </div>
+    </header>
+
+    <div class="divider"></div>
+
+    <section>
+      <div class="opportunity">
+        <h2>Opportunity 2: Expert Completion & Engagement</h2>
+        <p class="story-count">2 of 5 stories prototyped</p>
+
+        <div class="story-list">
+          <div class="story">
+            <div class="story-content">
+              <div class="story-id">O2-US1</div>
+              <div class="story-title">Responsive Expert Dashboard</div>
+              <div class="story-note">Addresses low expert completion rate with intuitive case management interface</div>
+            </div>
+            <a href="o2-us1/page-1.html" class="story-link">View</a>
+          </div>
+
+          <div class="story">
+            <div class="story-content">
+              <div class="story-id">O2-US3</div>
+              <div class="story-title">Smart Case Routing</div>
+              <div class="story-note">Enables team-based TLE workflows with intelligent expert assignment
+                <span class="safety-badge">Safety Critical</span>
+              </div>
+            </div>
+            <a href="o2-us3/page-1.html" class="story-link">View</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="opportunity">
+        <h2>Opportunity 7: Specialist Billing & Onboarding</h2>
+        <p class="story-count">1 of 5 stories prototyped</p>
+
+        <div class="story-list">
+          <div class="story">
+            <div class="story-content">
+              <div class="story-id">O7-US2</div>
+              <div class="story-title">Automated Billing Profile Setup Wizard</div>
+              <div class="story-note">Removes registration friction by guiding specialists through French FSE billing requirements</div>
+            </div>
+            <a href="o7-us2/page-1.html" class="story-link">View</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-value">3</div>
+        <div class="stat-label">Stories Prototyped</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">39 sp</div>
+        <div class="stat-label">Total Effort</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">12.13</div>
+        <div class="stat-label">Highest Weighted ICE</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">100%</div>
+        <div class="stat-label">QA Pass Rate</div>
+      </div>
+    </div>
+
+    <footer>
+      <p>Built with Agent 5 — Prototype Builder | Doctolib Design System | March 24, 2026</p>
+    </footer>
+  </div>
+</body>
+</html>
