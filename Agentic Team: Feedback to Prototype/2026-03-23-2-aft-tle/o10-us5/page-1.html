@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctolib TLE Prototype</title>
+  <style>
+
+:root {
+  --color-navy: #1B2A4A;
+  --color-blue: #0596DE;
+  --color-success: #00C48C;
+  --color-warning: #FFA500;
+  --color-error: #E74C3C;
+  --color-light-gray: #F5F5F5;
+  --color-medium-gray: #CCCCCC;
+  --color-dark-gray: #666666;
+  --color-text-primary: #333333;
+  --color-border: #DDDDDD;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f5f5f5;
+}
+
+.app-container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 76px;
+  background-color: var(--color-navy);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-top, .sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.sidebar-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 24px;
+  transition: background-color 0.2s;
+}
+
+.sidebar-icon:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-icon.active {
+  background-color: var(--color-blue);
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  height: 52px;
+  background-color: white;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.header-left {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.search-bar {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 14px;
+  width: 300px;
+}
+
+.header-right {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--color-text-primary);
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--color-blue);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.content-wrapper {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.sub-sidebar {
+  width: 230px;
+  background-color: #ffffff;
+  border-right: 1px solid var(--color-border);
+  overflow-y: auto;
+  padding: 16px 0;
+}
+
+.sub-sidebar-section {
+  padding: 8px 12px;
+}
+
+.sub-sidebar-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--color-dark-gray);
+  margin-bottom: 8px;
+  padding: 0 12px;
+}
+
+.sub-sidebar-item {
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  position: relative;
+}
+
+.sub-sidebar-item:hover {
+  background-color: #f0f0f0;
+}
+
+.sub-sidebar-item.active {
+  background-color: #e8f1fb;
+  border-left-color: var(--color-blue);
+  color: var(--color-blue);
+  font-weight: 600;
+}
+
+.new-tag {
+  display: inline-block;
+  background-color: var(--color-error);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-left: 8px;
+}
+
+.content {
+  flex: 1;
+  padding: 32px;
+  overflow-y: auto;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.journey-overlay {
+  position: fixed;
+  top: 52px;
+  right: 24px;
+  background-color: white;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 16px 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 100;
+}
+
+.journey-text {
+  font-size: 14px;
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.arrow-button {
+  background: none;
+  border: 1px solid var(--color-border);
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.arrow-button:hover:not(:disabled) {
+  background-color: var(--color-light-gray);
+}
+
+.arrow-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 52px;
+  background-color: white;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 24px;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.nav-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-dark-gray);
+}
+
+.nav-home {
+  font-size: 14px;
+  color: var(--color-blue);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.nav-home:hover {
+  text-decoration: underline;
+}
+
+.nav-tabs {
+  display: flex;
+  gap: 16px;
+  margin-left: auto;
+}
+
+.nav-tab {
+  font-size: 13px;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  position: relative;
+  padding: 4px 0;
+}
+
+.nav-tab:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 36px;
+  left: -20px;
+  background-color: var(--color-navy);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s;
+  z-index: 200;
+}
+
+.content {
+  padding-bottom: 80px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 16px;
+  margin-top: 24px;
+}
+
+.section-title:first-child {
+  margin-top: 0;
+}
+
+.description {
+  font-size: 14px;
+  color: var(--color-dark-gray);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.button-primary {
+  background-color: var(--color-blue);
+  color: white;
+}
+
+.button-primary:hover {
+  background-color: #0480c1;
+}
+
+.button-secondary {
+  background-color: var(--color-light-gray);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
+.button-secondary:hover {
+  background-color: #e8e8e8;
+}
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.toggle {
+  width: 56px;
+  height: 28px;
+  background-color: var(--color-success);
+  border-radius: 14px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.toggle.off {
+  background-color: var(--color-medium-gray);
+}
+
+.toggle-switch {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  background-color: white;
+  border-radius: 50%;
+  transition: left 0.2s;
+}
+
+.toggle.off .toggle-switch {
+  left: 30px;
+}
+
+.toggle-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-badge.success {
+  background-color: #e6f9f0;
+  color: var(--color-success);
+}
+
+.status-badge.warning {
+  background-color: #fff3e0;
+  color: var(--color-warning);
+}
+
+.alert-box {
+  padding: 16px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  border-left: 4px solid;
+}
+
+.alert-box.success {
+  background-color: #e6f9f0;
+  border-left-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.alert-box.warning {
+  background-color: #fff3e0;
+  border-left-color: var(--color-warning);
+  color: var(--color-warning);
+}
+
+.alert-icon {
+  font-size: 20px;
+  margin-right: 12px;
+}
+
+.checklist {
+  list-style: none;
+  margin-bottom: 24px;
+}
+
+.checklist-item {
+  padding: 12px 0;
+  font-size: 14px;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.checklist-item:before {
+  content: '✓';
+  color: var(--color-success);
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.card {
+  background-color: white;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.welcome-banner {
+  background: linear-gradient(135deg, var(--color-blue) 0%, #0480c1 100%);
+  color: white;
+  padding: 24px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.banner-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.banner-description {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.benefits-list {
+  list-style: none;
+  margin-bottom: 16px;
+}
+
+.benefits-item {
+  padding: 8px 0;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.benefits-item:before {
+  content: '•';
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.settings-menu {
+  list-style: none;
+}
+
+.settings-menu-item {
+  padding: 12px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--color-text-primary);
+  transition: background-color 0.2s;
+}
+
+.settings-menu-item:hover {
+  background-color: var(--color-light-gray);
+}
+
+.settings-menu-item.active {
+  background-color: #e8f1fb;
+  color: var(--color-blue);
+  font-weight: 600;
+}
+
+.settings-content {
+  padding-left: 24px;
+}
+
+.two-column {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 32px;
+  margin-top: 24px;
+}
+
+.confirmation-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.next-steps {
+  background-color: var(--color-light-gray);
+  padding: 16px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+
+.next-steps-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 12px;
+}
+
+.next-steps-list {
+  list-style: none;
+}
+
+.next-steps-item {
+  padding: 8px 0;
+  font-size: 13px;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.next-steps-item:before {
+  content: counter(item);
+  counter-increment: item;
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  background-color: var(--color-blue);
+  color: white;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.next-steps-list {
+  counter-reset: item;
+}
+
+.specialist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.specialist-card {
+  background-color: white;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.specialist-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 8px;
+}
+
+.specialist-info {
+  font-size: 13px;
+  color: var(--color-dark-gray);
+  line-height: 1.5;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+}
+
+.data-table thead {
+  background-color: var(--color-light-gray);
+}
+
+.data-table th {
+  padding: 12px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.data-table td {
+  padding: 12px;
+  font-size: 13px;
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.data-table tbody tr:hover {
+  background-color: #fafafa;
+}
+
+.table-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+  font-size: 13px;
+}
+
+.page-number {
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: white;
+}
+
+.page-number.active {
+  background-color: var(--color-blue);
+  color: white;
+  border-color: var(--color-blue);
+}
+
+.email-template {
+  background-color: white;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.email-header {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 12px;
+}
+
+.email-content {
+  font-size: 14px;
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.email-cta {
+  display: inline-block;
+  background-color: var(--color-blue);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.filter-section {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  align-items: center;
+}
+
+.filter-input {
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 13px;
+  flex: 1;
+  max-width: 250px;
+}
+
+.filter-button {
+  padding: 10px 16px;
+  background-color: var(--color-blue);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.filter-button:hover {
+  background-color: #0480c1;
+}
+
+.campaign-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background-color: white;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-blue);
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--color-dark-gray);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+  </style>
+</head>
+<body>
+<div id="journey-overlay" style="position: fixed; top: 52px; left: 0; right: 0; z-index: 9998; background: linear-gradient(135deg, #1B2A4A 0%, #2d3f66 100%); color: white; padding: 12px 24px; display: flex; align-items: center; justify-content: center; gap: 20px; font-family: 'Open Sans', sans-serif; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border-bottom: 2px solid #5BC0F0;">
+  <a href="page-1.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center; visibility: hidden;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9664;</a>
+  <div style="text-align: center; flex: 1; max-width: 600px;">
+    <span style="color: #5BC0F0; font-weight: 600;">Step 1 of 3</span>
+    <span style="margin: 0 8px; color: rgba(255,255,255,0.4);">&mdash;</span>
+    <span style="color: rgba(255,255,255,0.9);">Product team defines campaign cohort and drafts reactivation email</span>
+  </div>
+  <a href="page-2.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9654;</a>
+</div>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-top">
+        <div class="sidebar-icon active">📋</div>
+        <div class="sidebar-icon">👥</div>
+        <div class="sidebar-icon">📅</div>
+        <div class="sidebar-icon">💬</div>
+        <div class="sidebar-icon">📊</div>
+        <div class="sidebar-icon">⚙️</div>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="avatar" style="background-color: var(--color-blue);">DM</div>
+        <div class="avatar" style="background-color: var(--color-success);">PN</div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <!-- Header -->
+      <div class="header">
+        <div class="header-left">
+          <input type="text" class="search-bar" placeholder="Search...">
+        </div>
+        <div class="header-right">
+          <button class="icon-button">🔔</button>
+          <button class="icon-button">❓</button>
+          <div class="avatar">AD</div>
+        </div>
+      </div>
+
+      <!-- Journey Overlay -->
+      <div class="content-wrapper">
+        <!-- Sub-sidebar -->
+        <div class="sub-sidebar">
+          <div class="sub-sidebar-section">
+            <div class="sub-sidebar-title">Connect</div>
+            <div class="sub-sidebar-item active">
+              Tele-expertise
+              <span class="new-tag">New</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="content">
+
+        <div class="page-title">Reactivation Email Campaign</div>
+        <p class="description">Support team sends targeted emails to specialists with disabled preferences</p>
+
+        <div class="filter-section">
+          <select class="filter-input">
+            <option>All specialists</option>
+            <option>Last 30 days</option>
+            <option>Last 90 days</option>
+            <option>Last 1 year</option>
+          </select>
+          <button class="filter-button">Filter</button>
+        </div>
+
+        <div class="section-title">Email Campaign Summary</div>
+        <div class="campaign-stats">
+          <div class="stat-card">
+            <div class="stat-number">847</div>
+            <div class="stat-label">Target Specialists</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">3</div>
+            <div class="stat-label">Scheduled Sends</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">72h</div>
+            <div class="stat-label">Send Interval</div>
+          </div>
+        </div>
+
+        <div class="section-title">Email Preview</div>
+        <div class="email-template">
+          <div class="email-header">Subject: We'd love to have you back on Doctolib Tele-Expertise!</div>
+          <div class="email-content">
+            <p><strong>Hello Dr. Leclerc,</strong></p>
+            <p>We noticed your tele-expertise profile was recently disabled. We'd love to understand what happened and how we can help you get back to accepting patient consultations.</p>
+            <p><strong>Why activate tele-expertise again?</strong></p>
+            <ul style="margin-left: 20px; margin-bottom: 12px;">
+              <li>Reach more patients across your network</li>
+              <li>Flexible scheduling that works with your practice</li>
+              <li>Competitive compensation for remote consultations</li>
+              <li>Access to our support team for assistance</li>
+            </ul>
+            <p>If you have any questions or concerns, our support team is here to help.</p>
+            <p style="margin-top: 20px;">
+              <a href="#" class="email-cta">Reactivate Tele-Expertise</a>
+            </p>
+            <p style="font-size: 12px; color: var(--color-dark-gray);">
+              Best regards,<br>
+              The Doctolib Support Team
+            </p>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button class="button button-primary">Review & Send (Page 2)</button>
+          <button class="button button-secondary">Edit Campaign</button>
+        </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="nav-tab">
+        US2
+        <div class="tooltip">US2: Specialist Account Settings - Preference Toggle</div>
+      </div>
+      <div class="nav-tab">
+        US3
+        <div class="tooltip">US3: Admin Bulk Settings Update Tool</div>
+      </div>
+      <div class="nav-tab">
+        US4
+        <div class="tooltip">US4: GP Expert Pool Report - Specialist Search</div>
+      </div>
+      <div class="nav-tab">
+        US5
+        <div class="tooltip">US5: Support Reactivation Email Campaign</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const pageNum = parseInt(document.currentScript.getAttribute('data-page') || '1');
+    document.getElementById('journey-text').textContent = `Step ${pageNum} of 3`;
+    document.getElementById('prev-btn').disabled = pageNum === 1;
+    document.getElementById('next-btn').disabled = pageNum === 3;
+    
+    document.getElementById('prev-btn').addEventListener('click', () => {
+      if (pageNum > 1) window.location.href = `page-${pageNum - 1}.html`;
+    });
+    
+    document.getElementById('next-btn').addEventListener('click', () => {
+      if (pageNum < 3) window.location.href = `page-${pageNum + 1}.html`;
+    });
+  </script>
+  <script data-page="1"></script>
+<!-- FLOATING NAV BAR -->
+<div id="story-nav-bar" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1B2A4A; border-radius: 24px; padding: 10px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; gap: 12px; align-items: center; z-index: 9999; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 500;">
+  <div style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.6);">
+    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #0596DE;"></span>
+    O10
+  </div>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../index.html" style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">&larr; Home</a>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../o10-us1/page-1.html" title="As a French Specialist (Expert/Responder), I want to be explicitly asked during my initial account setup whether I accept tele-expertise requests via Doctolib Connect, so that I understand this service is available and deliberately enable or disable it, preventing silent defaults that leave me invisible to GPs." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">1</a>
+  <a href="../o10-us2/page-1.html" title="As a French Specialist (Expert/Responder), I want to see a prominent 'Tele-Expertise' toggle in my account settings with a status badge showing 'You are visible to GPs' or 'You are not visible to GPs', so that I can verify my tele-expertise status and change it at any time without confusion." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">2</a>
+  <a href="../o10-us3/page-1.html" title="As a Doctolib Admin / Support Team, I want to use a bulk settings update tool to enable allow_tele_expertise_request = true for all specialists affected by the July 2025 bug, so that hidden experts are immediately visible to GPs without requiring individual specialist action." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">3</a>
+  <a href="../o10-us4/page-1.html" title="As a French GP (Requester), I want to see a brief 'Expert Pool Report' when I search for a specialty, showing how many specialists are available and hidden (if any) due to preference settings, so that if my search returns no results, I know whether it's because no experts exist or they're all hidden by preference." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">4</a>
+  <a href="../o10-us5/page-1.html" title="As a Doctolib Support / Product Team, I want to send a reactivation email to all specialists registered since July 2025 with allow_tele_expertise_request = false, confirming their preference and offering to enable TLE, so that specialists who never deliberately opted out are given the opportunity to be visible to GPs." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: #5BC0F0; background: rgba(5,150,222,0.3); font-weight: 600;">5</a>
+</div>
+</body>
+</html>

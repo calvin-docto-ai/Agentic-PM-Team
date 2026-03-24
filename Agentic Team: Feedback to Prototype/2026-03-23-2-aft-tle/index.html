@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent 5 — Prototypes | AFT TLE Run 2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Open Sans', sans-serif; background: #F7F8FA; color: #1B2A4A; min-height: 100vh; }
+    .header-bar { background: #1B2A4A; color: white; padding: 20px 32px; display: flex; align-items: center; gap: 16px; }
+    .header-bar h1 { font-size: 18px; font-weight: 600; }
+    .header-bar .subtitle { color: rgba(255,255,255,0.6); font-size: 13px; margin-left: auto; }
+    .container { max-width: 960px; margin: 0 auto; padding: 32px 24px 60px; }
+    .summary-bar { display: flex; gap: 24px; margin-bottom: 32px; flex-wrap: wrap; }
+    .summary-card { background: white; border-radius: 8px; padding: 16px 20px; flex: 1; min-width: 140px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; }
+    .summary-card .number { font-size: 28px; font-weight: 700; color: #0596DE; }
+    .summary-card .label { font-size: 12px; color: #6B7280; margin-top: 4px; }
+    .opportunity { background: white; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); overflow: hidden; }
+    .opp-header { padding: 18px 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #E5E7EB; }
+    .opp-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .opp-header h2 { font-size: 16px; font-weight: 600; color: #1B2A4A; flex: 1; }
+    .opp-header .count { font-size: 12px; color: #6B7280; background: #F3F4F6; padding: 4px 10px; border-radius: 12px; white-space: nowrap; }
+    .story-list { padding: 0; }
+    .story { display: flex; align-items: center; padding: 14px 24px; border-bottom: 1px solid #F3F4F6; transition: background 0.15s; }
+    .story:last-child { border-bottom: none; }
+    .story:hover { background: #F7F8FA; }
+    .story-id { font-size: 11px; font-weight: 600; color: #9CA3AF; width: 64px; flex-shrink: 0; }
+    .story a { color: #0596DE; text-decoration: none; font-size: 14px; font-weight: 500; flex: 1; }
+    .story a:hover { text-decoration: underline; }
+    .story .pages { font-size: 11px; color: #9CA3AF; margin-left: 12px; white-space: nowrap; }
+    .footer { text-align: center; padding: 24px; color: #9CA3AF; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="header-bar">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="14" fill="#5BC0F0"/><path d="M8 14.5C8 11.5 10.5 9 14 9s6 2.5 6 5.5c0 2-1.5 3.5-3 4.5v2h-6v-2c-1.5-1-3-2.5-3-4.5z" fill="white"/></svg>
+    <h1>Agent 5 — Prototypes</h1>
+    <span class="subtitle">AFT TLE Run 2 &bull; 2026-03-23</span>
+  </div>
+
+  <div class="container">
+    <div class="summary-bar">
+      <div class="summary-card">
+        <div class="number">7</div>
+        <div class="label">Opportunities</div>
+      </div>
+      <div class="summary-card">
+        <div class="number">25</div>
+        <div class="label">User Stories</div>
+      </div>
+      <div class="summary-card">
+        <div class="number">75</div>
+        <div class="label">Prototype Pages</div>
+      </div>
+    </div>
+
+    <!-- O1 — Expert Suggestions Limited -->
+    <div class="opportunity">
+      <div class="opp-header">
+        <span class="opp-dot" style="background: #EF4444;"></span>
+        <h2>O1 — Expert Suggestions Limited</h2>
+        <span class="count">4 of 5 stories prototyped</span>
+      </div>
+      <div class="story-list">
+        <div class="story">
+          <span class="story-id">O1-US1</span>
+          <a href="o1-us1/page-1.html">Top 10 specialty suggestions by TLE volume for faster specialist discovery</a>
+          <span class="pages">3 pages</span>
+        </div>
+        <div class="story">
+          <span class="story-id">O1-US2</span>
+          <a href="o1-us2/page-1.html">Search help tooltip on suggestion panel to reduce abandonment</a>
+          <span class="pages">3 pages</span>
+        </div>
+        <div class="story">
+          <span class="story-id">O1-US4</span>
+          <a href="o1-us4/page-1.html">Instant auto-complete with specialist counts for niche specialties</a>
+          <span class="pages">3 pages</span>
+        </div>
+        <div class="story">
+          <span class="story-id">O1-US5</span>
+          <a href="o1-us5/page-1.html">Lazy-loaded specialty directory grouped by medical category</a>
+          <span class="pages">3 pages</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- O2 — Low Completion Rate -->
+    <div class="opportunity">
+      <div class="opp-header">
+        <span class="opp-dot" style="background: #EF4444;"></span>
+        <h2>O2 — Low Completion Rate</h2>
+        <span class="count">4 of 5 stories prototyped</span>
+      </div>
+      <div class="story-list">
+        <div class="story">
+          <span class="story-id">O2-US1</span>
+          <a href="o2-us1/page-1.html">Time estimate on TLE requests so specialists understand commitment</a>
+          <span class="pages">3 pages</span>
+        </div>
+        <div class="story">
+          <span class="story-id">O2-US2</span>
+          <a href="o2-us2/page-1.html">One-time 5-minute onboarding explaining TLE expectations</a>
+          <span class="pages">3 pages</span>
+        </div>
+        <div class="story">
+          <span class="story-id">O2-US3</span>
+          <a href="o2-us3/page-1.html">Complexity and urgency badges for triage prioritization</a>
+          <span class="pages">3 pages</span>
+        </div>
+        <div class="story">
+          <span class="story-id">O2-US5</span>
+          <a href="o2-us5/page-1.html">Automatic escalation if specialist doesn't respond within 24h</a>
+          <span class="pages">3 pages</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- O3 — Intrusive Notifications -->
+    <div class="opportunity">
+      <div class="opp-header">
+        <span class="opp-dot" style="background: #EF4444;"></span>
+        <h2>O3 — Intrusive Notifications</h2>
+        <span class="count">2 of 5 stories prototyped</span>
+      </div>
+      <div class="story-list">
+        <div class="story">
+          <span class="story-id">O3-US3</span>
+          <a href="o3-us3/page-1.html">Rate-limit TLE notifications to one every 5 minutes</a>
+          <span class="pages">3 pages</span>
+        </div>
+        <div class="story">
+          <span class="story-id">O3-US5</span>
+          <a href="o3-us5/page-1.html">Priority-only notifications with routine cases silently queued</a>
+          <span class="pages">3 pages</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- O6 — Specialists Want to Join TLE -->
+    <div class="opportunity">
+      <div class="opp-header">
+        <span class="opp-dot" style="background: #F59E0B;"></span>
+        <h2>O6 — Specialists Want to Join TLE</h2>
+        <span class="count">3 of 5 stories prototyped</span>
+      </div>
+      <div class="story-list">
+        <div class="story">
+          <span class="story-id">O6-US1</span>
+          <a href="o6-us1/page-1.html">Proactive opt-in to TLE suggestion lists from account settings</a>
+          <span class="pages">3 pages</span>
+        </div>
+        <div class="story">
+          <span class="story-id">O6-US2</span>
+          <a href="o6-us2/page-1.html">Declare availability hours and response time SLA in TLE profile</a>
+          <span class="pages">3 pages</span>
+        </div>
+        <div class="story">
+          <span class="story-id">O6-US4</span>
+          <a href="o6-us4/page-1.html">In-app discovery of TLE program with earnings calculator</a>
+          <span class="pages">3 pages</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- O8 — No Guided Onboarding -->
+    <div class="opportunity">
+      <div class="opp-header">
+        <span class="opp-dot" style="background: #0596DE;"></span>
+        <h2>O8 — No Guided Onboarding</h2>
+        <span class="count">2 of 5 stories prototyped</span>
+      </div>
+      <div class="story-list">
+        <div class="story">
+          <span class="story-id">O8-US2</span>
+          <a href="o8-us2/page-1.html">First-time onboarding overlay with response guidelines and examples</a>
+          <span class="pages">3 pages</span>
+        </div>
+        <div class="story">
+          <span class="story-id">O8-US4</span>
+          <a href="o8-us4/page-1.html">Revised satisfaction survey with clear definitions and 5-point scale</a>
+          <span class="pages">3 pages</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- O9 — Suggestions vs Search UX -->
+    <div class="opportunity">
+      <div class="opp-header">
+        <span class="opp-dot" style="background: #0596DE;"></span>
+        <h2>O9 — Suggestions vs Search UX</h2>
+        <span class="count">5 of 5 stories prototyped</span>
+      </div>
+      <div class="story-list">
+        <div class="story">
+          <span class="story-id">O9-US1</span>
+          <a href="o9-us1/page-1.html">Clear CTA button to launch full-search interface from suggestions</a>
+          <span class="pages">3 pages</span>
+        </div>
+        <div class="story">
+          <span class="story-id">O9-US2</span>
+          <a href="o9-us2/page-1.html">Suggestions labeled 'Popular Matches' with 'Search All' tab</a>
+          <span class="pages">3 pages</span>
+        </div>
+        <div class="story">
+          <span class="story-id">O9-US3</span>
+          <a href="o9-us3/page-1.html">Collapsed suggestions with expandable full specialty grid</a>
+          <span class="pages">3 pages</span>
+        </div>
+        <div class="story">
+          <span class="story-id">O9-US4</span>
+          <a href="o9-us4/page-1.html">Mini-quiz to guide GP to correct specialty when suggestions miss</a>
+          <span class="pages">3 pages</span>
+        </div>
+        <div class="story">
+          <span class="story-id">O9-US5</span>
+          <a href="o9-us5/page-1.html">Help icon explaining suggestion logic with link to full search</a>
+          <span class="pages">3 pages</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- O10 — Preference Default Bug -->
+    <div class="opportunity">
+      <div class="opp-header">
+        <span class="opp-dot" style="background: #0596DE;"></span>
+        <h2>O10 — Preference Default Bug</h2>
+        <span class="count">5 of 5 stories prototyped</span>
+      </div>
+      <div class="story-list">
+        <div class="story">
+          <span class="story-id">O10-US1</span>
+          <a href="o10-us1/page-1.html">Explicit TLE opt-in during initial account setup wizard</a>
+          <span class="pages">3 pages</span>
+        </div>
+        <div class="story">
+          <span class="story-id">O10-US2</span>
+          <a href="o10-us2/page-1.html">Prominent TLE toggle in settings with visibility status badge</a>
+          <span class="pages">3 pages</span>
+        </div>
+        <div class="story">
+          <span class="story-id">O10-US3</span>
+          <a href="o10-us3/page-1.html">Admin bulk settings tool to fix July 2025 preference bug</a>
+          <span class="pages">3 pages</span>
+        </div>
+        <div class="story">
+          <span class="story-id">O10-US4</span>
+          <a href="o10-us4/page-1.html">Expert Pool Report showing available vs hidden specialists</a>
+          <span class="pages">3 pages</span>
+        </div>
+        <div class="story">
+          <span class="story-id">O10-US5</span>
+          <a href="o10-us5/page-1.html">Reactivation email campaign for specialists with TLE disabled</a>
+          <span class="pages">3 pages</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Built by AFT Agent 5 — Prototype Builder &bull; 2026-03-24 &bull; Doctolib Tele-Expertise
+  </div>
+</body>
+</html>

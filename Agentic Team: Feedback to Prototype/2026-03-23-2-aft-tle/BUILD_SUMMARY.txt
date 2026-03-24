@@ -1,0 +1,130 @@
+DOCTOLIB TLE OPPORTUNITY 9 PROTOTYPES
+Completed: 2026-03-24
+
+FOLDER STRUCTURE
+================
+
+/2026-03-23-2-aft-tle/
+├── o9-us1/
+│   └── page-1.html          (24KB) - In-Suggestion CTA "Search all 130,000 experts"
+├── o9-us2/
+│   └── page-1.html          (26KB) - Tab Navigation "Popular Matches" + "Search All Specialists"
+├── o9-us3/
+│   └── page-1.html          (24KB) - Progressive Disclosure "Show more specialties +"
+├── o9-us4/
+│   └── page-1.html          (22KB) - Guided Mini-Quiz to Redirect to Search
+└── o9-us5/
+    └── page-1.html          (21KB) - Contextual Tooltip "Why only Cardio and Derm?"
+
+
+STORY DETAILS
+=============
+
+O9-US1: In-Suggestion CTA Button
+- Feature: Prominent blue button "Search all 130,000 experts →" 
+- Functionality: Clicking reveals a full search interface with specialty dropdown and text input
+- Key elements: Quantified language, large button, distinct visual treatment
+- Navigation: Links to other stories via floating nav bar
+
+O9-US2: Tab Navigation
+- Feature: Two functional tabs at top: "Popular Matches in Your Region" (active) and "Search All Specialists"
+- Tab 1 Content: Shows 3 cardio/dermato cards with "12 requests this month" badges
+- Tab 2 Content: Full search interface with specialty and location filters
+- Functionality: JavaScript driven tab switching, active state styling
+- Navigation: Links to other stories via floating nav bar
+
+O9-US3: Progressive Disclosure
+- Feature: "Show more specialties +" link below default 2 specialty cards
+- Default View: Cardiology, Dermatology (with expert counts)
+- Expanded View: 11 additional specialties (Neurology, Gastroenterology, Orthopedics, etc.)
+- Functionality: Toggle button expands/collapses specialty grid
+- Data: Each specialty shows expert count (e.g., "847 experts", "623 experts")
+- Navigation: Links to other stories via floating nav bar
+
+O9-US4: Guided Mini-Quiz
+- Feature: "My case doesn't match these suggestions" link opens interactive quiz panel
+- Questions:
+  - Q1: "What is the patient's medical concern?" (6 options: Skin, Heart, Digestion, Movement, Nervous, Other)
+  - Q2: "How urgent is this?" (3 options: Routine, Within a week, Very urgent)
+  - Q3: "Any location preferences?" (3 options: Any, My region, My city)
+- Result: Displays recommended specialty with "Search for Specialists" button
+- Functionality: Multi-step JavaScript quiz with question navigation and result display
+- Navigation: Links to other stories via floating nav bar
+
+O9-US5: Contextual Tooltip
+- Feature: Help icon (?) next to "Suggested Specialists" heading
+- Tooltip Content: "We show the most frequently requested specialties. Our platform has 130,000+ experts across all medical fields." with "Search all specialties →" link
+- Interaction: Hover or click to show/hide tooltip
+- Styling: Dark background tooltip with arrow pointer, positioned above icon
+- Navigation: Links to other stories via floating nav bar
+
+
+SHARED FEATURES
+===============
+
+All 5 Prototypes Include:
+✓ Complete sidebar (dark navy, icon rail with active "Connect" state)
+✓ Header bar with search, chips, actions (video, dictation, help, visibility, notifications, team, settings)
+✓ Sub-sidebar "Connect" navigation (Discussions, Tele-expertise with "New" tag)
+✓ Hero banner: "Find the right expertise" with progress bar
+✓ Realistic specialist data: Dr. Sophie Bernard, Dr. Pierre Legrand, Dr. Margot Dubois (with avatars)
+✓ Specialty categories: Cardiology, Dermatology sections
+✓ Location display with icons
+✓ Floating navigation bar (O9 label, blue dot, numbered story buttons 1-5)
+✓ English text only (no emoji icons in UI)
+✓ Doctolib design tokens: Navy #1B2A4A, Blue #0596DE, Open Sans font
+✓ Responsive specialist card grid (auto-fill layout)
+✓ Smooth transitions and hover states
+✓ Cross-linking between all 5 stories in floating nav
+
+
+DESIGN SYSTEM COMPLIANCE
+=========================
+
+✓ Sidebar: --dtl-navy background, white text
+✓ Active story in nav: color:#5BC0F0; background:rgba(5,150,222,0.3)
+✓ Inactive stories: color:rgba(255,255,255,0.6)
+✓ O9 label with blue dot (#0596DE)
+✓ All 5 approved stories shown (1, 2, 3, 4, 5)
+✓ Specialist cards: white background, gray border, hover: blue border + shadow
+✓ Buttons: blue background (#0596DE), hover: darker blue (#0080C5)
+✓ Typography: Open Sans, various weights (400, 500, 600, 700)
+✓ Spacing: 24px padding (content-inner), 16px card padding
+✓ Border radius: 8px (radius-md), 12px (radius-lg), 9999px (radius-full)
+
+
+INTERACTIVE ELEMENTS
+====================
+
+O9-US1: toggleSearchPanel() - Expands/collapses search interface
+O9-US2: switchTab() - Switches between Popular Matches and Search All Specialists tabs
+O9-US3: toggleMoreSpecialties() - Expands/collapses additional specialty categories
+O9-US4: selectOption(), nextQuestion(), showResult(), applyRecommendation(), resetQuiz() - Multi-step quiz flow
+O9-US5: Hover-based tooltip display (CSS :hover state)
+
+
+FILE LOCATIONS
+==============
+
+Base output directory:
+/sessions/amazing-cool-galileo/mnt/Agentic Team: Feedback to Prototype/2026-03-23-2-aft-tle/
+
+Individual prototypes:
+- /sessions/amazing-cool-galileo/mnt/Agentic Team: Feedback to Prototype/2026-03-23-2-aft-tle/o9-us1/page-1.html
+- /sessions/amazing-cool-galileo/mnt/Agentic Team: Feedback to Prototype/2026-03-23-2-aft-tle/o9-us2/page-1.html
+- /sessions/amazing-cool-galileo/mnt/Agentic Team: Feedback to Prototype/2026-03-23-2-aft-tle/o9-us3/page-1.html
+- /sessions/amazing-cool-galileo/mnt/Agentic Team: Feedback to Prototype/2026-03-23-2-aft-tle/o9-us4/page-1.html
+- /sessions/amazing-cool-galileo/mnt/Agentic Team: Feedback to Prototype/2026-03-23-2-aft-tle/o9-us5/page-1.html
+
+
+SCAFFOLDING SOURCE
+==================
+
+Baseline template used:
+/sessions/amazing-cool-galileo/OS-prototype-scaffolding/tle-flow.html
+
+All 5 prototypes built from complete HTML baseline including:
+- Full Doctolib design tokens CSS
+- Complete sidebar + header + sub-sidebar structure
+- All navigation elements and styling preserved
+- Content area customized per story requirement

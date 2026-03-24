@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O2-US2-Page-3 - Specialist Responds to First Case</title>
+  <style>
+    :root {
+      --dtl-navy: #1B2A4A;
+      --dtl-navy-light: #243557;
+      --dtl-navy-hover: #2D4068;
+      --dtl-blue: #0596DE;
+      --dtl-blue-dark: #0080C5;
+      --dtl-blue-light: #E8F4FD;
+      --dtl-green: #00C48C;
+      --dtl-success-bg: #E8F5E9;
+      --dtl-success-border: #4CAF50;
+      --dtl-white: #FFFFFF;
+      --dtl-gray-50: #F7F8FA;
+      --dtl-gray-100: #F0F2F5;
+      --dtl-gray-200: #E4E7EB;
+      --dtl-gray-500: #6B7280;
+      --dtl-gray-600: #4B5563;
+      --dtl-gray-700: #374151;
+      --dtl-gray-800: #1F2937;
+      --sidebar-width: 76px;
+      --header-height: 52px;
+      --sub-sidebar-width: 230px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--dtl-gray-50);
+      color: var(--dtl-gray-800);
+      line-height: 1.5;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background-color: var(--dtl-navy);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0;
+      gap: 24px;
+      z-index: 1000;
+    }
+
+    .sidebar-logo {
+      width: 44px;
+      height: 44px;
+      background-color: var(--dtl-blue);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--dtl-white);
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-item {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background-color: transparent;
+      color: var(--dtl-gray-500);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-item:hover {
+      background-color: var(--dtl-navy-light);
+      color: var(--dtl-blue);
+    }
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: var(--sidebar-width);
+      right: 0;
+      height: var(--header-height);
+      background-color: var(--dtl-white);
+      border-bottom: 1px solid var(--dtl-gray-200);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 16px;
+      z-index: 999;
+    }
+
+    .search-bar {
+      flex: 1;
+      max-width: 500px;
+      height: 36px;
+      background-color: var(--dtl-gray-100);
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 6px;
+      padding: 0 12px;
+      font-size: 14px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .icon-button {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--dtl-gray-600);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-button:hover {
+      background-color: var(--dtl-gray-100);
+      color: var(--dtl-navy);
+    }
+
+    .sub-sidebar {
+      position: fixed;
+      top: var(--header-height);
+      left: var(--sidebar-width);
+      width: var(--sub-sidebar-width);
+      height: calc(100vh - var(--header-height) - 48px);
+      background-color: var(--dtl-white);
+      border-right: 1px solid var(--dtl-gray-200);
+      padding: 12px 0;
+      z-index: 998;
+    }
+
+    .sub-sidebar-tab {
+      padding: 12px 16px;
+      color: var(--dtl-gray-600);
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      transition: all 0.3s ease;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .sub-sidebar-tab:hover {
+      background-color: var(--dtl-gray-50);
+      color: var(--dtl-navy);
+    }
+
+    .sub-sidebar-tab.active {
+      color: var(--dtl-blue);
+      border-left-color: var(--dtl-blue);
+      background-color: var(--dtl-blue-light);
+    }
+
+    .content {
+      margin-left: calc(var(--sidebar-width) + var(--sub-sidebar-width));
+      margin-top: var(--header-height);
+      padding: 24px;
+      min-height: calc(100vh - var(--header-height) - 48px);
+    }
+
+    .content-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .case-header {
+      background-color: var(--dtl-white);
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .case-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--dtl-navy);
+      margin-bottom: 12px;
+    }
+
+    .case-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      font-size: 13px;
+    }
+
+    .detail-item {
+      display: flex;
+      gap: 8px;
+    }
+
+    .detail-label {
+      color: var(--dtl-gray-600);
+      font-weight: 500;
+    }
+
+    .detail-value {
+      color: var(--dtl-gray-800);
+    }
+
+    .response-section {
+      background-color: var(--dtl-white);
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--dtl-navy);
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--dtl-gray-700);
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 13px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--dtl-blue);
+      box-shadow: 0 0 0 2px var(--dtl-blue-light);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-start;
+      margin-top: 20px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 6px;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--dtl-blue);
+      color: var(--dtl-white);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--dtl-blue-dark);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--dtl-blue);
+      border: 1px solid var(--dtl-blue);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--dtl-blue-light);
+    }
+
+    #journey-overlay {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background-color: var(--dtl-white);
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      z-index: 997;
+      max-width: 320px;
+    }
+
+    .journey-header {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dtl-gray-600);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .journey-step {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--dtl-navy);
+      margin-bottom: 16px;
+    }
+
+    .journey-nav {
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+    }
+
+    .journey-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid var(--dtl-gray-200);
+      background-color: var(--dtl-white);
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .journey-btn:hover:not(:disabled) {
+      background-color: var(--dtl-gray-50);
+      border-color: var(--dtl-gray-500);
+    }
+
+    .journey-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    #story-nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: var(--sidebar-width);
+      right: 0;
+      height: 48px;
+      background-color: var(--dtl-white);
+      border-top: 1px solid var(--dtl-gray-200);
+      display: flex;
+      gap: 24px;
+      padding: 0 24px;
+      align-items: center;
+      z-index: 996;
+    }
+
+    .story-tab {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dtl-gray-600);
+      cursor: pointer;
+      padding: 8px 4px;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .story-tab:hover {
+      color: var(--dtl-navy);
+    }
+
+    .story-tab.active {
+      color: var(--dtl-white);
+      background-color: #5BC0F0;
+      border-radius: 4px;
+      padding: 8px 12px;
+    }
+
+    .success-message {
+      background-color: var(--dtl-success-bg);
+      border: 1px solid var(--dtl-success-border);
+      border-left: 3px solid var(--dtl-success-border);
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: var(--dtl-gray-800);
+    }
+  </style>
+</head>
+<body>
+  <nav class="sidebar">
+    <div class="sidebar-logo">D</div>
+    <div class="sidebar-nav">
+      <div class="sidebar-item" title="Home">🏠</div>
+      <div class="sidebar-item" title="Messages">💬</div>
+      <div class="sidebar-item" title="Calendar">📅</div>
+    </div>
+  </nav>
+
+  <header class="header">
+    <input type="text" class="search-bar" placeholder="Rechercher...">
+    <div class="header-actions">
+      <button class="icon-button" title="Notifications">🔔</button>
+      <button class="icon-button" title="Profile">👤</button>
+    </div>
+  </header>
+<!-- Journey Step Overlay -->
+<div id="journey-overlay" style="position: fixed; top: 52px; left: 0; right: 0; z-index: 9998; background: linear-gradient(135deg, #1B2A4A 0%, #2d3f66 100%); color: white; padding: 12px 24px; display: flex; align-items: center; justify-content: center; gap: 20px; font-family: 'Open Sans', sans-serif; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border-bottom: 2px solid #5BC0F0;">
+  <a href="page-2.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9664;</a>
+  <div style="text-align: center; flex: 1; max-width: 600px;">
+    <span style="color: #5BC0F0; font-weight: 600;">Step 3 of 3</span>
+    <span style="margin: 0 8px; color: rgba(255,255,255,0.4);">&mdash;</span>
+    <span style="color: rgba(255,255,255,0.9);">Specialist clicks 'Start Responding' and sees first case in inbox</span>
+  </div>
+  <a href="page-3.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center; visibility: hidden;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9654;</a>
+</div>
+
+  <aside class="sub-sidebar">
+    <div class="sub-sidebar-tab active">Connect</div>
+    <div class="sub-sidebar-tab">Discussions</div>
+    <div class="sub-sidebar-tab">TLE</div>
+  </aside>
+
+  <main class="content">
+    <div class="content-inner">
+      <div class="success-message">
+        ✓ Onboarding completed! You're ready to start responding to TLE requests.
+      </div>
+
+      <div class="case-header">
+        <div class="case-title">Patient: Marie Dubois</div>
+        <div class="case-details">
+          <div class="detail-item">
+            <span class="detail-label">Âge:</span>
+            <span class="detail-value">48 ans</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Motif:</span>
+            <span class="detail-value">Migraine chronique</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Médecin référent:</span>
+            <span class="detail-value">Dr. Pierre Marchand</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Localité:</span>
+            <span class="detail-value">Lyon</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="response-section">
+        <div class="section-title">Rédiger ma réponse</div>
+        
+        <div class="form-group">
+          <label class="form-label">Réponse à la demande</label>
+          <textarea class="form-input" placeholder="Tapez votre recommandation clinique ici...
+
+Incluez:
+• Évaluation clinique
+• Recommandation spécifique
+• Justification
+• Considérations de sécurité
+• Plan de suivi"></textarea>
+        </div>
+
+        <div class="action-buttons">
+          <button class="btn btn-primary">Soumettre la réponse</button>
+          <button class="btn btn-secondary">Enregistrer en brouillon</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="journey-step">Specialist clicks 'Start Responding' and sees first case in inbox</div>
+    <div class="journey-nav">
+      <button class="journey-btn" onclick="navigateJourney(-1)">← Précédent</button>
+      <button class="journey-btn" onclick="navigateJourney(1)" disabled>Suivant →</button>
+    </div>
+  </div>
+
+  <div class="story-tab">US2 - Onboarding</div>
+    <div class="story-tab">US3 - Triage</div>
+    <div class="story-tab">US5 - Escalation</div>
+  </div>
+
+  <script>
+    function navigateJourney(direction) {
+      if (direction === -1) {
+        window.location.href = './page-2.html';
+      }
+    }
+  </script>
+<!-- FLOATING NAV BAR -->
+<div id="story-nav-bar" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1B2A4A; border-radius: 24px; padding: 10px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; gap: 12px; align-items: center; z-index: 9999; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 500;">
+  <div style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.6);">
+    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #EF4444;"></span>
+    O2
+  </div>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../index.html" style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">&larr; Home</a>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../o2-us1/page-1.html" title="As a French Specialist, I want to see an estimate of how long a TLE response typically takes, so that I understand commitment before opening the request and accept cases I can complete." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">1</a>
+  <a href="../o2-us2/page-1.html" title="As a French Specialist, I want to complete a one-time 5-minute onboarding explaining TLE expectations, so that I respond with confidence." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: #5BC0F0; background: rgba(5,150,222,0.3); font-weight: 600;">2</a>
+  <a href="../o2-us3/page-1.html" title="As a French Specialist, I want to see complexity and urgency badges on each TLE request, so that I prioritize quick wins and defer complex cases." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">3</a>
+  <a href="../o2-us5/page-1.html" title="As a French GP, I want automatic escalation if the specialist doesn't respond within 24 hours, so that my case is handled without indefinite waiting." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">5</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctolib TLE - US2 Page 1</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --dtl-navy: #1B2A4A; --dtl-navy-light: #243557; --dtl-navy-hover: #2D4068; --dtl-navy-active: #1A3A6A;
+      --dtl-blue: #0596DE; --dtl-blue-dark: #0080C5; --dtl-blue-light: #E8F4FD;
+      --dtl-green: #00C48C; --dtl-success-bg: #E8F5E9; --dtl-success-border: #4CAF50; --dtl-success-text: #2E7D32;
+      --dtl-white: #FFFFFF; --dtl-gray-50: #F7F8FA; --dtl-gray-100: #F0F2F5; --dtl-gray-200: #E4E7EB;
+      --dtl-gray-300: #CDD1D8; --dtl-gray-400: #9BA3AE; --dtl-gray-500: #6B7280; --dtl-gray-600: #4B5563;
+      --dtl-gray-700: #374151; --dtl-gray-800: #1F2937;
+      --sidebar-width: 76px; --header-height: 52px; --sub-sidebar-width: 230px;
+      --font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --font-xs: 11px; --font-sm: 13px; --font-base: 14px; --font-md: 15px; --font-lg: 18px; --font-xl: 22px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05); --shadow-md: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06); --shadow-lg: 0 4px 12px rgba(0,0,0,0.1);
+      --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px; --radius-full: 9999px;
+      --border-color: var(--dtl-gray-200);
+    }
+    body { font-family: var(--font-family); font-size: var(--font-base); color: var(--dtl-gray-800); background: var(--dtl-gray-50); height: 100vh; overflow: hidden; }
+    a { color: var(--dtl-blue); text-decoration: none; } a:hover { text-decoration: underline; }
+    .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-width); background: var(--dtl-navy); display: flex; flex-direction: column; align-items: center; z-index: 110; }
+    .sidebar-logo { width: 100%; height: 52px; display: flex; align-items: center; justify-content: center; }
+    .sidebar-nav { display: flex; flex-direction: column; align-items: center; width: 100%; padding: 2px 0; gap: 0; flex: 1; }
+    .sidebar-item { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 68px; padding: 7px 4px 5px; border-radius: var(--radius-md); cursor: pointer; text-decoration: none; color: rgba(255,255,255,0.65); transition: background 0.15s, color 0.15s; margin: 1px 0; }
+    .sidebar-item:hover { background: var(--dtl-navy-hover); color: rgba(255,255,255,0.9); }
+    .sidebar-item.active { background: rgba(255,255,255,0.1); color: #fff; }
+    .sidebar-item svg { margin-bottom: 2px; }
+    .sidebar-item span { font-size: 9.5px; font-weight: 500; text-align: center; }
+    .sidebar-badge { position: absolute; top: 1px; right: 0px; min-width: 18px; height: 18px; background: var(--dtl-blue); color: white; font-size: 9px; font-weight: 700; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid var(--dtl-navy); }
+    .sidebar-spacer { flex: 1; }
+    .sidebar-bottom { display: flex; flex-direction: column; align-items: center; gap: 8px; padding-bottom: 16px; }
+    .sidebar-avatar-bottom { width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; }
+    .header { position: fixed; top: 0; left: var(--sidebar-width); right: 0; height: var(--header-height); background: var(--dtl-navy); display: flex; align-items: center; padding: 0 16px; z-index: 100; gap: 8px; }
+    .header-search { flex: 0 1 520px; height: 36px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-full); display: flex; align-items: center; padding: 0 14px; gap: 8px; color: rgba(255,255,255,0.45); font-size: var(--font-sm); }
+    .header-actions { display: flex; align-items: center; gap: 2px; margin-left: auto; }
+    .header-chip { display: flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: var(--radius-full); font-size: var(--font-sm); color: rgba(255,255,255,0.85); background: transparent; cursor: pointer; }
+    .header-icon-btn { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-full); border: none; background: transparent; color: rgba(255,255,255,0.6); cursor: pointer; }
+    .header-icon-btn:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9); }
+    .header-separator { width: 1px; height: 24px; background: rgba(255,255,255,0.15); margin: 0 4px; }
+    .header-avatar { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.25); cursor: pointer; overflow: hidden; }
+    .header-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .header-locale { font-size: var(--font-sm); color: rgba(255,255,255,0.5); cursor: pointer; }
+    .header-shortcut { display: inline-flex; align-items: center; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; padding: 1px 5px; font-size: 10px; color: rgba(255,255,255,0.4); margin-left: auto; }
+    .sub-sidebar { position: fixed; top: var(--header-height); left: var(--sidebar-width); bottom: 0; width: var(--sub-sidebar-width); background: var(--dtl-white); border-right: 1px solid var(--dtl-gray-200); padding: 20px 0; z-index: 80; }
+    .sub-sidebar-title { font-size: var(--font-lg); font-weight: 700; color: var(--dtl-gray-800); padding: 0 20px; margin-bottom: 14px; }
+    .sub-sidebar-item { display: flex; align-items: center; gap: 10px; padding: 9px 20px; font-size: var(--font-base); color: var(--dtl-gray-600); cursor: pointer; text-decoration: none; border-left: 3px solid transparent; transition: all 0.15s; }
+    .sub-sidebar-item.active { background: var(--dtl-blue-light); color: var(--dtl-blue); border-left-color: var(--dtl-blue); font-weight: 600; }
+    .sub-sidebar-tag { font-size: 10px; font-weight: 600; color: var(--dtl-blue); background: var(--dtl-blue-light); padding: 2px 6px; border-radius: var(--radius-sm); margin-left: auto; }
+    .content { position: fixed; top: var(--header-height); left: calc(var(--sidebar-width) + var(--sub-sidebar-width)); right: 0; bottom: 0; overflow-y: auto; background: var(--dtl-gray-50); z-index: 50; }
+    .content-inner { padding: 76px 32px 24px 32px; max-width: 1200px; }
+    .btn-primary { background: var(--dtl-blue); color: white; border: none; border-radius: var(--radius-full); padding: 10px 24px; font-size: var(--font-base); font-weight: 600; cursor: pointer; font-family: var(--font-family); }
+    .btn-primary:hover { background: var(--dtl-blue-dark); }
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 200; display: flex; align-items: center; justify-content: center; }
+    .modal { background: var(--dtl-white); border-radius: var(--radius-lg); padding: 48px; max-width: 550px; width: 90%; box-shadow: var(--shadow-lg); text-align: center; }
+    .modal h1 { font-size: 32px; font-weight: 700; color: var(--dtl-gray-800); margin-bottom: 16px; }
+    .modal p { font-size: var(--font-base); color: var(--dtl-gray-600); line-height: 1.6; margin-bottom: 24px; }
+    .modal-emoji { font-size: 64px; margin-bottom: 20px; }
+    .btn-group { display: flex; gap: 12px; justify-content: center; }
+    .btn-secondary { background: var(--dtl-white); color: var(--dtl-gray-700); border: 1px solid var(--border-color); border-radius: var(--radius-full); padding: 10px 24px; font-size: var(--font-base); font-weight: 600; cursor: pointer; font-family: var(--font-family); }
+  </style>
+</head>
+<body>
+<nav class="sidebar">
+  <a href="../index.html" class="sidebar-logo"><div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;"><svg width="34" height="34" viewBox="0 0 40 40" fill="none"><path d="M13 7h7c7 0 11.5 4.5 11.5 11.5S27 30 20 30h-7V7zm3.8 3.5v16h3c4.8 0 7.5-3.2 7.5-8s-2.7-8-7.5-8h-3z" fill="white" opacity="0.95"/></svg></div></a>
+  <div class="sidebar-nav">
+    <a class="sidebar-item" href="#"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Calendar</span></a>
+    <div class="sidebar-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>Tasks</span></div>
+    <a class="sidebar-item active" href="#"><span class="sidebar-badge" style="position:absolute;top:1px;right:0;">1</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Connect</span></a>
+    <div class="sidebar-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Patient Messaging</span></div>
+    <div class="sidebar-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M2 8h20"/><path d="M12 8v13"/></svg><span>Patient Mgmt</span></div>
+    <div class="sidebar-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><span>Emails</span></div>
+    <div class="sidebar-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>Billing</span></div>
+  </div>
+  <div class="sidebar-spacer"></div>
+  <div class="sidebar-bottom"><div class="sidebar-avatar-bottom" style="background:#B8907C;">AP</div><div class="sidebar-avatar-bottom" style="background:#9370DB;">MP</div></div>
+</nav>
+<header class="header">
+  <div class="header-search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search for a patient</span><div class="header-shortcut">&#8984;+K</div></div>
+  <div class="header-actions">
+    <div class="header-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Insurance card</div>
+    <button class="header-icon-btn" title="Video"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></button>
+    <div class="header-separator"></div>
+    <button class="header-icon-btn" title="Notifications"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button>
+    <button class="header-icon-btn" title="Settings"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+    <div class="header-avatar"><img src="https://i.pravatar.cc/64?img=68" alt="User"></div>
+    <span class="header-locale">Locales</span>
+  </div>
+</header>
+<!-- Journey Step Overlay -->
+<div id="journey-overlay" style="position: fixed; top: 52px; left: 0; right: 0; z-index: 9998; background: linear-gradient(135deg, #1B2A4A 0%, #2d3f66 100%); color: white; padding: 12px 24px; display: flex; align-items: center; justify-content: center; gap: 20px; font-family: 'Open Sans', sans-serif; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border-bottom: 2px solid #5BC0F0;">
+  <a href="page-1.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center; visibility: hidden;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9664;</a>
+  <div style="text-align: center; flex: 1; max-width: 600px;">
+    <span style="color: #5BC0F0; font-weight: 600;">Step 1 of 3</span>
+    <span style="margin: 0 8px; color: rgba(255,255,255,0.4);">&mdash;</span>
+    <span style="color: rgba(255,255,255,0.9);">Specialist's first TLE detected — onboarding modal: Welcome to TLE</span>
+  </div>
+  <a href="page-2.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9654;</a>
+</div>
+<a href="page-2.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9654;</a>
+</div>
+<aside class="sub-sidebar">
+  <div class="sub-sidebar-title">Connect</div>
+  <a class="sub-sidebar-item" href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Discussions</a>
+  <a class="sub-sidebar-item active" href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="9" y1="6" x2="9" y2="6.01"/><line x1="15" y1="6" x2="15" y2="6.01"/><line x1="9" y1="10" x2="9" y2="10.01"/><line x1="15" y1="10" x2="15" y2="10.01"/><line x1="9" y1="14" x2="9" y2="14.01"/><line x1="15" y1="14" x2="15" y2="14.01"/><path d="M10 22v-4h4v4"/></svg>Tele-expertise<span class="sub-sidebar-tag">New</span></a>
+</aside>
+<main class="content">
+  <div class="content-inner"></div>
+</main>
+<div class="modal-overlay">
+  <div class="modal">
+    <div class="modal-emoji">👋</div>
+    <h1>Welcome to Tele-expertise</h1>
+    <p>You've received your first TLE (Tele-expertise) request! Before you start responding, let's take 5 minutes to understand what's expected of you.</p>
+    <div class="btn-group">
+      <a href="page-2.html" class="btn-primary">Start Onboarding</a>
+      <button class="btn-secondary" onclick="window.location.href='../index.html'">Skip for Now</button>
+    </div>
+  </div>
+</div>
+<div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../index.html" style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">&larr; Home</a>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../o2-us1/page-1.html" title="As a French Specialist, I want to see an estimate of how long a TLE response typically takes, so that I understand commitment before opening the request and accept cases I can complete." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">US1</a>
+  <a href="page-1.html" title="As a French Specialist, I want to complete a one-time 5-minute onboarding explaining TLE expectations, so that I respond with confidence." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: #5BC0F0; background: rgba(5,150,222,0.3); font-weight: 600;">US2</a>
+  <a href="../o2-us3/page-1.html" title="As a French Specialist, I want to see complexity and urgency badges on each TLE request, so that I prioritize quick wins and defer complex cases." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">US3</a>
+  <a href="../o2-us5/page-1.html" title="As a French GP, I want automatic escalation if the specialist doesn&#39;t respond within 24 hours, so that my case is handled without indefinite waiting." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">US5</a>
+</div>
+<!-- FLOATING NAV BAR -->
+<div id="story-nav-bar" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1B2A4A; border-radius: 24px; padding: 10px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; gap: 12px; align-items: center; z-index: 9999; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 500;">
+  <div style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.6);">
+    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #EF4444;"></span>
+    O2
+  </div>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../index.html" style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">&larr; Home</a>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../o2-us1/page-1.html" title="As a French Specialist, I want to see an estimate of how long a TLE response typically takes, so that I understand commitment before opening the request and accept cases I can complete." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">1</a>
+  <a href="../o2-us2/page-1.html" title="As a French Specialist, I want to complete a one-time 5-minute onboarding explaining TLE expectations, so that I respond with confidence." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: #5BC0F0; background: rgba(5,150,222,0.3); font-weight: 600;">2</a>
+  <a href="../o2-us3/page-1.html" title="As a French Specialist, I want to see complexity and urgency badges on each TLE request, so that I prioritize quick wins and defer complex cases." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">3</a>
+  <a href="../o2-us5/page-1.html" title="As a French GP, I want automatic escalation if the specialist doesn't respond within 24 hours, so that my case is handled without indefinite waiting." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">5</a>
+</div>
+</body>
+</html>

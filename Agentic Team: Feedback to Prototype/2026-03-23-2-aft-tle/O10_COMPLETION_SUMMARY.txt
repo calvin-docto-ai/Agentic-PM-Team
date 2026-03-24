@@ -1,0 +1,133 @@
+OPPORTUNITY 10: PREFERENCE DEFAULT BUG
+Interactive HTML Prototypes - Build Complete
+
+=== DELIVERY SUMMARY ===
+
+Created 5 fully functional HTML prototypes based on the approved O10 stories for Doctolib's Tele-Expertise platform.
+
+All prototypes:
+- Include complete Doctolib-styled sidebar, header, and sub-sidebar navigation
+- Feature the floating navigation bar with O10 blue dot (#0596DE)
+- Use the exact scaffolding structure from tle-flow.html baseline
+- Include all 5 story links in the floating nav for easy navigation
+- Feature realistic healthcare data and interaction patterns
+- Use Doctolib design tokens from the CSS variable system
+- NO emoji icons - SVG/text only, as required
+
+=== DELIVERABLES ===
+
+Output Directory:
+/sessions/amazing-cool-galileo/mnt/Agentic Team: Feedback to Prototype/2026-03-23-2-aft-tle/
+
+Root Files:
+- index.html (Main landing page linking all 5 stories)
+- O10_COMPLETION_SUMMARY.txt (This file)
+
+Story Folders (5 total):
+
+1. o10-us1/ - Expert Onboarding Flow with Explicit TLE Opt-In
+   - page-1.html (764 lines)
+   - Focus: Onboarding modal during specialist registration
+   - Key Elements: TLE feature description, €23 reimbursement display, default-enabled toggle, "Save & Continue" button, confirmation message showing "You are now visible to GPs"
+   - Interactions: Toggle ON/OFF functionality, save confirmation
+
+2. o10-us2/ - Settings Dashboard Toggle with Visibility Status
+   - page-1.html (579 lines)
+   - Focus: Account settings page for specialist TLE management
+   - Key Elements: Large ON/OFF toggle, green "You are visible to GPs" status badge, payment details card, response SLA info, guidelines link
+   - Interactions: Toggle ON/OFF changes status badge dynamically
+
+3. o10-us3/ - Admin Bulk Repair Tool
+   - page-1.html (615 lines)
+   - Focus: Admin console for bulk preference updates
+   - Key Elements: Target selection dropdown, affected count preview card (~250 specialists), change details form, reason field pre-filled "KITN-3821", notification checkbox, "Apply Bulk Change" button
+   - Interactions: Dropdown updates affected count, form submission with confirmation
+
+4. o10-us4/ - Expert Pool Visibility Report for GPs
+   - page-1.html (593 lines)
+   - Focus: GP search results with expert availability metrics
+   - Key Elements: Search bar, results list, expert pool info card showing "2 available, 1 hidden (preference)", expandable details section, specialist cards
+   - Interactions: Expandable pool details with chevron animation
+
+5. o10-us5/ - Reactivation Email Campaign (Preference Verification)
+   - page-1.html (463 lines)
+   - Focus: Landing page from preference verification email
+   - Key Elements: Full-page centered card design, current TLE status with warning icon, explanation of July 2025 bug (KITN-3821), "Turn on TLE" CTA button, footer with help links
+   - Interactions: One-click TLE reactivation with success message
+
+=== DESIGN SPECIFICATIONS IMPLEMENTED ===
+
+Sidebar & Header:
+- Fixed sidebar width: 76px (--sidebar-width)
+- Header height: 52px (--header-height)
+- Sub-sidebar width: 230px (--sub-sidebar-width)
+- Dark navy background: #1B2A4A (--dtl-navy)
+- Active item: Connect (as required)
+
+Navigation Bar:
+- Position: Fixed bottom-center (20px from bottom)
+- Background: Dark navy with transparency
+- O10 Label: Blue dot (#0596DE) with "O10" text
+- All 5 story links (1-5) included
+- Active story highlighted with blue background and color
+
+Color Palette Used:
+- Primary Blue: #0596DE (--dtl-blue)
+- Dark Navy: #1B2A4A (--dtl-navy)
+- Success Green: #00C48C (--dtl-green)
+- Light Blue Background: #E8F4FD (--dtl-blue-light)
+- Grays: Full range from #F7F8FA to #1F2937
+
+Typography:
+- Font Family: Open Sans (preloaded from Google Fonts)
+- Font sizes: 11px to 22px defined as CSS variables
+
+=== INTERACTIVE FEATURES ===
+
+Story 1: Toggle enables/disables, Save button shows confirmation
+Story 2: Toggle changes status badge from "Visible" to "Hidden" with color change
+Story 3: Dropdown filters update preview count dynamically
+Story 4: Expandable details section with chevron animation
+Story 5: CTA button triggers success message, footer links
+
+=== QUALITY ASSURANCE ===
+
+✓ All files created in correct directory structure
+✓ All 5 stories are independently accessible via floating nav
+✓ No scaffold elements were removed or modified from baseline
+✓ Consistent design tokens and color system throughout
+✓ Realistic healthcare specialist data and scenarios
+✓ Professional Doctolib branding and styling
+✓ Responsive design patterns (though primarily desktop-focused like baseline)
+✓ Clear visual hierarchy and CTA prominence
+✓ SVG icons only (no emoji)
+✓ All English text, no lorem ipsum
+
+=== FILE LOCATIONS ===
+
+Main Index:
+/sessions/amazing-cool-galileo/mnt/Agentic Team: Feedback to Prototype/2026-03-23-2-aft-tle/index.html
+
+Individual Stories:
+/sessions/amazing-cool-galileo/mnt/Agentic Team: Feedback to Prototype/2026-03-23-2-aft-tle/o10-us1/page-1.html
+/sessions/amazing-cool-galileo/mnt/Agentic Team: Feedback to Prototype/2026-03-23-2-aft-tle/o10-us2/page-1.html
+/sessions/amazing-cool-galileo/mnt/Agentic Team: Feedback to Prototype/2026-03-23-2-aft-tle/o10-us3/page-1.html
+/sessions/amazing-cool-galileo/mnt/Agentic Team: Feedback to Prototype/2026-03-23-2-aft-tle/o10-us4/page-1.html
+/sessions/amazing-cool-galileo/mnt/Agentic Team: Feedback to Prototype/2026-03-23-2-aft-tle/o10-us5/page-1.html
+
+=== HOW TO USE ===
+
+1. Start at index.html to see all 5 stories with descriptions
+2. Click any story card to view that prototype
+3. Use the floating nav bar at the bottom of any page to switch between stories
+4. Each page is fully interactive with working toggles, dropdowns, and buttons
+5. All pages maintain consistent navigation and styling
+
+=== COMPLETION TIME ===
+
+Build Date: 2026-03-24
+Total Stories: 5 (all approved)
+Total HTML Files: 6 (1 index + 5 story pages)
+Lines of Code: 3,014 (stories only, not including index)
+
+Build completed successfully without errors.

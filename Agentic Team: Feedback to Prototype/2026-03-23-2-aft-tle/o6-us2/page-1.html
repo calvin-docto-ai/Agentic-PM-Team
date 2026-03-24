@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O6-US2 Page 1 - Availability Settings</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-blue: #0596DE;
+            --success-green: #00C48C;
+            --urgent-red: #DC2626;
+            --priority-amber: #F59E0B;
+            --neutral-gray: #6B7280;
+            --light-gray: #F3F4F6;
+            --border-gray: #E5E7EB;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #FFFFFF;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+            position: relative;
+        }
+        .sidebar {
+            width: 76px;
+            background: linear-gradient(180deg, #1F2937 0%, #111827 100%);
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            z-index: 100;
+        }
+        .header {
+            position: fixed;
+            left: 76px;
+            top: 0;
+            right: 0;
+            height: 52px;
+            background: white;
+            border-bottom: 1px solid var(--border-gray);
+            z-index: 90;
+        }
+        .header-content {
+            height: 52px;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: var(--neutral-gray);
+        }
+        .main {
+            margin-left: 76px;
+            margin-top: 52px;
+            display: flex;
+            flex: 1;
+            min-height: calc(100vh - 52px);
+        }
+        .sub-sidebar {
+            width: 230px;
+            background: var(--light-gray);
+            border-right: 1px solid var(--border-gray);
+            padding: 24px 16px;
+            overflow-y: auto;
+        }
+        .nav-item {
+            padding: 12px 12px;
+            font-size: 13px;
+            color: var(--neutral-gray);
+            margin-bottom: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .nav-item.active {
+            background: white;
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+        .content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+        .journey-overlay {
+            position: fixed;
+            top: 52px;
+            left: 76px;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--primary-blue) 33%, var(--border-gray) 33%, var(--border-gray) 100%);
+            z-index: 80;
+        }
+        .main {
+            margin-top: 56px;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: #111827;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: var(--neutral-gray);
+            margin-bottom: 32px;
+        }
+        .step-indicator {
+            font-size: 12px;
+            color: var(--neutral-gray);
+            margin-bottom: 24px;
+        }
+        .form-group {
+            margin-bottom: 24px;
+        }
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        .form-select {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px 12px;
+            border: 1px solid var(--border-gray);
+            border-radius: 6px;
+            font-size: 13px;
+            color: #111827;
+        }
+        .form-description {
+            font-size: 13px;
+            color: var(--neutral-gray);
+            margin-top: 6px;
+        }
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 40px;
+        }
+        .btn {
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-primary {
+            background: var(--primary-blue);
+            color: white;
+        }
+        .btn-secondary {
+            background: var(--light-gray);
+            color: #111827;
+            border: 1px solid var(--border-gray);
+        }
+        .story-nav {
+            position: fixed;
+            bottom: 0;
+            left: 76px;
+            right: 0;
+            height: 48px;
+            background: white;
+            border-top: 1px solid var(--border-gray);
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            padding: 0 24px;
+            z-index: 70;
+        }
+        .story-tab {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            font-size: 13px;
+            color: var(--neutral-gray);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        .story-tab.active {
+            color: var(--primary-blue);
+            border-bottom-color: var(--primary-blue);
+        }
+        .content {
+            padding-bottom: 80px;
+        }
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+            background: var(--priority-amber);
+        }
+    </style>
+</head>
+<body>
+<div id="journey-overlay" style="position: fixed; top: 52px; left: 0; right: 0; z-index: 9998; background: linear-gradient(135deg, #1B2A4A 0%, #2d3f66 100%); color: white; padding: 12px 24px; display: flex; align-items: center; justify-content: center; gap: 20px; font-family: 'Open Sans', sans-serif; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border-bottom: 2px solid #5BC0F0;">
+  <a href="page-1.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center; visibility: hidden;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9664;</a>
+  <div style="text-align: center; flex: 1; max-width: 600px;">
+    <span style="color: #5BC0F0; font-weight: 600;">Step 1 of 3</span>
+    <span style="margin: 0 8px; color: rgba(255,255,255,0.4);">&mdash;</span>
+    <span style="color: rgba(255,255,255,0.9);">Specialist opens TLE profile settings</span>
+  </div>
+  <a href="page-2.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9654;</a>
+</div>
+
+    <div class="container">
+        <div class="sidebar"></div>
+        <div class="header">
+            <div class="header-content">TLE Profile Settings</div>
+        </div>
+        <div class="main">
+            <div class="sub-sidebar">
+                <div class="nav-item active">Availability</div>
+                <div class="nav-item">SLA Response Time</div>
+                <div class="nav-item">Profile Preview</div>
+            </div>
+            <div class="content">
+                <div class="step-indicator">Step 1 of 3</div>
+                <h1>Configure Your Availability</h1>
+                <p class="subtitle">Set your working hours for tele-expertise consultations</p>
+                
+                <div class="form-group">
+                    <label class="form-label">Working Hours</label>
+                    <select class="form-select">
+                        <option>Monday - Friday, 09:00 - 18:00</option>
+                        <option>Monday - Friday, 08:00 - 17:00</option>
+                        <option>Monday - Friday, 10:00 - 19:00</option>
+                        <option>Monday - Friday, 09:00 - 12:00 & 14:00 - 18:00</option>
+                        <option>Monday - Thursday, 09:00 - 18:00 (Friday off)</option>
+                        <option>Custom hours</option>
+                    </select>
+                    <p class="form-description">General practitioners will see your availability when submitting cases</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Time Zone</label>
+                    <select class="form-select">
+                        <option>Europe/Paris</option>
+                        <option>Europe/London</option>
+                        <option>Europe/Berlin</option>
+                        <option>Europe/Amsterdam</option>
+                    </select>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Continue</button>
+                </div>
+            </div>
+        </div>
+        </div>
+<!-- FLOATING NAV BAR -->
+<div id="story-nav-bar" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1B2A4A; border-radius: 24px; padding: 10px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; gap: 12px; align-items: center; z-index: 9999; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 500;">
+  <div style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.6);">
+    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #F59E0B;"></span>
+    O6
+  </div>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../index.html" style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">&larr; Home</a>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../o6-us1/page-1.html" title="As a French Specialist, I want to proactively opt-in to appear in TLE suggestion lists for my specialty, so that I can receive more expert consultation requests and grow my TLE practice without relying on Doctolib to manually enable me." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">1</a>
+  <a href="../o6-us2/page-1.html" title="As a Specialist, I want to declare my expected availability (hours, days, response time SLA) in my TLE profile, so that GPs know when to expect a response and I can manage demand to match my capacity." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: #5BC0F0; background: rgba(5,150,222,0.3); font-weight: 600;">2</a>
+  <a href="../o6-us4/page-1.html" title="As a Specialist not yet aware of TLE, I want to discover the TLE program through in-app notifications, emails, or education content, so that I can evaluate whether TLE aligns with my practice goals and learn about the earning opportunity." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">4</a>
+</div>
+</body>
+</html>

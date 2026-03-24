@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctolib TLE - Specialty Directory Modal</title>
+    <style>
+        :root {
+            --dtl-navy: #1B2A4A;
+            --dtl-blue: #0596DE;
+            --dtl-blue-dark: #0080C5;
+            --dtl-blue-light: #E8F4FD;
+            --dtl-white: #FFFFFF;
+            --dtl-gray-50: #F7F8FA;
+            --dtl-gray-200: #E4E7EB;
+            --dtl-gray-500: #6B7280;
+            --dtl-gray-800: #1F2937;
+            --sidebar-width: 76px;
+            --header-height: 52px;
+            --sub-sidebar-width: 230px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--dtl-gray-50);
+            color: var(--dtl-gray-800);
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background-color: var(--dtl-navy);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 0;
+            z-index: 1000;
+        }
+
+        .sidebar-logo {
+            width: 44px;
+            height: 44px;
+            background-color: var(--dtl-blue);
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dtl-white);
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sidebar-nav-item {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            background-color: transparent;
+            color: var(--dtl-gray-500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-nav-item.active {
+            background-color: var(--dtl-blue);
+            color: var(--dtl-white);
+        }
+
+        .sidebar-nav-item.active::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: #EF4444;
+            border-radius: 50%;
+            top: 8px;
+            right: 8px;
+        }
+
+        .sidebar-bottom {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sidebar-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dtl-white);
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-width);
+            right: 0;
+            height: var(--header-height);
+            background-color: var(--dtl-white);
+            border-bottom: 1px solid var(--dtl-gray-200);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            gap: 16px;
+            z-index: 900;
+        }
+
+        .header-search {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background-color: var(--dtl-gray-50);
+            border-radius: 6px;
+            padding: 6px 12px;
+            gap: 8px;
+        }
+
+        .header-search input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .header-action {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background-color: transparent;
+            border: 1px solid var(--dtl-gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .header-action:hover {
+            background-color: var(--dtl-gray-50);
+        }
+
+        .sub-sidebar {
+            position: fixed;
+            left: var(--sidebar-width);
+            top: var(--header-height);
+            width: var(--sub-sidebar-width);
+            height: calc(100vh - var(--header-height));
+            background-color: var(--dtl-white);
+            border-right: 1px solid var(--dtl-gray-200);
+            padding: 16px 0;
+            z-index: 850;
+        }
+
+        .sub-sidebar-title {
+            padding: 0 16px 16px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--dtl-gray-800);
+        }
+
+        .sub-sidebar-item {
+            padding: 8px 16px;
+            font-size: 14px;
+            color: var(--dtl-gray-500);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sub-sidebar-item:hover {
+            background-color: var(--dtl-gray-50);
+            color: var(--dtl-gray-800);
+        }
+
+        .sub-sidebar-item.active {
+            background-color: var(--dtl-blue-light);
+            color: var(--dtl-blue);
+            font-weight: 600;
+        }
+
+        .sub-sidebar-badge {
+            background-color: #EF4444;
+            color: var(--dtl-white);
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .journey-overlay {
+            position: fixed;
+            top: var(--header-height);
+            left: var(--sidebar-width);
+            right: 0;
+            height: 52px;
+            background: linear-gradient(90deg, #1B2A4A 0%, #2d3f66 100%);
+            color: var(--dtl-white);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 800;
+        }
+
+        .journey-nav-button {
+            width: 32px;
+            height: 32px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 6px;
+            color: var(--dtl-white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.2s ease;
+        }
+
+        .journey-nav-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .journey-nav-button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .journey-text {
+            font-size: 14px;
+            text-align: center;
+            flex: 1;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            margin-top: calc(var(--header-height) + 52px);
+            padding: 24px;
+            min-height: calc(100vh - var(--header-height) - 52px);
+        }
+
+        .content-wrapper {
+            display: flex;
+            gap: 24px;
+        }
+
+        .side-panel {
+            width: var(--sub-sidebar-width);
+            flex-shrink: 0;
+        }
+
+        .main-panel {
+            flex: 1;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+        }
+
+        .modal {
+            background-color: var(--dtl-white);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--dtl-gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dtl-gray-800);
+        }
+
+        .modal-close {
+            background-color: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--dtl-gray-500);
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--dtl-gray-800);
+        }
+
+        .modal-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .directory-category {
+            margin-bottom: 24px;
+        }
+
+        .category-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dtl-gray-800);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--dtl-gray-500);
+        }
+
+        .category-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 8px;
+        }
+
+        .category-item {
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--dtl-gray-200);
+            background-color: var(--dtl-white);
+            cursor: pointer;
+            font-size: 13px;
+            text-align: center;
+            color: var(--dtl-gray-800);
+            transition: all 0.2s ease;
+        }
+
+        .category-item:hover {
+            border-color: var(--dtl-blue);
+            background-color: var(--dtl-blue-light);
+            color: var(--dtl-blue);
+            font-weight: 500;
+        }
+
+        .category-item.loading {
+            opacity: 0.5;
+            cursor: wait;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--dtl-white);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            gap: 12px;
+            padding: 12px 16px;
+            z-index: 950;
+        }
+
+        .nav-tab {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: none;
+            background-color: transparent;
+            color: var(--dtl-gray-500);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .nav-tab.active {
+            background-color: var(--dtl-blue);
+            color: var(--dtl-white);
+        }
+
+        .nav-tab-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #EF4444;
+            border-radius: 50%;
+            position: absolute;
+            top: 4px;
+            left: 4px;
+        }
+    </style>
+</head>
+<body>
+<div id="journey-overlay" style="position: fixed; top: 52px; left: 0; right: 0; z-index: 9998; background: linear-gradient(135deg, #1B2A4A 0%, #2d3f66 100%); color: white; padding: 12px 24px; display: flex; align-items: center; justify-content: center; gap: 20px; font-family: 'Open Sans', sans-serif; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border-bottom: 2px solid #5BC0F0;">
+  <a href="page-1.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9664;</a>
+  <div style="text-align: center; flex: 1; max-width: 600px;">
+    <span style="color: #5BC0F0; font-weight: 600;">Step 2 of 3</span>
+    <span style="margin: 0 8px; color: rgba(255,255,255,0.4);">&mdash;</span>
+    <span style="color: rgba(255,255,255,0.9);">Directory modal opens with category groups, lazy-loading as GP scrolls</span>
+  </div>
+  <a href="page-3.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9654;</a>
+</div>
+
+    <div class="sidebar">
+        <div class="sidebar-logo">D</div>
+        <div class="sidebar-nav">
+            <div class="sidebar-nav-item">📅</div>
+            <div class="sidebar-nav-item">✓</div>
+            <div class="sidebar-nav-item active">🔗</div>
+            <div class="sidebar-nav-item">💬</div>
+            <div class="sidebar-nav-item">👥</div>
+            <div class="sidebar-nav-item">✉️</div>
+            <div class="sidebar-nav-item">💳</div>
+        </div>
+        <div class="sidebar-bottom">
+            <div class="sidebar-avatar">JD</div>
+            <div class="sidebar-avatar" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">+</div>
+        </div>
+    </div>
+
+    <div class="header">
+        <div class="header-search">
+            <span>🔍</span>
+            <input type="text" placeholder="Search patients, providers...">
+        </div>
+        <div class="header-action">🏥</div>
+        <div class="header-action">📹</div>
+        <div class="header-action">🎤</div>
+        <div class="header-action">❓</div>
+        <div class="header-action">🔔</div>
+        <div class="header-action">⚙️</div>
+        <div class="header-action">👤</div>
+        <div class="header-action">🌐</div>
+    </div>
+
+    <div class="sub-sidebar">
+        <div class="sub-sidebar-title">Connect</div>
+        <div class="sub-sidebar-item">Discussions</div>
+        <div class="sub-sidebar-item active">Tele-expertise <span class="sub-sidebar-badge">New</span></div>
+    </div>
+
+    <button class="journey-nav-button">→</button>
+    </div>
+
+    <div class="main-content">
+        <div class="content-wrapper">
+            <div class="side-panel"></div>
+            <div class="main-panel"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">All Specialties</div>
+                <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-content">
+                <div class="directory-category">
+                    <div class="category-title">Cardiology & Vascular</div>
+                    <div class="category-items">
+                        <div class="category-item">Cardiology</div>
+                        <div class="category-item">Interventional Cardiology</div>
+                        <div class="category-item">Cardiac Electrophysiology</div>
+                        <div class="category-item">Vascular Surgery</div>
+                    </div>
+                </div>
+
+                <div class="directory-category">
+                    <div class="category-title">Neurology & Neuro-Surgery</div>
+                    <div class="category-items">
+                        <div class="category-item">Neurology</div>
+                        <div class="category-item">Neuro-Surgery</div>
+                        <div class="category-item">Neuropsychology</div>
+                        <div class="category-item">Sleep Medicine</div>
+                    </div>
+                </div>
+
+                <div class="directory-category">
+                    <div class="category-title">Gastroenterology & Hepatology</div>
+                    <div class="category-items">
+                        <div class="category-item">Gastroenterology</div>
+                        <div class="category-item">Hepatology</div>
+                        <div class="category-item">Colorectal Surgery</div>
+                        <div class="category-item">Pancreatic Surgery</div>
+                    </div>
+                </div>
+
+                <div class="directory-category">
+                    <div class="category-title">Rheumatology & Orthopedics</div>
+                    <div class="category-items">
+                        <div class="category-item">Rheumatology</div>
+                        <div class="category-item">Orthopedic Surgery</div>
+                        <div class="category-item">Sports Medicine</div>
+                        <div class="category-item">Physical Medicine</div>
+                    </div>
+                </div>
+
+                <div class="directory-category">
+                    <div class="category-title">Dermatology & Aesthetics</div>
+                    <div class="category-items">
+                        <div class="category-item loading">Dermatology</div>
+                        <div class="category-item loading">Surgical Dermatology</div>
+                        <div class="category-item loading">Aesthetic Medicine</div>
+                        <div class="category-item loading">Venereology</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-tab"><span class="nav-tab-dot"></span>O1</div>
+        <button class="nav-tab active">US1</button>
+        <button class="nav-tab">US2</button>
+        <button class="nav-tab">US4</button>
+        <button class="nav-tab">US5</button>
+    </div>
+<!-- FLOATING NAV BAR -->
+<div id="story-nav-bar" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1B2A4A; border-radius: 24px; padding: 10px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; gap: 12px; align-items: center; z-index: 9999; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 500;">
+  <div style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.6);">
+    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #EF4444;"></span>
+    O1
+  </div>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../index.html" style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">&larr; Home</a>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../o1-us1/page-1.html" title="As a French GP (Requester), I want to see suggestions for the top 10 specialties by TLE volume nationally, so that I find relevant specialists 60% faster without manually searching." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">1</a>
+  <a href="../o1-us2/page-1.html" title="As a French GP (Requester), I want to see a 'Search for other specialties' help tooltip when I hover over the suggestion panel, so that I discover the search function and find niche specialists without abandonment." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">2</a>
+  <a href="../o1-us4/page-1.html" title="As a French GP (Requester), I want to type a specialty name and see instant auto-complete with specialist counts, so that I find niche specialists in &lt;10 seconds." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">4</a>
+  <a href="../o1-us5/page-1.html" title="As a French GP (Requester), I want to click 'View all specialties' and browse a lazy-loaded directory grouped by medical category, so that I discover specialists serendipitously." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: #5BC0F0; background: rgba(5,150,222,0.3); font-weight: 600;">5</a>
+</div>
+</body>
+</html>

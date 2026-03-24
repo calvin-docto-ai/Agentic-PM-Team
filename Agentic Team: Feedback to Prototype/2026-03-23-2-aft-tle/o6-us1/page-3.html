@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Doctolib — O6-US1</title><style>*{box-sizing:border-box;margin:0;padding:0}.sidebar{position:fixed;top:0;left:0;width:76px;height:100%;background:#1B2A4A}.header{position:fixed;top:0;left:76px;right:0;height:52px;background:#1B2A4A}.sub-sidebar{position:fixed;top:52px;left:76px;width:230px;height:calc(100%-52px);background:#fff;border-right:1px solid #E4E7EB}.content{position:fixed;top:52px;left:306px;right:0;bottom:0;overflow-y:auto;background:#F7F8FA}.content-inner{padding:76px 32px;max-width:700px}.btn-primary{background:#0596DE;color:#fff;padding:12px 24px;border:none;border-radius:9999px;cursor:pointer;font-weight:600;width:100%}.success{background:#E8F5E9;color:#2E7D32;padding:14px;border-radius:8px;border:1px solid #4CAF50;margin-bottom:20px}#journey-overlay{position:fixed;top:52px;left:0;right:0;background:linear-gradient(135deg,#1B2A4A 0%,#2d3f66 100%);color:#fff;padding:12px 24px;display:flex;justify-content:center;align-items:center;gap:20px;font-size:14px;z-index:9998;border-bottom:2px solid #5BC0F0}
+</style></head><body>
+<nav class="sidebar"></nav>
+<header class="header"></header>
+<!-- Journey Step Overlay -->
+<div id="journey-overlay" style="position: fixed; top: 52px; left: 0; right: 0; z-index: 9998; background: linear-gradient(135deg, #1B2A4A 0%, #2d3f66 100%); color: white; padding: 12px 24px; display: flex; align-items: center; justify-content: center; gap: 20px; font-family: 'Open Sans', sans-serif; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border-bottom: 2px solid #5BC0F0;">
+  <a href="page-2.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9664;</a>
+  <div style="text-align: center; flex: 1; max-width: 600px;">
+    <span style="color: #5BC0F0; font-weight: 600;">Step 3 of 3</span>
+    <span style="margin: 0 8px; color: rgba(255,255,255,0.4);">&mdash;</span>
+    <span style="color: rgba(255,255,255,0.9);">Specialist accepts TLE terms and receives confirmation: 'You're now in TLE suggestions'</span>
+  </div>
+  <a href="page-3.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center; visibility: hidden;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9654;</a>
+</div>
+<a href="#" style="visibility:hidden">&#9654;</a>
+</div>
+<aside class="sub-sidebar"><div style="font-size:18px;font-weight:700;padding:0 20px;margin-bottom:14px">Profil</div></aside>
+<main class="content">
+  <div class="content-inner">
+    <div style="background:#fff;border-radius:12px;padding:32px;box-shadow:0 1px 2px rgba(0,0,0,0.05)">
+      <div class="success">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;margin-right:8px"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <strong>Félicitations !</strong> Vous êtes maintenant inscrit au programme TLE
+      </div>
+
+      <h1 style="font-size:22px;font-weight:700;margin-bottom:6px">Vous êtes maintenant expert TLE</h1>
+      <p style="font-size:14px;color:#6B7280;margin-bottom:28px">Votre profil est visible auprès des praticiens cherchant une consultation d'expert.</p>
+
+      <div style="background:#E8F4FD;padding:16px;border-radius:8px;margin-bottom:20px">
+        <h3 style="font-size:14px;font-weight:600;margin-bottom:8px">Votre profil TLE</h3>
+        <p style="font-size:13px;color:#0080C5"><strong>Spécialité :</strong> Cardiologie interventionnelle</p>
+        <p style="font-size:13px;color:#0080C5"><strong>Statut :</strong> Actif dans les suggestions TLE</p>
+      </div>
+
+      <div style="background:#F7F8FA;padding:16px;border-radius:8px;margin-bottom:24px">
+        <h3 style="font-size:14px;font-weight:600;margin-bottom:12px">Prochaines étapes :</h3>
+        <ol style="font-size:13px;color:#4B5563;line-height:1.8;margin-left:20px">
+          <li>Consultez vos demandes TLE dans le panneau Connect</li>
+          <li>Configurez votre disponibilité (menu Paramètres)</li>
+          <li>Définissez votre SLA de réponse</li>
+        </ol>
+      </div>
+
+      <button class="btn-primary" onclick="window.location.href='../index.html'">Retour à l'accueil</button>
+    </div>
+  </div>
+</main>
+<div style="width:1px;height:20px;background:rgba(255,255,255,0.2)"></div>
+  <a href="../index.html" style="color:rgba(255,255,255,0.6);text-decoration:none;padding:6px 12px;border-radius:6px;font-size:13px">&larr; Home</a>
+  <div style="width:1px;height:20px;background:rgba(255,255,255,0.2)"></div>
+  <a href="page-1.html" style="padding:6px 12px;border-radius:6px;text-decoration:none;color:#5BC0F0;background:rgba(5,150,222,0.3);font-weight:600">US1</a>
+  <a href="../o6-us2/page-1.html" style="padding:6px 12px;border-radius:6px;text-decoration:none;color:rgba(255,255,255,0.6)">US2</a>
+  <a href="../o6-us4/page-1.html" style="padding:6px 12px;border-radius:6px;text-decoration:none;color:rgba(255,255,255,0.6)">US4</a>
+</div>
+<!-- FLOATING NAV BAR -->
+<div id="story-nav-bar" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1B2A4A; border-radius: 24px; padding: 10px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; gap: 12px; align-items: center; z-index: 9999; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 500;">
+  <div style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.6);">
+    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #F59E0B;"></span>
+    O6
+  </div>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../index.html" style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">&larr; Home</a>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../o6-us1/page-1.html" title="As a French Specialist, I want to proactively opt-in to appear in TLE suggestion lists for my specialty, so that I can receive more expert consultation requests and grow my TLE practice without relying on Doctolib to manually enable me." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: #5BC0F0; background: rgba(5,150,222,0.3); font-weight: 600;">1</a>
+  <a href="../o6-us2/page-1.html" title="As a Specialist, I want to declare my expected availability (hours, days, response time SLA) in my TLE profile, so that GPs know when to expect a response and I can manage demand to match my capacity." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">2</a>
+  <a href="../o6-us4/page-1.html" title="As a Specialist not yet aware of TLE, I want to discover the TLE program through in-app notifications, emails, or education content, so that I can evaluate whether TLE aligns with my practice goals and learn about the earning opportunity." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">4</a>
+</div>
+</body></html>
