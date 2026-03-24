@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Doctolib Connect — O11-US2: Intelligent Account Linking</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
+    :root {
+      --dtl-navy: #1B2A4A;
+      --dtl-navy-light: #243557;
+      --dtl-blue: #0596DE;
+      --dtl-blue-dark: #0080C5;
+      --dtl-blue-light: #E8F4FD;
+      --dtl-green: #00C48C;
+      --dtl-white: #FFFFFF;
+      --dtl-gray-50: #F7F8FA;
+      --dtl-gray-100: #F0F2F5;
+      --dtl-gray-200: #E4E7EB;
+      --dtl-gray-300: #CDD1D8;
+      --dtl-gray-400: #9BA3AE;
+      --dtl-gray-500: #6B7280;
+      --dtl-gray-600: #4B5563;
+      --dtl-gray-700: #374151;
+      --dtl-gray-800: #1F2937;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--dtl-gray-50);
+      color: var(--dtl-gray-600);
+    }
+    .page-wrapper {
+      display: flex;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 76px;
+      background: var(--dtl-navy);
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 16px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .sidebar-logo {
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--dtl-white);
+      font-weight: 700;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+    .sidebar-item {
+      width: 52px;
+      height: 52px;
+      background: transparent;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      font-size: 20px;
+      transition: all 0.15s;
+    }
+    .sidebar-item:hover {
+      background: var(--dtl-navy-light);
+    }
+    .sidebar-item.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--dtl-white);
+    }
+    .sidebar-item.badge {
+      position: relative;
+    }
+    .sidebar-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--dtl-blue);
+      color: var(--dtl-white);
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 9999px;
+      border: 2px solid var(--dtl-navy);
+    }
+    .header {
+      position: absolute;
+      top: 0;
+      left: 76px;
+      right: 0;
+      height: 52px;
+      background: var(--dtl-navy);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .header-search {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      padding: 6px 12px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 13px;
+      width: 200px;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header-icon {
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      font-size: 16px;
+      transition: color 0.15s;
+    }
+    .header-avatar {
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+    }
+    .sub-sidebar {
+      position: fixed;
+      left: 76px;
+      top: 52px;
+      width: 230px;
+      height: calc(100vh - 52px);
+      background: var(--dtl-white);
+      border-right: 1px solid var(--dtl-gray-200);
+      padding: 24px 0;
+      overflow-y: auto;
+    }
+    .sub-sidebar-section {
+      padding: 0 16px;
+      margin-bottom: 24px;
+    }
+    .sub-sidebar-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--dtl-gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+    .sub-sidebar-link {
+      display: block;
+      padding: 10px 12px;
+      border-radius: 6px;
+      color: var(--dtl-gray-600);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.15s;
+      margin-bottom: 4px;
+    }
+    .sub-sidebar-link:hover {
+      background: var(--dtl-gray-50);
+      color: var(--dtl-blue);
+    }
+    .sub-sidebar-link.active {
+      background: var(--dtl-blue-light);
+      color: var(--dtl-blue);
+      font-weight: 600;
+    }
+    .main {
+      margin-left: 76px;
+      margin-top: 52px;
+      flex: 1;
+      display: flex;
+    }
+    .content {
+      flex: 1;
+      background: var(--dtl-gray-50);
+      padding: 32px;
+      overflow-y: auto;
+      max-height: calc(100vh - 52px);
+    }
+    .content-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .content-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dtl-gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    .hero-banner {
+      background: var(--dtl-white);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 32px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+    .hero-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--dtl-gray-800);
+      margin-bottom: 12px;
+    }
+    .hero-subtitle {
+      font-size: 15px;
+      color: var(--dtl-gray-600);
+      margin-bottom: 24px;
+    }
+    .content-section {
+      background: var(--dtl-white);
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--dtl-gray-800);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title-icon {
+      font-size: 18px;
+    }
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: var(--dtl-gray-50);
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+    .toggle-label {
+      font-size: 14px;
+      color: var(--dtl-gray-800);
+      font-weight: 500;
+    }
+    .toggle-desc {
+      font-size: 12px;
+      color: var(--dtl-gray-500);
+      margin-top: 2px;
+    }
+    .toggle-switch {
+      width: 44px;
+      height: 24px;
+      background: var(--dtl-blue);
+      border-radius: 12px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .toggle-switch.checked {
+      background: var(--dtl-green);
+    }
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: var(--dtl-white);
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: left 0.2s;
+    }
+    .toggle-switch.checked::after {
+      left: 22px;
+    }
+    .suggestion-card {
+      background: var(--dtl-gray-50);
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .suggestion-checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--dtl-gray-300);
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--dtl-white);
+    }
+    .suggestion-checkbox.checked {
+      background: var(--dtl-blue);
+      border-color: var(--dtl-blue);
+      color: var(--dtl-white);
+      font-size: 12px;
+    }
+    .suggestion-content {
+      flex: 1;
+    }
+    .suggestion-title {
+      font-weight: 600;
+      color: var(--dtl-gray-800);
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+    .suggestion-desc {
+      font-size: 13px;
+      color: var(--dtl-gray-600);
+      margin-bottom: 8px;
+    }
+    .suggestion-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--dtl-gray-500);
+    }
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .btn {
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--dtl-blue);
+      color: var(--dtl-white);
+    }
+    .btn-primary:hover {
+      background: var(--dtl-blue-dark);
+    }
+    .btn-secondary {
+      background: var(--dtl-white);
+      color: var(--dtl-blue);
+      border: 1px solid var(--dtl-blue);
+    }
+    .btn-secondary:hover {
+      background: var(--dtl-blue-light);
+    }
+    .floating-nav {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--dtl-navy);
+      border-radius: 24px;
+      padding: 12px 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      z-index: 9999;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .floating-nav a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .floating-nav a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--dtl-white);
+    }
+    .floating-nav a.active {
+      background: rgba(5, 150, 222, 0.3);
+      color: #5BC0F0;
+    }
+    .floating-nav-divider {
+      width: 1px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .floating-nav-priority {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .priority-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #EF4444;
+    }
+    .floating-nav-options {
+      display: flex;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <div class="sidebar">
+      <div class="sidebar-logo">D</div>
+      <div class="sidebar-item active">📋</div>
+      <div class="sidebar-item">📅</div>
+      <div class="sidebar-item">✓</div>
+      <div class="sidebar-item badge">
+        💬
+        <span class="sidebar-badge">12</span>
+      </div>
+      <div class="sidebar-item">✉</div>
+      <div class="sidebar-item">👥</div>
+      <div class="sidebar-item">📧</div>
+      <div class="sidebar-item">📄</div>
+      <div class="sidebar-item">💵</div>
+      <div class="sidebar-item">📊</div>
+    </div>
+    <div class="header">
+      <div class="header-left">
+        <input class="header-search" placeholder="Search messages, people...">
+      </div>
+      <div class="header-right">
+        <div class="header-icon">🔔</div>
+        <div class="header-icon">⚙</div>
+        <div class="header-avatar">CH</div>
+      </div>
+    </div>
+    <div class="sub-sidebar">
+      <div class="sub-sidebar-section">
+        <div class="sub-sidebar-label">Connect</div>
+        <a href="#" class="sub-sidebar-link">Discussions</a>
+        <a href="#" class="sub-sidebar-link">Tele-expertise</a>
+        <a href="#" class="sub-sidebar-link">Networks</a>
+      </div>
+    </div>
+    <div class="main">
+      <div class="content">
+        <div class="content-inner">
+          <div class="content-label">Account & Merge</div>
+          <div class="hero-banner">
+            <div class="hero-title">Select Data to Merge</div>
+            <div class="hero-subtitle">We found conversations and contacts in both accounts. Choose what to combine.</div>
+          </div>
+
+          <div class="content-section">
+            <div class="section-title">
+              <span class="section-title-icon">💬</span>
+              Suggested Merges (4 conversations found)
+            </div>
+
+            <div class="suggestion-card">
+              <div class="suggestion-checkbox checked">✓</div>
+              <div class="suggestion-content">
+                <div class="suggestion-title">Cardiology Team Discussion</div>
+                <div class="suggestion-desc">Thread with Dr. Marie Laurent, Dr. Pierre Dubois, and Dr. Sophie Martin about cardiology consultations.</div>
+                <div class="suggestion-meta">
+                  <span>24 messages</span>
+                  <span>Active</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="suggestion-card">
+              <div class="suggestion-checkbox checked">✓</div>
+              <div class="suggestion-content">
+                <div class="suggestion-title">Patient Referral Coordination</div>
+                <div class="suggestion-desc">Ongoing conversation about patient care coordination with the pediatrics department.</div>
+                <div class="suggestion-meta">
+                  <span>18 messages</span>
+                  <span>Active</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="suggestion-card">
+              <div class="suggestion-checkbox checked">✓</div>
+              <div class="suggestion-content">
+                <div class="suggestion-title">TLE Appointment Scheduling</div>
+                <div class="suggestion-desc">Admin messages about scheduling tele-expertise appointments with specialists.</div>
+                <div class="suggestion-meta">
+                  <span>12 messages</span>
+                  <span>Archived</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="suggestion-card">
+              <div class="suggestion-checkbox checked">✓</div>
+              <div class="suggestion-content">
+                <div class="suggestion-title">Oncology Case Review</div>
+                <div class="suggestion-desc">Clinical discussion about patient case with tumor board members.</div>
+                <div class="suggestion-meta">
+                  <span>8 messages</span>
+                  <span>Active</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="content-section">
+            <div class="section-title">
+              <span class="section-title-icon">👥</span>
+              Merge Duplicate Contacts (6 found)
+            </div>
+
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Dr. Marie Laurent</div>
+                <div class="toggle-desc">marie.laurent@hopital.fr</div>
+              </div>
+              <div class="toggle-switch checked"></div>
+            </div>
+
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Dr. Pierre Dubois</div>
+                <div class="toggle-desc">p.dubois@clinic.com</div>
+              </div>
+              <div class="toggle-switch checked"></div>
+            </div>
+
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Dr. Sophie Martin</div>
+                <div class="toggle-desc">sophie.m@hopital.fr</div>
+              </div>
+              <div class="toggle-switch checked"></div>
+            </div>
+
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Admin Support Team</div>
+                <div class="toggle-desc">support@doctolib.fr</div>
+              </div>
+              <div class="toggle-switch checked"></div>
+            </div>
+
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Pediatrics Dept</div>
+                <div class="toggle-desc">pediatrics@hopital.fr</div>
+              </div>
+              <div class="toggle-switch checked"></div>
+            </div>
+
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Tumor Board Members</div>
+                <div class="toggle-desc">oncology-team@hopital.fr</div>
+              </div>
+              <div class="toggle-switch checked"></div>
+            </div>
+          </div>
+
+          <div class="content-section" style="background: #FFFAEF; border-color: #FFB020;">
+            <div class="section-title" style="color: #FF9800;">
+              <span class="section-title-icon">⚠</span>
+              Important: Review Before Confirming
+            </div>
+            <p style="font-size: 13px; color: #666; margin-bottom: 12px;">
+              All selected items will be merged into your primary account. This cannot be undone. Please review the list and uncheck any items you want to keep separate.
+            </p>
+            <p style="font-size: 13px; color: #666;">
+              We'll preserve your message history and only combine duplicate entries.
+            </p>
+          </div>
+
+          <div class="button-group">
+            <button class="btn btn-primary">Confirm & Merge</button>
+            <button class="btn btn-secondary">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="floating-nav">
+    <a href="../index.html">🏠 Home</a>
+    <div class="floating-nav-divider"></div>
+    <div class="floating-nav-priority">
+      <span class="priority-dot"></span>
+      O11
+    </div>
+    <div class="floating-nav-options">
+      <a href="../o11-us5/page.html">US5</a>
+      <a href="#" class="active">US2</a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Doctolib Connect — Prototype Hub (2026-03-24-1)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
+
+    :root {
+      --dtl-navy: #1B2A4A;
+      --dtl-blue: #0596DE;
+      --dtl-blue-dark: #0080C5;
+      --dtl-gray-50: #F7F8FA;
+      --dtl-gray-200: #E4E7EB;
+      --dtl-gray-600: #4B5563;
+      --dtl-gray-800: #1F2937;
+      --dtl-white: #FFFFFF;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--dtl-gray-50);
+      font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--dtl-gray-600);
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 32px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .badge {
+      background: var(--dtl-blue);
+      color: var(--dtl-white);
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--dtl-gray-800);
+    }
+
+    .subtitle {
+      color: var(--dtl-gray-600);
+      font-size: 15px;
+      margin-top: 8px;
+    }
+
+    .summary-section {
+      background: var(--dtl-white);
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 8px;
+      margin-bottom: 48px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th {
+      background: var(--dtl-gray-50);
+      padding: 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--dtl-gray-800);
+      border-bottom: 1px solid var(--dtl-gray-200);
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--dtl-gray-200);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .story-id {
+      font-weight: 600;
+      color: var(--dtl-navy);
+      font-size: 13px;
+    }
+
+    .story-title {
+      font-weight: 500;
+      color: var(--dtl-gray-800);
+    }
+
+    .story-effort {
+      display: inline-block;
+      padding: 4px 10px;
+      background: var(--dtl-gray-50);
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--dtl-gray-600);
+    }
+
+    .sections {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .opportunity-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--dtl-gray-800);
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--dtl-blue);
+    }
+
+    .prototype-card {
+      background: var(--dtl-white);
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 8px;
+      padding: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+
+    .prototype-card:hover {
+      border-color: var(--dtl-blue);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .prototype-card-content {
+      flex: 1;
+    }
+
+    .prototype-card-id {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--dtl-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .prototype-card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--dtl-gray-800);
+      margin-bottom: 6px;
+    }
+
+    .prototype-card-desc {
+      font-size: 13px;
+      color: var(--dtl-gray-600);
+    }
+
+    .prototype-card-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: var(--dtl-blue);
+      color: var(--dtl-white);
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      margin-left: 16px;
+    }
+
+    .prototype-card-link:hover {
+      background: var(--dtl-blue-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(5, 150, 222, 0.2);
+    }
+
+    .opp-label {
+      display: inline-block;
+      background: var(--dtl-gray-50);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--dtl-gray-600);
+      margin-bottom: 12px;
+    }
+
+    .stats {
+      background: var(--dtl-white);
+      border: 1px solid var(--dtl-gray-200);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 32px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--dtl-blue);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dtl-gray-600);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .footnote {
+      margin-top: 40px;
+      padding: 20px;
+      background: var(--dtl-gray-50);
+      border-left: 3px solid var(--dtl-blue);
+      border-radius: 4px;
+      font-size: 13px;
+      color: var(--dtl-gray-600);
+    }
+
+    @media (max-width: 768px) {
+      .prototype-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .prototype-card-link {
+        margin-left: 0;
+        margin-top: 12px;
+        align-self: flex-end;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <span class="badge">Agent 5</span>
+      <div>
+        <h1>Doctolib Connect — Interactive Prototypes</h1>
+        <p class="subtitle">Run: 2026-03-24-1 • 12 High-Priority User Stories</p>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">12</div>
+        <div class="stat-label">Stories</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">31</div>
+        <div class="stat-label">Dev Weeks</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">6</div>
+        <div class="stat-label">Opportunities</div>
+      </div>
+    </div>
+
+    <!-- Summary Table -->
+    <div class="summary-section">
+      <table>
+        <thead>
+          <tr>
+            <th>Story ID</th>
+            <th>Title</th>
+            <th>Opportunity</th>
+            <th>Effort</th>
+            <th>RICE Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="story-id">O11-US5</td>
+            <td class="story-title">Clear Data Handling Communication</td>
+            <td>Account Merge Safety</td>
+            <td><span class="story-effort">Medium</span></td>
+            <td>252.6K</td>
+          </tr>
+          <tr>
+            <td class="story-id">O11-US2</td>
+            <td class="story-title">Intelligent Account Linking</td>
+            <td>Account Merge Safety</td>
+            <td><span class="story-effort">Medium</span></td>
+            <td>208.0K</td>
+          </tr>
+          <tr>
+            <td class="story-id">O9-US1</td>
+            <td class="story-title">Quick Add via Search with Typeahead</td>
+            <td>Group Participant Addition</td>
+            <td><span class="story-effort">Small</span></td>
+            <td>170.0K</td>
+          </tr>
+          <tr>
+            <td class="story-id">O4-US1</td>
+            <td class="story-title">Optimistic UI Updates with Fallback</td>
+            <td>Conversation Lag & Sync</td>
+            <td><span class="story-effort">Medium</span></td>
+            <td>156.0K</td>
+          </tr>
+          <tr>
+            <td class="story-id">O4-US4</td>
+            <td class="story-title">Lag Detection & User Notification</td>
+            <td>Conversation Lag & Sync</td>
+            <td><span class="story-effort">Medium</span></td>
+            <td>156.0K</td>
+          </tr>
+          <tr>
+            <td class="story-id">O9-US4</td>
+            <td class="story-title">Role-Based Participant Management UI</td>
+            <td>Group Participant Addition</td>
+            <td><span class="story-effort">Medium</span></td>
+            <td>102.0K</td>
+          </tr>
+          <tr>
+            <td class="story-id">O1-US2</td>
+            <td class="story-title">Recipient Status Indicator in Composer</td>
+            <td>Inactive Recipients</td>
+            <td><span class="story-effort">Small</span></td>
+            <td>85.0K</td>
+          </tr>
+          <tr>
+            <td class="story-id">O2-US4</td>
+            <td class="story-title">Error Context Tooltip System</td>
+            <td>Error Notification Overload</td>
+            <td><span class="story-effort">Small</span></td>
+            <td>85.0K</td>
+          </tr>
+          <tr>
+            <td class="story-id">O9-US2</td>
+            <td class="story-title">Bulk Add with Role Assignment</td>
+            <td>Group Participant Addition</td>
+            <td><span class="story-effort">Medium</span></td>
+            <td>84.0K</td>
+          </tr>
+          <tr>
+            <td class="story-id">O10-US2</td>
+            <td class="story-title">Self-Service Absence with Preview</td>
+            <td>Multi-Day Unavailability</td>
+            <td><span class="story-effort">Medium</span></td>
+            <td>67.2K</td>
+          </tr>
+          <tr>
+            <td class="story-id">O4-US2</td>
+            <td class="story-title">Participant List Real-Time Sync</td>
+            <td>Conversation Lag & Sync</td>
+            <td><span class="story-effort">Large</span></td>
+            <td>63.7K</td>
+          </tr>
+          <tr>
+            <td class="story-id">O4-US3</td>
+            <td class="story-title">Message Ordering Consistency</td>
+            <td>Conversation Lag & Sync</td>
+            <td><span class="story-effort">Large</span></td>
+            <td>63.7K</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Prototypes by Opportunity -->
+    <div class="sections">
+      <!-- O11: Account Merge -->
+      <div class="opportunity-section">
+        <div class="section-title">O11 — Safe Account Claim & Data Loss Prevention</div>
+        <div class="opp-label">Critical for User Trust • 2 Stories</div>
+
+        <div class="prototype-card">
+          <div class="prototype-card-content">
+            <div class="prototype-card-id">O11-US5</div>
+            <div class="prototype-card-title">Clear Data Handling Communication</div>
+            <div class="prototype-card-desc">Educational messaging during account merge to build confidence and prevent data loss anxiety.</div>
+          </div>
+          <a href="o11-us5/page.html" class="prototype-card-link">View</a>
+        </div>
+
+        <div class="prototype-card">
+          <div class="prototype-card-content">
+            <div class="prototype-card-id">O11-US2</div>
+            <div class="prototype-card-title">Intelligent Account Linking</div>
+            <div class="prototype-card-desc">Smart suggestions for which messages and threads to merge when claiming duplicate accounts.</div>
+          </div>
+          <a href="o11-us2/page.html" class="prototype-card-link">View</a>
+        </div>
+      </div>
+
+      <!-- O9: Participant Addition -->
+      <div class="opportunity-section">
+        <div class="section-title">O9 — Group Chat Participant Addition</div>
+        <div class="opp-label">Reduces Friction • 3 Stories</div>
+
+        <div class="prototype-card">
+          <div class="prototype-card-content">
+            <div class="prototype-card-id">O9-US1</div>
+            <div class="prototype-card-title">Quick Add via Search with Typeahead</div>
+            <div class="prototype-card-desc">Fast search-based lookup to add team members instead of scrolling through long member lists.</div>
+          </div>
+          <a href="o9-us1/page.html" class="prototype-card-link">View</a>
+        </div>
+
+        <div class="prototype-card">
+          <div class="prototype-card-content">
+            <div class="prototype-card-id">O9-US4</div>
+            <div class="prototype-card-title">Role-Based Participant Management UI</div>
+            <div class="prototype-card-desc">Show available roles (moderator, member, observer) when adding members to prevent misconfiguration.</div>
+          </div>
+          <a href="o9-us4/page.html" class="prototype-card-link">View</a>
+        </div>
+
+        <div class="prototype-card">
+          <div class="prototype-card-content">
+            <div class="prototype-card-id">O9-US2</div>
+            <div class="prototype-card-title">Bulk Add with Role Assignment</div>
+            <div class="prototype-card-desc">CSV/paste bulk import with automatic role mapping for faster admin workflows.</div>
+          </div>
+          <a href="o9-us2/page.html" class="prototype-card-link">View</a>
+        </div>
+      </div>
+
+      <!-- O4: Conversation Lag -->
+      <div class="opportunity-section">
+        <div class="section-title">O4 — Conversation Lag & Out-of-Sync State</div>
+        <div class="opp-label">Core Messaging Reliability • 4 Stories</div>
+
+        <div class="prototype-card">
+          <div class="prototype-card-content">
+            <div class="prototype-card-id">O4-US1</div>
+            <div class="prototype-card-title">Optimistic UI Updates with Fallback</div>
+            <div class="prototype-card-desc">Show sent messages immediately while syncing in background, with graceful error recovery.</div>
+          </div>
+          <a href="o4-us1/page.html" class="prototype-card-link">View</a>
+        </div>
+
+        <div class="prototype-card">
+          <div class="prototype-card-content">
+            <div class="prototype-card-id">O4-US4</div>
+            <div class="prototype-card-title">Lag Detection & User Notification</div>
+            <div class="prototype-card-desc">Detect sync delays >2s and surface transparent banner to reassure users about message delivery.</div>
+          </div>
+          <a href="o4-us4/page.html" class="prototype-card-link">View</a>
+        </div>
+
+        <div class="prototype-card">
+          <div class="prototype-card-content">
+            <div class="prototype-card-id">O4-US2</div>
+            <div class="prototype-card-title">Participant List Real-Time Sync</div>
+            <div class="prototype-card-desc">Real-time synchronization of participant additions/removals across all connected clients.</div>
+          </div>
+          <a href="o4-us2/page.html" class="prototype-card-link">View</a>
+        </div>
+
+        <div class="prototype-card">
+          <div class="prototype-card-content">
+            <div class="prototype-card-id">O4-US3</div>
+            <div class="prototype-card-title">Message Ordering Consistency</div>
+            <div class="prototype-card-desc">Guarantee correct message order despite distributed writes and prevent confusing reordering.</div>
+          </div>
+          <a href="o4-us3/page.html" class="prototype-card-link">View</a>
+        </div>
+      </div>
+
+      <!-- O10: Absence -->
+      <div class="opportunity-section">
+        <div class="section-title">O10 — Multi-Day Unavailability Management</div>
+        <div class="opp-label">Self-Service • 1 Story</div>
+
+        <div class="prototype-card">
+          <div class="prototype-card-content">
+            <div class="prototype-card-id">O10-US2</div>
+            <div class="prototype-card-title">Self-Service Absence with Preview</div>
+            <div class="prototype-card-desc">Multi-day absence setter with live preview of auto-reply to prevent accidental misconfiguration.</div>
+          </div>
+          <a href="o10-us2/page.html" class="prototype-card-link">View</a>
+        </div>
+      </div>
+
+      <!-- O1: Recipient Status -->
+      <div class="opportunity-section">
+        <div class="section-title">O1 — Inactive Message Recipients Missing from UI</div>
+        <div class="opp-label">Visibility • 1 Story</div>
+
+        <div class="prototype-card">
+          <div class="prototype-card-content">
+            <div class="prototype-card-id">O1-US2</div>
+            <div class="prototype-card-title">Recipient Status Indicator in Composer</div>
+            <div class="prototype-card-desc">Show recipient online/offline/inactive status in message composer to prevent wasted messages.</div>
+          </div>
+          <a href="o1-us2/page.html" class="prototype-card-link">View</a>
+        </div>
+      </div>
+
+      <!-- O2: Error Handling -->
+      <div class="opportunity-section">
+        <div class="section-title">O2 — Error Notification Overload</div>
+        <div class="opp-label">User Guidance • 1 Story</div>
+
+        <div class="prototype-card">
+          <div class="prototype-card-content">
+            <div class="prototype-card-id">O2-US4</div>
+            <div class="prototype-card-title">Error Context Tooltip System</div>
+            <div class="prototype-card-desc">Hover tooltips that explain error messages and why they occurred to reduce support burden.</div>
+          </div>
+          <a href="o2-us4/page.html" class="prototype-card-link">View</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footnote -->
+    <div class="footnote">
+      <strong>How to Use These Prototypes:</strong> Each prototype is fully interactive and self-contained. Click the "View" button to open any prototype. Use the floating navigation bar at the bottom of each prototype to switch between stories or return to this index. All prototypes use the Doctolib design system and replicate the real product UI.
+    </div>
+  </div>
+</body>
+</html>
