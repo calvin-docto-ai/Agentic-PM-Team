@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctolib TLE - O2-US2 Step 2</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --dtl-navy: #1B2A4A; --dtl-blue: #0596DE; --dtl-blue-dark: #0080C5; --dtl-blue-light: #E8F4FD; --dtl-white: #FFFFFF; --dtl-gray-50: #F7F8FA; --dtl-gray-100: #F0F2F5; --dtl-gray-200: #E4E7EB; --dtl-gray-500: #6B7280; --dtl-gray-600: #4B5563; --dtl-gray-800: #1F2937; --sidebar-width: 76px; --header-height: 52px; --sub-sidebar-width: 230px; --font-family: 'Open Sans', sans-serif; --radius-md: 8px; --radius-lg: 12px; --radius-full: 9999px; --shadow-sm: 0 1px 2px rgba(0,0,0,0.05); }
+    body { font-family: var(--font-family); font-size: 14px; color: var(--dtl-gray-800); background: var(--dtl-gray-50); height: 100vh; overflow: hidden; }
+    a { color: var(--dtl-blue); text-decoration: none; }
+    .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-width); background: var(--dtl-navy); display: flex; flex-direction: column; align-items: center; z-index: 110; }
+    .sidebar-logo { width: 100%; height: 52px; display: flex; align-items: center; justify-content: center; }
+    .sidebar-nav { display: flex; flex-direction: column; align-items: center; width: 100%; padding: 2px 0; flex: 1; }
+    .sidebar-item { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 68px; padding: 7px 4px 5px; border-radius: var(--radius-md); color: rgba(255,255,255,0.65); margin: 1px 0; }
+    .sidebar-item.active { background: rgba(255,255,255,0.1); color: #fff; }
+    .sidebar-item svg { margin-bottom: 2px; }
+    .sidebar-item span { font-size: 9.5px; font-weight: 500; text-align: center; }
+    .sidebar-badge { position: absolute; top: 1px; right: 0px; min-width: 18px; height: 18px; background: var(--dtl-blue); color: white; font-size: 9px; font-weight: 700; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid var(--dtl-navy); }
+    .sidebar-spacer { flex: 1; }
+    .sidebar-bottom { display: flex; flex-direction: column; align-items: center; gap: 8px; padding-bottom: 16px; }
+    .sidebar-avatar-bottom { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; }
+    .header { position: fixed; top: 0; left: var(--sidebar-width); right: 0; height: var(--header-height); background: var(--dtl-navy); display: flex; align-items: center; padding: 0 16px; z-index: 100; }
+    .header-search { flex: 0 1 520px; height: 36px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-full); display: flex; align-items: center; padding: 0 14px; gap: 8px; color: rgba(255,255,255,0.45); font-size: 13px; }
+    .header-actions { display: flex; align-items: center; gap: 2px; margin-left: auto; }
+    .header-icon-btn { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; color: rgba(255,255,255,0.6); cursor: pointer; }
+    .header-separator { width: 1px; height: 24px; background: rgba(255,255,255,0.15); margin: 0 4px; }
+    .header-avatar { width: 32px; height: 32px; border-radius: 50%; overflow: hidden; }
+    .header-locale { font-size: 13px; color: rgba(255,255,255,0.5); }
+    .sub-sidebar { position: fixed; top: var(--header-height); left: var(--sidebar-width); bottom: 0; width: var(--sub-sidebar-width); background: var(--dtl-white); border-right: 1px solid var(--dtl-gray-200); padding: 20px 0; z-index: 80; }
+    .sub-sidebar-title { font-size: 18px; font-weight: 700; color: var(--dtl-gray-800); padding: 0 20px; margin-bottom: 14px; }
+    .sub-sidebar-item { display: flex; align-items: center; gap: 10px; padding: 9px 20px; font-size: 14px; color: var(--dtl-gray-600); text-decoration: none; border-left: 3px solid transparent; }
+    .sub-sidebar-item.active { background: var(--dtl-blue-light); color: var(--dtl-blue); border-left-color: var(--dtl-blue); font-weight: 600; }
+    .sub-sidebar-tag { font-size: 10px; font-weight: 600; color: var(--dtl-blue); background: var(--dtl-blue-light); padding: 2px 6px; border-radius: 4px; margin-left: auto; }
+    .content { position: fixed; top: var(--header-height); left: calc(var(--sidebar-width) + var(--sub-sidebar-width)); right: 0; bottom: 0; overflow-y: auto; background: var(--dtl-gray-50); z-index: 50; }
+    .content-inner { padding: 76px 32px 24px 32px; max-width: 1200px; }
+    .hero-banner { background: var(--dtl-white); border-radius: var(--radius-lg); padding: 28px 32px; margin-bottom: 24px; box-shadow: var(--shadow-sm); }
+    .hero-banner h1 { font-size: 22px; font-weight: 700; color: var(--dtl-gray-800); margin-bottom: 6px; }
+    .best-practice { background: var(--dtl-white); border-radius: var(--radius-md); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow-sm); }
+    .best-practice h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--dtl-gray-800); }
+    .best-practice-good { background: #E8F5E9; border-left: 4px solid #4CAF50; padding: 12px; border-radius: 4px; margin-bottom: 8px; }
+    .best-practice-good p { font-size: 13px; color: #2E7D32; }
+    .best-practice-avoid { background: #FFEBEE; border-left: 4px solid #EF4444; padding: 12px; border-radius: 4px; }
+    .best-practice-avoid p { font-size: 13px; color: #C62828; }
+    .template-box { background: var(--dtl-gray-100); border: 1px solid var(--dtl-gray-200); border-radius: var(--radius-md); padding: 12px; font-size: 12px; font-family: monospace; color: var(--dtl-gray-700); margin-top: 8px; }
+    .btn { background: var(--dtl-blue); color: white; border: none; border-radius: var(--radius-full); padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font-family); }
+    .btn:hover { background: var(--dtl-blue-dark); }
+  </style>
+</head>
+<body>
+<nav class="sidebar">
+  <a href="../../index.html" class="sidebar-logo"><div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;"><svg width="34" height="34" viewBox="0 0 40 40" fill="none"><path d="M13 7h7c7 0 11.5 4.5 11.5 11.5S27 30 20 30h-7V7zm3.8 3.5v16h3c4.8 0 7.5-3.2 7.5-8s-2.7-8-7.5-8h-3z" fill="white" opacity="0.95"/></svg></div></a>
+  <div class="sidebar-nav">
+    <div class="sidebar-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/></svg><span>Calendar</span></div>
+    <div class="sidebar-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/></svg><span>Tasks</span></div>
+    <a class="sidebar-item active" href="#"><span class="sidebar-badge">99+</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/></svg><span>Connect</span></a>
+  </div>
+  <div class="sidebar-spacer"></div>
+  <div class="sidebar-bottom"><div class="sidebar-avatar-bottom" style="background:#B8907C;">AP</div><div class="sidebar-avatar-bottom" style="background:#9370DB;">MP</div></div>
+</nav>
+
+<header class="header">
+  <div class="header-search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/></svg><span>Search inbox</span></div>
+  <div class="header-actions">
+    <button class="header-icon-btn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17"/></svg></button>
+    <div class="header-separator"></div>
+    <button class="header-icon-btn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg></button>
+    <div class="header-avatar"><img src="https://i.pravatar.cc/64?img=68" alt="User"></div>
+    <span class="header-locale">FR</span>
+  </div>
+</header>
+
+<div id="journey-overlay" style="position: fixed; top: 52px; left: 306px; right: 0; z-index: 9998; background: linear-gradient(135deg, #1B2A4A 0%, #2d3f66 100%); color: white; padding: 12px 24px; display: flex; align-items: center; justify-content: center; gap: 20px; font-family: 'Open Sans', sans-serif; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border-bottom: 2px solid #5BC0F0;">
+  <a href="page-1.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9664;</a>
+  <div style="text-align: center; flex: 1; max-width: 600px;">
+    <span style="color: #5BC0F0; font-weight: 600;">Step 2 of 3</span>
+    <span style="margin: 0 8px; color: rgba(255,255,255,0.4);">&mdash;</span>
+    <span style="color: rgba(255,255,255,0.9);">What makes a good response? — examples and response template</span>
+  </div>
+  <a href="page-3.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9654;</a>
+</div>
+
+<aside class="sub-sidebar">
+  <div class="sub-sidebar-title">Connect</div>
+  <a class="sub-sidebar-item" href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Discussions</a>
+  <a class="sub-sidebar-item active" href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="2" width="16" height="20" rx="2"/></svg>Tele-expertise<span class="sub-sidebar-tag">New</span></a>
+</aside>
+
+<main class="content">
+  <div class="content-inner">
+    <div class="hero-banner">
+      <h1>Best Practices for TLE Responses</h1>
+      <p>Learn what makes a strong response that helps GPs and their patients.</p>
+    </div>
+
+    <div class="best-practice">
+      <h3>✓ Good Practice: Be Concise & Actionable</h3>
+      <div class="best-practice-good">
+        <p>"For elevated creatinine with normal urinalysis, I recommend checking ACR ratio and reviewing medications (ACE-I, NSAIDs). Consider nephrology referral if creatinine remains elevated after 2 weeks of medication adjustment."</p>
+      </div>
+      <p style="font-size: 12px; color: var(--dtl-gray-600); margin-top: 8px;">Clear reasoning, specific next steps, timeline for re-assessment.</p>
+    </div>
+
+    <div class="best-practice">
+      <h3>✗ Avoid: Vague or Incomplete Advice</h3>
+      <div class="best-practice-avoid">
+        <p>"This patient needs further investigation. Refer to specialist if needed."</p>
+      </div>
+      <p style="font-size: 12px; color: var(--dtl-gray-600); margin-top: 8px;">Lacks specificity; doesn't guide the GP or patient forward.</p>
+    </div>
+
+    <div class="best-practice">
+      <h3>Response Template</h3>
+      <div class="template-box">
+Clinical Summary:
+[Confirm key details of case]
+
+Assessment:
+[Your professional interpretation]
+
+Recommendations:
+1. [Immediate action]
+2. [Follow-up investigation]
+3. [Timeline for reassessment]
+
+References:
+[Relevant guideline or resource]
+      </div>
+    </div>
+
+    <div style="margin-top: 24px;">
+      <a href="page-3.html" class="btn">Continue to First Case</a>
+    </div>
+  </div>
+</main>
+
+<div id="story-nav-bar" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1B2A4A; border-radius: 24px; padding: 10px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; gap: 12px; align-items: center; z-index: 9999; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 500;">
+  <div style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.6);"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #EF4444;"></span>O2</div>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../../index.html" style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">&larr; Home</a>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../o2-us1/page-1.html" title="As a French Specialist, I want to see an estimate of how long a TLE response typically takes, so that I understand commitment before opening the request and accept cases I can complete." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">1</a>
+  <a href="page-1.html" title="As a French Specialist, I want to complete a one-time 5-minute onboarding explaining TLE expectations, so that I respond with confidence." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: #5BC0F0; background: rgba(5,150,222,0.3); font-weight: 600;">2</a>
+  <a href="../o2-us3/page-1.html" title="As a French Specialist, I want to see complexity and urgency badges on each TLE request, so that I prioritize quick wins and defer complex cases." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">3</a>
+  <a href="../o2-us5/page-1.html" title="As a French GP, I want automatic escalation if the specialist doesn't respond within 24 hours, so that my case is handled without indefinite waiting." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">5</a>
+</div>
+
+<script>
+(function(){
+  var tip = document.createElement('div');
+  tip.id = 'nav-tooltip';
+  tip.style.cssText = 'position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#1B2A4A;color:rgba(255,255,255,0.95);padding:10px 16px;border-radius:8px;font-size:13px;max-width:420px;text-align:center;line-height:1.4;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:10000;pointer-events:none;opacity:0;transition:opacity 0.15s;font-family:Open Sans,sans-serif;border:1px solid rgba(91,192,240,0.3);';
+  document.body.appendChild(tip);
+  var bar = document.getElementById('story-nav-bar');
+  if(!bar) return;
+  bar.querySelectorAll('a[title]').forEach(function(a){
+    a.addEventListener('mouseenter', function(){
+      var t = this.getAttribute('title');
+      if(t && t.length > 5){ tip.textContent = t; tip.style.opacity = '1'; }
+    });
+    a.addEventListener('mouseleave', function(){ tip.style.opacity = '0'; });
+  });
+})();
+</script>
+</body>
+</html>

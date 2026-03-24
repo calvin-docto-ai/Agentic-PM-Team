@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctolib TLE - O9-US3 Step 2</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --dtl-navy: #1B2A4A; --dtl-blue: #0596DE; --dtl-blue-dark: #0080C5; --dtl-blue-light: #E8F4FD; --dtl-white: #FFFFFF; --dtl-gray-50: #F7F8FA; --dtl-gray-100: #F0F2F5; --dtl-gray-200: #E4E7EB; --dtl-gray-500: #6B7280; --dtl-gray-600: #4B5563; --dtl-gray-800: #1F2937; --sidebar-width: 76px; --header-height: 52px; --sub-sidebar-width: 230px; --font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; --shadow-sm: 0 1px 2px rgba(0,0,0,0.05); --shadow-lg: 0 4px 12px rgba(0,0,0,0.1); --radius-lg: 12px; --border-color: var(--dtl-gray-200); }
+    body { font-family: var(--font-family); font-size: 14px; color: var(--dtl-gray-800); background: var(--dtl-gray-50); height: 100vh; overflow: hidden; }
+    a { color: var(--dtl-blue); text-decoration: none; }
+    .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-width); background: var(--dtl-navy); display: flex; flex-direction: column; align-items: center; z-index: 110; }
+    .sidebar-logo { width: 100%; height: 52px; display: flex; align-items: center; justify-content: center; }
+    .sidebar-nav { display: flex; flex-direction: column; align-items: center; width: 100%; padding: 2px 0; gap: 0; flex: 1; }
+    .sidebar-item { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 68px; padding: 7px 4px 5px; border-radius: 8px; cursor: pointer; text-decoration: none; color: rgba(255,255,255,0.65); transition: background 0.15s; margin: 1px 0; }
+    .sidebar-item.active { background: rgba(255,255,255,0.1); color: #fff; }
+    .sidebar-item svg { margin-bottom: 2px; }
+    .sidebar-item span { font-size: 9.5px; font-weight: 500; text-align: center; }
+    .sidebar-badge { position: absolute; top: 1px; right: 0px; min-width: 18px; height: 18px; background: var(--dtl-blue); color: white; font-size: 9px; font-weight: 700; border-radius: 9999px; display: flex; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid var(--dtl-navy); }
+    .sidebar-spacer { flex: 1; }
+    .sidebar-bottom { display: flex; flex-direction: column; align-items: center; gap: 8px; padding-bottom: 16px; }
+    .sidebar-avatar-bottom { width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; }
+    .header { position: fixed; top: 0; left: var(--sidebar-width); right: 0; height: var(--header-height); background: var(--dtl-navy); display: flex; align-items: center; padding: 0 16px; z-index: 100; }
+    .header-search { flex: 0 1 520px; height: 36px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 9999px; display: flex; align-items: center; padding: 0 14px; gap: 8px; color: rgba(255,255,255,0.45); }
+    .header-actions { display: flex; align-items: center; gap: 2px; margin-left: auto; }
+    .header-chip { display: flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 9999px; font-size: 13px; color: rgba(255,255,255,0.85); background: transparent; cursor: pointer; }
+    .header-icon-btn { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 9999px; border: none; background: transparent; color: rgba(255,255,255,0.6); cursor: pointer; }
+    .header-separator { width: 1px; height: 24px; background: rgba(255,255,255,0.15); margin: 0 4px; }
+    .header-avatar { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.25); }
+    .header-locale { font-size: 13px; color: rgba(255,255,255,0.5); cursor: pointer; }
+    .header-shortcut { display: inline-flex; align-items: center; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; padding: 1px 5px; font-size: 10px; color: rgba(255,255,255,0.4); }
+    .sub-sidebar { position: fixed; top: var(--header-height); left: var(--sidebar-width); bottom: 0; width: var(--sub-sidebar-width); background: var(--dtl-white); border-right: 1px solid var(--border-color); padding: 20px 0; z-index: 80; }
+    .sub-sidebar-title { font-size: 18px; font-weight: 700; color: var(--dtl-gray-800); padding: 0 20px; margin-bottom: 14px; }
+    .sub-sidebar-item { display: flex; align-items: center; gap: 10px; padding: 9px 20px; font-size: 14px; color: var(--dtl-gray-600); cursor: pointer; text-decoration: none; border-left: 3px solid transparent; transition: all 0.15s; }
+    .sub-sidebar-item.active { background: var(--dtl-blue-light); color: var(--dtl-blue); border-left-color: var(--dtl-blue); font-weight: 600; }
+    .sub-sidebar-tag { font-size: 10px; font-weight: 600; color: var(--dtl-blue); background: var(--dtl-blue-light); padding: 2px 6px; border-radius: 4px; margin-left: auto; }
+    .content { position: fixed; top: var(--header-height); left: calc(var(--sidebar-width) + var(--sub-sidebar-width)); right: 0; bottom: 0; overflow-y: auto; background: var(--dtl-gray-50); z-index: 50; }
+    .content-inner { padding: 76px 32px 24px 32px; max-width: 1200px; }
+    .hero-banner { background: var(--dtl-white); border-radius: var(--radius-lg); padding: 28px 32px; margin-bottom: 24px; box-shadow: var(--shadow-sm); }
+    .hero-banner h1 { font-size: 22px; font-weight: 700; color: var(--dtl-gray-800); margin-bottom: 6px; }
+    .hero-banner p { color: var(--dtl-gray-500); font-size: 14px; line-height: 1.5; }
+    .btn-primary { background: var(--dtl-blue); color: white; border: none; border-radius: 9999px; padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font-family); }
+    .btn-primary:hover { background: var(--dtl-blue-dark); }
+    #journey-overlay { position: fixed; top: 52px; left: 306px; right: 0; height: 60px; background: var(--dtl-white); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; z-index: 75; font-size: 13px; }
+    .overlay-left { color: var(--dtl-gray-600); }
+    .overlay-center { font-weight: 600; color: var(--dtl-gray-800); }
+    .overlay-right { display: flex; gap: 12px; }
+    .overlay-btn { background: transparent; border: 1px solid var(--border-color); border-radius: 9999px; padding: 6px 14px; cursor: pointer; color: var(--dtl-gray-600); font-size: 13px; font-family: var(--font-family); }
+    .overlay-btn:hover { background: var(--dtl-gray-50); }
+    .overlay-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .section-title { font-size: 18px; font-weight: 700; color: var(--dtl-gray-800); margin-bottom: 16px; margin-top: 24px; }
+    .section-title:first-child { margin-top: 0; }
+    .specialty-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+    .specialty-card { background: var(--dtl-white); border-radius: var(--radius-lg); padding: 16px; text-align: center; box-shadow: var(--shadow-sm); cursor: pointer; transition: all 0.15s; }
+    .specialty-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+    .specialty-icon { font-size: 28px; margin-bottom: 8px; }
+    .specialty-name { font-weight: 600; color: var(--dtl-gray-800); }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-logo"><svg width="36" height="36" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="18" fill="#0596DE"/><text x="18" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="white">D</text></svg></div>
+  <div class="sidebar-nav">
+    <a href="#" class="sidebar-item"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M5 2a1 1 0 011 1v2h8V3a1 1 0 112 0v2h2a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V7a2 2 0 012-2h2V3a1 1 0 011-1z"/></svg><span>Calendar</span></a>
+    <a href="#" class="sidebar-item"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a2 2 0 012-2h6a2 2 0 012 2v4h3a2 2 0 012 2v6a2 2 0 01-2 2H3a2 2 0 01-2-2v-6a2 2 0 012-2h3V3z"/></svg><span>Tasks</span></a>
+    <a href="#" class="sidebar-item active"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 12a1 1 0 011-1h2.697a3 3 0 012.829 1.976l.5 1.5a1 1 0 001.905-.268c.04-.115.068-.234.084-.355A2 2 0 0013 12h4a1 1 0 110 2h-4a4 4 0 00-7.753 1.977A4.5 4.5 0 001.5 12H2a1 1 0 01-1-1z"/></svg><span>Connect</span><div class="sidebar-badge">99+</div></a>
+    <a href="#" class="sidebar-item"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V5z"/></svg><span>Messaging</span></a>
+    <a href="#" class="sidebar-item"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/></svg><span>Patients</span></a>
+    <a href="#" class="sidebar-item"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2l-7 4-7-4V4z"/></svg><span>Emails</span></a>
+    <a href="#" class="sidebar-item"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4z"/></svg><span>Billing</span></a>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-bottom"><div class="sidebar-avatar-bottom" style="background: #FF6B6B;">JD</div></div>
+  </div>
+</div>
+
+<header class="header">
+  <div class="header-search"><span>🔍</span><span>Search appointments, patients...</span></div>
+  <div class="header-actions"><div class="header-chip"><span>🏥</span><span>Insurance Card</span></div><div class="header-separator"></div><button class="header-icon-btn">📹</button><button class="header-icon-btn">🔔</button><button class="header-icon-btn">⚙️</button><div class="header-separator"></div><div class="header-avatar"></div><div class="header-locale">EN</div><span class="header-shortcut">⌘K</span></div>
+</header>
+
+<div id="journey-overlay">
+  <div class="overlay-left">Step 2 of 3</div>
+  <div class="overlay-center">GP clicks to expand — full grid of 8-12 specialty categories appears</div>
+  <div class="overlay-right"><button class="overlay-btn" onclick="location.href='page-1.html'">← Previous</button><button class="overlay-btn" onclick="location.href='page-3.html'">Next →</button></div>
+</div>
+
+<aside class="sub-sidebar">
+  <div class="sub-sidebar-title">Connect</div>
+  <a href="#" class="sub-sidebar-item">Discussions</a>
+  <a href="#" class="sub-sidebar-item active">Tele-expertise <span class="sub-sidebar-tag">New</span></a>
+</aside>
+
+<main class="content">
+  <div class="content-inner">
+    <div class="hero-banner">
+      <h1>All Available Specialties</h1>
+      <p>Choose from our full range of medical specialties to find the right expert for your patient.</p>
+    </div>
+
+    <div class="section-title">Specialties</div>
+    <div class="specialty-grid">
+      <div class="specialty-card"><div class="specialty-icon">❤️</div><div class="specialty-name">Cardiologie</div></div>
+      <div class="specialty-card"><div class="specialty-icon">🧠</div><div class="specialty-name">Neurologie</div></div>
+      <div class="specialty-card"><div class="specialty-icon">🫁</div><div class="specialty-name">Pneumologie</div></div>
+      <div class="specialty-card"><div class="specialty-icon">🦴</div><div class="specialty-name">Orthopédie</div></div>
+      <div class="specialty-card"><div class="specialty-icon">👁️</div><div class="specialty-name">Ophtalmologie</div></div>
+      <div class="specialty-card"><div class="specialty-icon">🦷</div><div class="specialty-name">Dentisterie</div></div>
+      <div class="specialty-card"><div class="specialty-icon">🌡️</div><div class="specialty-name">Dermatologie</div></div>
+      <div class="specialty-card"><div class="specialty-icon">🫘</div><div class="specialty-name">Gastroentérologie</div></div>
+      <div class="specialty-card"><div class="specialty-icon">👶</div><div class="specialty-name">Pédiatrie</div></div>
+      <div class="specialty-card"><div class="specialty-icon">👨‍⚕️</div><div class="specialty-name">Généraliste</div></div>
+      <div class="specialty-card"><div class="specialty-icon">💊</div><div class="specialty-name">Pharmacologie</div></div>
+      <div class="specialty-card"><div class="specialty-icon">🏥</div><div class="specialty-name">Autre</div></div>
+    </div>
+  </div>
+</main>
+
+<div id="story-nav-bar" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1B2A4A; border-radius: 24px; padding: 10px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; gap: 12px; align-items: center; z-index: 9999; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 500;"><div style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.6);"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #0596DE;"></span>O9</div><div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div><a href="../index.html" style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">&larr; Home</a><div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div><a href="../o9-us1/page-1.html" title="As a French GP (Requester), I want to see a clear call-to-action button within the suggestions panel that launches a full-search interface, so that I understand I can find specialists beyond cardiology and dermatology without feeling constrained by the initial options." style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">US1</a><a href="../o9-us2/page-1.html" title="As a French GP (Requester), I want to see the suggestions clearly labeled as Popular Matches in Your Region and access a dedicated Search All Specialists tab, so that I immediately recognize suggestions are curated recommendations and that I have full search access." style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">US2</a><a href="../o9-us3/page-1.html" title="As a French GP (Requester), I want to start with a concise view showing top 2-3 suggested specialists, but expand to a full list of available specialties with a single click, so that I can quickly scan suggestions or dig deeper without overwhelming initial choice." style="color: #5BC0F0; background: rgba(5,150,222,0.3); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600;" onmouseover="this.style.background='rgba(5,150,222,0.4)'" onmouseout="this.style.background='rgba(5,150,222,0.3)'">US3</a><a href="../o9-us4/page-1.html" title="As a French GP (Requester), I want to answer a 2-3 question mini-quiz about the patients condition if my initial specialty is not in suggestions, so that the system guides me to the correct specialty and I am confident searching for the right expert." style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">US4</a><a href="../o9-us5/page-1.html" title="As a French GP (Requester), I want to click a help icon next to Suggested Specialists and see a 2-3 sentence explanation of why only cardiology and dermatology are shown, and a direct link to search all specialties, so that I am confident that the platform has more options and understand the suggestion logic." style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">US5</a></div>
+
+<script>
+(function(){
+  var tip = document.createElement('div');
+  tip.id = 'nav-tooltip';
+  tip.style.cssText = 'position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#1B2A4A;color:rgba(255,255,255,0.95);padding:10px 16px;border-radius:8px;font-size:13px;max-width:420px;text-align:center;line-height:1.4;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:10000;pointer-events:none;opacity:0;transition:opacity 0.15s;font-family:Open Sans,sans-serif;border:1px solid rgba(91,192,240,0.3);';
+  document.body.appendChild(tip);
+  var bar = document.getElementById('story-nav-bar');
+  if(!bar) return;
+  bar.querySelectorAll('a[title]').forEach(function(a){
+    a.addEventListener('mouseenter', function(){
+      var t = this.getAttribute('title');
+      if(t && t.length > 5){ tip.textContent = t; tip.style.opacity = '1'; }
+    });
+    a.addEventListener('mouseleave', function(){ tip.style.opacity = '0'; });
+  });
+})();
+</script>
+
+</body>
+</html>

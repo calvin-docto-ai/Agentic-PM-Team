@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent 5 — TLE Prototypes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #F7F8FA; margin: 0; padding: 32px; color: #1F2937; }
+    .container { max-width: 960px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 48px; padding-top: 16px; }
+    header h1 { font-size: 28px; font-weight: 700; color: #1B2A4A; margin-bottom: 8px; }
+    header .subtitle { color: #6B7280; font-size: 15px; line-height: 1.5; }
+    header .meta { margin-top: 12px; font-size: 13px; color: #9BA3AE; }
+    .opportunity { background: #FFFFFF; border-radius: 12px; padding: 28px 32px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #E4E7EB; }
+    .opp-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+    .opp-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .opp-header h2 { font-size: 18px; font-weight: 700; color: #1B2A4A; margin: 0; }
+    .opp-desc { color: #6B7280; font-size: 14px; margin-bottom: 16px; line-height: 1.5; }
+    .story-count { color: #9BA3AE; font-size: 13px; font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .story { display: flex; align-items: flex-start; gap: 12px; padding: 14px 0; border-top: 1px solid #F0F2F5; }
+    .story:first-of-type { border-top: none; }
+    .story-id { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; min-width: 64px; height: 28px; background: #E8F4FD; color: #0596DE; font-size: 12px; font-weight: 700; border-radius: 6px; }
+    .story-link { color: #0596DE; text-decoration: none; font-weight: 500; font-size: 14px; line-height: 1.5; }
+    .story-link:hover { text-decoration: underline; color: #0080C5; }
+    .rice-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: #9BA3AE; font-weight: 600; margin-left: 8px; }
+    footer { text-align: center; padding: 32px 0 16px; color: #9BA3AE; font-size: 13px; }
+    footer a { color: #0596DE; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Agent 5 — TLE Prototypes</h1>
+      <p class="subtitle">Interactive mockups for 25 approved user stories across 7 opportunities</p>
+      <p class="meta">AFT Run: 2026-03-23-2-aft-tle &middot; Generated 2026-03-24 &middot; 75 pages total</p>
+    </header>
+
+    <!-- O1 — Expert Suggestions Limited -->
+    <div class="opportunity">
+      <div class="opp-header">
+        <div class="opp-dot" style="background: #EF4444;"></div>
+        <h2>O1 — Expert Suggestions Limited</h2>
+      </div>
+      <p class="opp-desc">GPs only see 2 default specialty suggestions (Cardiology, Dermatology) when creating a TLE request, missing 130,000+ available experts across all specialties.</p>
+      <div class="story-count">4 of 5 stories prototyped</div>
+      <div class="story">
+        <span class="story-id">O1-US1</span>
+        <a class="story-link" href="o1-us1/page-1.html">See suggestions for the top 10 specialties by TLE volume nationally, finding relevant specialists 60% faster</a>
+        <span class="rice-badge">RICE 2,880</span>
+      </div>
+      <div class="story">
+        <span class="story-id">O1-US2</span>
+        <a class="story-link" href="o1-us2/page-1.html">See a &lsquo;Search for other specialties&rsquo; help tooltip to discover the search function without abandonment</a>
+        <span class="rice-badge">RICE 3,733</span>
+      </div>
+      <div class="story">
+        <span class="story-id">O1-US4</span>
+        <a class="story-link" href="o1-us4/page-1.html">Type a specialty name and see instant auto-complete with specialist counts, finding niche specialists in &lt;10s</a>
+        <span class="rice-badge">RICE 5,486</span>
+      </div>
+      <div class="story">
+        <span class="story-id">O1-US5</span>
+        <a class="story-link" href="o1-us5/page-1.html">Click &lsquo;View all specialties&rsquo; and browse a lazy-loaded directory grouped by medical category</a>
+        <span class="rice-badge">RICE 1,891</span>
+      </div>
+    </div>
+
+    <!-- O2 — Low Completion Rate -->
+    <div class="opportunity">
+      <div class="opp-header">
+        <div class="opp-dot" style="background: #EF4444;"></div>
+        <h2>O2 — Low Completion Rate</h2>
+      </div>
+      <p class="opp-desc">Only 30-37% of TLE requests are completed. Experts don&rsquo;t respond due to unclear expectations, no onboarding, and no escalation mechanism.</p>
+      <div class="story-count">4 of 5 stories prototyped</div>
+      <div class="story">
+        <span class="story-id">O2-US1</span>
+        <a class="story-link" href="o2-us1/page-1.html">See an estimate of how long a TLE response typically takes before opening the request</a>
+        <span class="rice-badge">RICE 5,486</span>
+      </div>
+      <div class="story">
+        <span class="story-id">O2-US2</span>
+        <a class="story-link" href="o2-us2/page-1.html">Complete a one-time 5-minute onboarding explaining TLE expectations and response best practices</a>
+        <span class="rice-badge">RICE 9,984</span>
+      </div>
+      <div class="story">
+        <span class="story-id">O2-US3</span>
+        <a class="story-link" href="o2-us3/page-1.html">See complexity and urgency badges on each TLE request to prioritize quick wins</a>
+        <span class="rice-badge">RICE 4,887</span>
+      </div>
+      <div class="story">
+        <span class="story-id">O2-US5</span>
+        <a class="story-link" href="o2-us5/page-1.html">Automatic escalation if the specialist doesn&rsquo;t respond within 24 hours</a>
+        <span class="rice-badge">RICE 7,680</span>
+      </div>
+    </div>
+
+    <!-- O3 — Intrusive Notifications -->
+    <div class="opportunity">
+      <div class="opp-header">
+        <div class="opp-dot" style="background: #EF4444;"></div>
+        <h2>O3 — Intrusive Notifications</h2>
+      </div>
+      <p class="opp-desc">Specialists receive too many TLE notifications, leading to 15 opt-out requests and notification fatigue that hurts response rates.</p>
+      <div class="story-count">2 of 5 stories prototyped</div>
+      <div class="story">
+        <span class="story-id">O3-US3</span>
+        <a class="story-link" href="o3-us3/page-1.html">Rate-limit TLE notifications to one every 5 minutes to avoid notification storms</a>
+        <span class="rice-badge">RICE 1,536</span>
+      </div>
+      <div class="story">
+        <span class="story-id">O3-US5</span>
+        <a class="story-link" href="o3-us5/page-1.html">Receive notifications only for Priority/Urgent cases, with Routine cases silently queued</a>
+        <span class="rice-badge">RICE 1,536</span>
+      </div>
+    </div>
+
+    <!-- O6 — Specialists Want to Join TLE -->
+    <div class="opportunity">
+      <div class="opp-header">
+        <div class="opp-dot" style="background: #F59E0B;"></div>
+        <h2>O6 — Specialists Want to Join TLE</h2>
+      </div>
+      <p class="opp-desc">7 of the first 9 support tickets were specialists asking &ldquo;How do I join TLE?&rdquo; — no self-service registration or discovery mechanism exists.</p>
+      <div class="story-count">3 of 5 stories prototyped</div>
+      <div class="story">
+        <span class="story-id">O6-US1</span>
+        <a class="story-link" href="o6-us1/page-1.html">Proactively opt-in to appear in TLE suggestion lists via account settings</a>
+        <span class="rice-badge">RICE 1,311</span>
+      </div>
+      <div class="story">
+        <span class="story-id">O6-US2</span>
+        <a class="story-link" href="o6-us2/page-1.html">Declare expected availability and response time SLA in TLE profile</a>
+        <span class="rice-badge">RICE 1,600</span>
+      </div>
+      <div class="story">
+        <span class="story-id">O6-US4</span>
+        <a class="story-link" href="o6-us4/page-1.html">Discover the TLE program through in-app banners and an earnings calculator</a>
+        <span class="rice-badge">RICE 1,920</span>
+      </div>
+    </div>
+
+    <!-- O8 — No Guided Onboarding -->
+    <div class="opportunity">
+      <div class="opp-header">
+        <div class="opp-dot" style="background: #0596DE;"></div>
+        <h2>O8 — No Guided Onboarding</h2>
+      </div>
+      <p class="opp-desc">No onboarding exists for new TLE users. SES survey questions confuse 50% of respondents, producing unreliable satisfaction data.</p>
+      <div class="story-count">2 of 5 stories prototyped</div>
+      <div class="story">
+        <span class="story-id">O8-US2</span>
+        <a class="story-link" href="o8-us2/page-1.html">See a quick onboarding overlay on first TLE explaining what a &lsquo;good response&rsquo; looks like</a>
+        <span class="rice-badge">RICE 3,200</span>
+      </div>
+      <div class="story">
+        <span class="story-id">O8-US4</span>
+        <a class="story-link" href="o8-us4/page-1.html">See a satisfaction survey with unambiguous question wording and hover definitions</a>
+        <span class="rice-badge">RICE 1,344</span>
+      </div>
+    </div>
+
+    <!-- O9 — Suggestions vs Search UX -->
+    <div class="opportunity">
+      <div class="opp-header">
+        <div class="opp-dot" style="background: #0596DE;"></div>
+        <h2>O9 — Suggestions vs Search UX</h2>
+      </div>
+      <p class="opp-desc">50% of day-1 GPs didn&rsquo;t realize 130,000 experts are available beyond the default Cardiology and Dermatology suggestions.</p>
+      <div class="story-count">5 of 5 stories prototyped</div>
+      <div class="story">
+        <span class="story-id">O9-US1</span>
+        <a class="story-link" href="o9-us1/page-1.html">See a clear &lsquo;Search all 130,000 experts&rsquo; CTA within the suggestions panel</a>
+        <span class="rice-badge">RICE 5,760</span>
+      </div>
+      <div class="story">
+        <span class="story-id">O9-US2</span>
+        <a class="story-link" href="o9-us2/page-1.html">Suggestions labeled as &lsquo;Popular Matches in Your Region&rsquo; with a dedicated search tab</a>
+        <span class="rice-badge">RICE 2,987</span>
+      </div>
+      <div class="story">
+        <span class="story-id">O9-US3</span>
+        <a class="story-link" href="o9-us3/page-1.html">Start with 2-3 suggestions, expand to full specialty grid with a single click</a>
+        <span class="rice-badge">RICE 2,080</span>
+      </div>
+      <div class="story">
+        <span class="story-id">O9-US4</span>
+        <a class="story-link" href="o9-us4/page-1.html">Answer a mini-quiz about the patient&rsquo;s condition to find the right specialist</a>
+        <span class="rice-badge">RICE 1,920</span>
+      </div>
+      <div class="story">
+        <span class="story-id">O9-US5</span>
+        <a class="story-link" href="o9-us5/page-1.html">Click a help icon to see why only Cardiology and Dermatology are shown, with a search link</a>
+        <span class="rice-badge">RICE 3,584</span>
+      </div>
+    </div>
+
+    <!-- O10 — Preference Default Bug -->
+    <div class="opportunity">
+      <div class="opp-header">
+        <div class="opp-dot" style="background: #0596DE;"></div>
+        <h2>O10 — Preference Default Bug</h2>
+      </div>
+      <p class="opp-desc">A preference default bug (KITN-3821) has hidden 250-300 eligible specialists from GP search since July 2025, directly reducing the expert pool.</p>
+      <div class="story-count">5 of 5 stories prototyped</div>
+      <div class="story">
+        <span class="story-id">O10-US1</span>
+        <a class="story-link" href="o10-us1/page-1.html">Explicit TLE opt-in during initial account setup to prevent silent defaults</a>
+        <span class="rice-badge">RICE 1,920</span>
+      </div>
+      <div class="story">
+        <span class="story-id">O10-US2</span>
+        <a class="story-link" href="o10-us2/page-1.html">Prominent TLE toggle in account settings with &lsquo;Visible to GPs&rsquo; status badge</a>
+        <span class="rice-badge">RICE 10,880</span>
+      </div>
+      <div class="story">
+        <span class="story-id">O10-US3</span>
+        <a class="story-link" href="o10-us3/page-1.html">Admin bulk settings tool to fix all specialists affected by the July 2025 bug</a>
+        <span class="rice-badge">RICE 2,376</span>
+      </div>
+      <div class="story">
+        <span class="story-id">O10-US4</span>
+        <a class="story-link" href="o10-us4/page-1.html">Expert Pool Report showing how many specialists are available vs. hidden by preference</a>
+        <span class="rice-badge">RICE 4,200</span>
+      </div>
+      <div class="story">
+        <span class="story-id">O10-US5</span>
+        <a class="story-link" href="o10-us5/page-1.html">Reactivation email campaign: &lsquo;Did you mean to disable TLE?&rsquo; with one-click toggle</a>
+        <span class="rice-badge">RICE 1,920</span>
+      </div>
+    </div>
+
+    <footer>
+      <p>Doctolib Tele-expertise &middot; AFT Pipeline Agent 5 &middot; 25 stories &middot; 75 pages &middot; <a href="https://doctolib.atlassian.net/wiki/spaces/PTA/pages/3873964034">Confluence</a></p>
+    </footer>
+  </div>
+</body>
+</html>

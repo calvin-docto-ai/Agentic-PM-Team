@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctolib TLE - O10-US1 Step 3</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --dtl-navy: #1B2A4A; --dtl-navy-light: #243557; --dtl-navy-hover: #2D4068; --dtl-navy-active: #1A3A6A;
+      --dtl-blue: #0596DE; --dtl-blue-dark: #0080C5; --dtl-blue-light: #E8F4FD;
+      --dtl-green: #00C48C; --dtl-success-bg: #E8F5E9; --dtl-success-border: #4CAF50; --dtl-success-text: #2E7D32;
+      --dtl-white: #FFFFFF; --dtl-gray-50: #F7F8FA; --dtl-gray-100: #F0F2F5; --dtl-gray-200: #E4E7EB;
+      --dtl-gray-300: #CDD1D8; --dtl-gray-400: #9BA3AE; --dtl-gray-500: #6B7280; --dtl-gray-600: #4B5563;
+      --dtl-gray-700: #374151; --dtl-gray-800: #1F2937;
+      --sidebar-width: 76px; --header-height: 52px; --sub-sidebar-width: 230px;
+      --font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --font-xs: 11px; --font-sm: 13px; --font-base: 14px; --font-md: 15px; --font-lg: 18px; --font-xl: 22px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05); --shadow-md: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06); --shadow-lg: 0 4px 12px rgba(0,0,0,0.1);
+      --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px; --radius-full: 9999px;
+      --border-color: var(--dtl-gray-200);
+    }
+    body { font-family: var(--font-family); font-size: var(--font-base); color: var(--dtl-gray-800); background: var(--dtl-gray-50); height: 100vh; overflow: hidden; }
+    a { color: var(--dtl-blue); text-decoration: none; } a:hover { text-decoration: underline; }
+    .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-width); background: var(--dtl-navy); display: flex; flex-direction: column; align-items: center; z-index: 110; }
+    .sidebar-logo { width: 100%; height: 52px; display: flex; align-items: center; justify-content: center; }
+    .sidebar-nav { display: flex; flex-direction: column; align-items: center; width: 100%; padding: 2px 0; gap: 0; flex: 1; }
+    .sidebar-item { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 68px; padding: 7px 4px 5px; border-radius: var(--radius-md); cursor: pointer; text-decoration: none; color: rgba(255,255,255,0.65); transition: background 0.15s, color 0.15s; margin: 1px 0; }
+    .sidebar-item:hover { background: var(--dtl-navy-hover); color: rgba(255,255,255,0.9); }
+    .sidebar-item.active { background: rgba(255,255,255,0.1); color: #fff; }
+    .sidebar-item svg { margin-bottom: 2px; }
+    .sidebar-item span { font-size: 9.5px; font-weight: 500; text-align: center; }
+    .sidebar-badge { position: absolute; top: 1px; right: 0px; min-width: 18px; height: 18px; background: var(--dtl-blue); color: white; font-size: 9px; font-weight: 700; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid var(--dtl-navy); }
+    .sidebar-spacer { flex: 1; }
+    .sidebar-bottom { display: flex; flex-direction: column; align-items: center; gap: 8px; padding-bottom: 16px; }
+    .sidebar-avatar-bottom { width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; }
+    .header { position: fixed; top: 0; left: var(--sidebar-width); right: 0; height: var(--header-height); background: var(--dtl-navy); display: flex; align-items: center; padding: 0 16px; z-index: 100; gap: 8px; }
+    .header-search { flex: 0 1 520px; height: 36px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-full); display: flex; align-items: center; padding: 0 14px; gap: 8px; color: rgba(255,255,255,0.45); font-size: var(--font-sm); }
+    .header-actions { display: flex; align-items: center; gap: 2px; margin-left: auto; }
+    .header-chip { display: flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: var(--radius-full); font-size: var(--font-sm); color: rgba(255,255,255,0.85); background: transparent; cursor: pointer; }
+    .header-icon-btn { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-full); border: none; background: transparent; color: rgba(255,255,255,0.6); cursor: pointer; }
+    .header-icon-btn:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9); }
+    .header-separator { width: 1px; height: 24px; background: rgba(255,255,255,0.15); margin: 0 4px; }
+    .header-avatar { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.25); cursor: pointer; overflow: hidden; }
+    .header-locale { font-size: var(--font-sm); color: rgba(255,255,255,0.5); cursor: pointer; }
+    .sub-sidebar { position: fixed; top: var(--header-height); left: var(--sidebar-width); bottom: 0; width: var(--sub-sidebar-width); background: var(--dtl-white); border-right: 1px solid var(--dtl-gray-200); padding: 20px 0; z-index: 80; }
+    .sub-sidebar-title { font-size: var(--font-lg); font-weight: 700; color: var(--dtl-gray-800); padding: 0 20px; margin-bottom: 14px; }
+    .sub-sidebar-item { display: flex; align-items: center; gap: 10px; padding: 9px 20px; font-size: var(--font-base); color: var(--dtl-gray-600); cursor: pointer; text-decoration: none; border-left: 3px solid transparent; transition: all 0.15s; }
+    .sub-sidebar-item.active { background: var(--dtl-blue-light); color: var(--dtl-blue); border-left-color: var(--dtl-blue); font-weight: 600; }
+    .sub-sidebar-tag { font-size: 10px; font-weight: 600; color: var(--dtl-blue); background: var(--dtl-blue-light); padding: 2px 6px; border-radius: var(--radius-sm); margin-left: auto; }
+    .content { position: fixed; top: var(--header-height); left: calc(var(--sidebar-width) + var(--sub-sidebar-width)); right: 0; bottom: 0; overflow-y: auto; background: var(--dtl-gray-50); z-index: 50; }
+    .content-inner { padding: 76px 32px 24px 32px; max-width: 1200px; }
+    .hero-banner { background: var(--dtl-white); border-radius: var(--radius-lg); padding: 28px 32px; margin-bottom: 24px; box-shadow: var(--shadow-sm); }
+    .hero-banner h1 { font-size: var(--font-xl); font-weight: 700; color: var(--dtl-gray-800); margin-bottom: 6px; }
+    .hero-banner p { color: var(--dtl-gray-500); font-size: var(--font-base); line-height: 1.5; }
+    .btn-primary { background: var(--dtl-blue); color: white; border: none; border-radius: var(--radius-full); padding: 10px 24px; font-size: var(--font-base); font-weight: 600; cursor: pointer; font-family: var(--font-family); }
+    .btn-primary:hover { background: var(--dtl-blue-dark); }
+    .btn-secondary { background: var(--dtl-white); color: var(--dtl-gray-700); border: 1px solid var(--border-color); border-radius: var(--radius-full); padding: 10px 24px; font-size: var(--font-base); font-weight: 600; cursor: pointer; font-family: var(--font-family); }
+    #journey-overlay { position: fixed; top: 52px; left: 306px; right: 0; background: linear-gradient(90deg, rgba(91, 192, 240, 0.08) 0%, rgba(5, 150, 222, 0.06) 100%); border-bottom: 1px solid rgba(5, 150, 222, 0.15); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; z-index: 9998; }
+    .overlay-left { display: flex; align-items: center; gap: 16px; }
+    .overlay-step { font-size: 13px; font-weight: 600; color: var(--dtl-blue); background: var(--dtl-blue-light); padding: 4px 12px; border-radius: var(--radius-full); }
+    .overlay-text { font-size: var(--font-base); color: var(--dtl-gray-600); max-width: 400px; }
+    .overlay-right { display: flex; gap: 8px; }
+    .overlay-btn { background: var(--dtl-blue); color: white; border: none; border-radius: var(--radius-full); padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-family); }
+    .overlay-btn:hover { background: var(--dtl-blue-dark); }
+    .overlay-btn-disabled { background: var(--dtl-gray-300); cursor: not-allowed; }
+    .overlay-btn-disabled:hover { background: var(--dtl-gray-300); }
+    .success-badge { background: var(--dtl-success-bg); border: 1px solid var(--dtl-success-border); border-radius: 8px; padding: 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+    .success-badge svg { width: 24px; height: 24px; }
+    .success-badge-text { color: var(--dtl-success-text); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="8" fill="#0596DE"/>
+        <path d="M8 16L14 22L24 10" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="sidebar-nav">
+      <a href="#" class="sidebar-item" title="Calendar"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="16" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 0v4M14 0v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M2 8h16" stroke="currentColor" stroke-width="1.5"/></svg><span>Calendar</span></a>
+      <a href="#" class="sidebar-item" title="Tasks"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2 4h16M2 10h16M2 16h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>Tasks</span></a>
+      <a href="#" class="sidebar-item active" title="Connect"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2c4.4 0 8 3.6 8 8s-3.6 8-8 8-8-3.6-8-8 3.6-8 8-8M6 10h8M10 6v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Connect</span><div class="sidebar-badge">99+</div></a>
+      <a href="#" class="sidebar-item" title="Patient Messaging"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="16" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M2 6h16M4 14h4M10 14h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>Messages</span></a>
+      <a href="#" class="sidebar-item" title="Patient Management"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="6" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 10c-3.3 0-6 1.3-6 3v3h12v-3c0-1.7-2.7-3-6-3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><span>Patients</span></a>
+      <a href="#" class="sidebar-item" title="Emails"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="3" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M2 5l8 5 8-5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><span>Emails</span></a>
+      <a href="#" class="sidebar-item" title="Billing"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span>Billing</span></a>
+    </div>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-bottom">
+      <div class="sidebar-avatar-bottom" style="background: #FF6B6B;">AP</div>
+      <div class="sidebar-avatar-bottom" style="background: #4ECDC4;">MP</div>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-search">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 10l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span>Search patients, documents...</span>
+    </div>
+    <div class="header-actions">
+      <div class="header-chip">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+        <span>Insurance Card</span>
+      </div>
+      <div class="header-separator"></div>
+      <button class="header-icon-btn" title="Video"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="3" width="10" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M11 5l5-2v10l-5-2v-6z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></button>
+      <button class="header-icon-btn" title="Notifications"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 6c0-2.2 1.8-4 4-4s4 1.8 4 4c0 2 1 3 1.5 4h1V4M5 14h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></button>
+      <button class="header-icon-btn" title="Settings"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="2" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="9" r="5.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M9 1v3M9 14v3M15.6 4.4l-2.1 2.1M4.4 13.6l2.1-2.1M17 9h-3M4 9H1M15.6 13.6l-2.1-2.1M4.4 4.4l2.1 2.1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></button>
+      <div class="header-separator"></div>
+      <div class="header-avatar"></div>
+      <span class="header-locale">FR</span>
+    </div>
+  </header>
+
+  <!-- JOURNEY OVERLAY -->
+  <div id="journey-overlay">
+    <div class="overlay-left">
+      <div class="overlay-step">Step 3 of 3</div>
+      <div class="overlay-text">Specialist confirms preference and sees status: 'You are now visible to GPs'</div>
+    </div>
+    <div class="overlay-right">
+      <button class="overlay-btn" onclick="window.location.href='page-2.html'">← Previous</button>
+      <button class="overlay-btn overlay-btn-disabled" style="visibility: hidden;">Next →</button>
+    </div>
+  </div>
+
+  <!-- SUB-SIDEBAR -->
+  <aside class="sub-sidebar">
+    <div class="sub-sidebar-title">Connect</div>
+    <a href="#" class="sub-sidebar-item">Discussions</a>
+    <a href="#" class="sub-sidebar-item active">Tele-expertise <span class="sub-sidebar-tag">New</span></a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <div class="content-inner">
+      <div class="hero-banner">
+        <h1>Onboarding Complete</h1>
+        <p>Your tele-expertise preference has been successfully configured.</p>
+      </div>
+
+      <div style="background: white; border-radius: 12px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+        <div class="success-badge">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 16.2L4.8 12m-0 0a6 6 0 1010.4 6.4M9 16.2l8.4-8.4" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="success-badge-text">You are now visible to GPs for tele-expertise requests</div>
+        </div>
+
+        <div style="background: #F7F8FA; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+          <h2 style="font-size: 16px; font-weight: 600; color: #1F2937; margin-bottom: 12px;">What Happens Next?</h2>
+          <ul style="color: #374151; line-height: 1.8; margin-left: 20px; font-size: 14px;">
+            <li><strong>Visibility:</strong> GPs searching for specialists in your specialty can now see your profile.</li>
+            <li><strong>Requests:</strong> You may start receiving tele-expertise requests from GPs through Doctolib Connect.</li>
+            <li><strong>Control:</strong> You remain fully in control — accept requests at your own pace and set your own response time.</li>
+            <li><strong>Change anytime:</strong> Visit your account settings to adjust this preference whenever you wish.</li>
+          </ul>
+        </div>
+
+        <div style="background: white; border: 1px solid #CDD1D8; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+          <h3 style="font-size: 14px; font-weight: 600; color: #1F2937; margin-bottom: 8px;">Your Current Settings</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div>
+              <p style="color: #6B7280; font-size: 13px; margin-bottom: 4px;">Specialty</p>
+              <p style="color: #1F2937; font-weight: 600;">Cardiologist</p>
+            </div>
+            <div>
+              <p style="color: #6B7280; font-size: 13px; margin-bottom: 4px;">Tele-Expertise Status</p>
+              <p style="color: #00C48C; font-weight: 600;">✓ Enabled</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 16px;">
+          <button class="btn-primary" onclick="alert('Onboarding completed! Redirecting to your dashboard...')">Complete Onboarding</button>
+          <button class="btn-secondary" onclick="alert('Settings opened')">View Account Settings</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- NAV BAR -->
+  <div id="story-nav-bar" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1B2A4A; border-radius: 24px; padding: 10px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; gap: 12px; align-items: center; z-index: 9999; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 500;">
+    <div style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.6);">
+      <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #0596DE;"></span>O10</div>
+    <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+    <a href="../index.html" style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">&larr; Home</a>
+    <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+    <a href="page-1.html" style="color: #5BC0F0; background: rgba(5,150,222,0.3); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600;" title="As a French Specialist (Expert/Responder), I want to be explicitly asked during my initial account setup whether I accept tele-expertise requests via Doctolib Connect, so that I understand this service is available and deliberately enable or disable it, preventing silent defaults that leave me invisible to GPs.">US1</a>
+    <a href="../o10-us2/page-1.html" style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'" title="As a French Specialist (Expert/Responder), I want to see a prominent 'Tele-Expertise' toggle in my account settings with a status badge showing 'You are visible to GPs' or 'You are not visible to GPs', so that I can verify my tele-expertise status and change it at any time without confusion.">US2</a>
+    <a href="../o10-us3/page-1.html" style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'" title="As a Doctolib Admin / Support Team, I want to use a bulk settings update tool to enable allow_tele_expertise_request = true for all specialists affected by the July 2025 bug, so that hidden experts are immediately visible to GPs without requiring individual specialist action.">US3</a>
+    <a href="../o10-us4/page-1.html" style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'" title="As a French GP (Requester), I want to see a brief 'Expert Pool Report' when I search for a specialty, showing how many specialists are available and hidden (if any) due to preference settings, so that if my search returns no results, I know whether it's because no experts exist or they're all hidden by preference.">US4</a>
+    <a href="../o10-us5/page-1.html" style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'" title="As a Doctolib Support / Product Team, I want to send a reactivation email to all specialists registered since July 2025 with allow_tele_expertise_request = false, confirming their preference and offering to enable TLE, so that specialists who never deliberately opted out are given the opportunity to be visible to GPs.">US5</a>
+  </div>
+
+  <!-- TOOLTIP -->
+  <script>
+(function(){
+  var tip = document.createElement('div');
+  tip.id = 'nav-tooltip';
+  tip.style.cssText = 'position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#1B2A4A;color:rgba(255,255,255,0.95);padding:10px 16px;border-radius:8px;font-size:13px;max-width:420px;text-align:center;line-height:1.4;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:10000;pointer-events:none;opacity:0;transition:opacity 0.15s;font-family:Open Sans,sans-serif;border:1px solid rgba(91,192,240,0.3);';
+  document.body.appendChild(tip);
+  var bar = document.getElementById('story-nav-bar');
+  if(!bar) return;
+  bar.querySelectorAll('a[title]').forEach(function(a){
+    a.addEventListener('mouseenter', function(){
+      var t = this.getAttribute('title');
+      if(t && t.length > 5){ tip.textContent = t; tip.style.opacity = '1'; }
+    });
+    a.addEventListener('mouseleave', function(){ tip.style.opacity = '0'; });
+  });
+})();
+  </script>
+</body>
+</html>

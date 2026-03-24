@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctolib TLE - Activation Confirmation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --dtl-navy: #1F2937;
+            --dtl-blue: #0066CC;
+            --dtl-light-gray: #F3F4F6;
+            --dtl-gray: #9CA3AF;
+            --dtl-border: #E5E7EB;
+            --dtl-success: #10B981;
+            --dtl-warning: #F59E0B;
+            --dtl-error: #EF4444;
+            --dtl-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            --dtl-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: white;
+            color: var(--dtl-navy);
+            line-height: 1.5;
+        }
+
+        .layout {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 80px;
+            background: var(--dtl-navy);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 16px;
+            border-right: 1px solid var(--dtl-border);
+            overflow-y: auto;
+        }
+
+        .sidebar-item {
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            color: #9CA3AF;
+            cursor: pointer;
+            position: relative;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .sidebar-item.active {
+            background: var(--dtl-blue);
+            color: white;
+        }
+
+        .sidebar-item-icon {
+            font-size: 24px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            height: 64px;
+            border-bottom: 1px solid var(--dtl-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            background: white;
+            position: relative;
+            z-index: 50;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .search-box {
+            flex: 1;
+            max-width: 320px;
+            height: 40px;
+            border: 1px solid var(--dtl-border);
+            border-radius: 6px;
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--dtl-light-gray);
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            border: 1px solid var(--dtl-border);
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.2s ease;
+        }
+
+        .header-btn:hover {
+            background: var(--dtl-light-gray);
+        }
+
+        /* Container Layout */
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Sub-sidebar */
+        .sub-sidebar {
+            width: 240px;
+            background: var(--dtl-light-gray);
+            border-right: 1px solid var(--dtl-border);
+            overflow-y: auto;
+            padding: 16px 0;
+        }
+
+        .sub-sidebar-item {
+            height: 44px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            color: var(--dtl-navy);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .sub-sidebar-item:hover {
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        .sub-sidebar-item.active {
+            background: white;
+            border-left: 3px solid var(--dtl-warning);
+            padding-left: 13px;
+            color: var(--dtl-navy);
+            font-weight: 600;
+        }
+
+        /* Content Area */
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: white;
+        }
+
+        .content-header {
+            height: 56px;
+            border-bottom: 1px solid var(--dtl-border);
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            background: white;
+        }
+
+        .content-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .content-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            padding-bottom: 100px;
+        }
+
+        /* Story Content */
+        .story-section {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .success-card {
+            background: linear-gradient(135deg, var(--dtl-success) 0%, rgba(16, 185, 129, 0.8) 100%);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            color: white;
+            margin-bottom: 32px;
+        }
+
+        .success-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .success-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .success-subtitle {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+
+        .confirmation-details {
+            background: white;
+            border: 2px solid var(--dtl-success);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .confirmation-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--dtl-border);
+        }
+
+        .confirmation-item:last-child {
+            border-bottom: none;
+        }
+
+        .confirmation-label {
+            font-size: 14px;
+            color: var(--dtl-gray);
+            font-weight: 500;
+        }
+
+        .confirmation-value {
+            font-size: 14px;
+            color: var(--dtl-navy);
+            font-weight: 600;
+        }
+
+        .next-steps {
+            background: var(--dtl-light-gray);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+
+        .next-steps h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--dtl-navy);
+            margin-bottom: 16px;
+        }
+
+        .steps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--dtl-warning);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .step-text {
+            color: var(--dtl-navy);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary {
+            background: var(--dtl-light-gray);
+            color: var(--dtl-navy);
+        }
+
+        .btn-secondary:hover {
+            background: #E5E7EB;
+        }
+
+        .btn-primary {
+            background: var(--dtl-warning);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #D97706;
+        }
+
+        /* Journey Overlay */
+        .journey-overlay {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: var(--dtl-shadow-lg);
+            z-index: 100;
+        }
+
+        .journey-step {
+            font-size: 12px;
+            color: var(--dtl-gray);
+            margin-bottom: 8px;
+        }
+
+        .journey-progress {
+            display: flex;
+            gap: 6px;
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 4px;
+            background: #E5E7EB;
+            transition: all 0.2s ease;
+        }
+
+        .progress-dot.completed {
+            background: var(--dtl-success);
+        }
+
+        .progress-dot.current {
+            background: var(--dtl-warning);
+            width: 24px;
+        }
+
+        /* Story Navigation Bar */
+        .story-nav {
+            position: fixed;
+            bottom: 0;
+            left: 80px;
+            right: 0;
+            height: 80px;
+            background: white;
+            border-top: 1px solid var(--dtl-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            z-index: 40;
+            padding: 0 24px;
+        }
+
+        .story-nav-group {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .story-nav-label {
+            font-size: 12px;
+            color: var(--dtl-gray);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .story-nav-dots {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 6px;
+            background: #E5E7EB;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .nav-dot:hover {
+            background: #D1D5DB;
+        }
+
+        .nav-dot.active {
+            background: var(--dtl-warning);
+            width: 32px;
+        }
+
+        .nav-dot.completed {
+            background: var(--dtl-success);
+        }
+
+        .nav-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dtl-navy);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            margin-bottom: 8px;
+        }
+
+        .nav-dot:hover .nav-tooltip {
+            opacity: 1;
+        }
+
+        .info-banner {
+            background: rgba(16, 185, 129, 0.05);
+            border-left: 3px solid var(--dtl-success);
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .info-banner-title {
+            font-weight: 600;
+            color: var(--dtl-navy);
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .info-banner-text {
+            font-size: 14px;
+            color: var(--dtl-gray);
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-item active">🏠</div>
+            <div class="sidebar-item">📊</div>
+            <div class="sidebar-item">👥</div>
+            <div class="sidebar-item">⚙️</div>
+            <div class="sidebar-item">❓</div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <div class="search-box">
+                        <span>🔍</span>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="header-btn">🔔</button>
+                    <button class="header-btn">👤</button>
+                </div>
+            </div>
+
+            <!-- Container -->
+            <div class="container">
+                <!-- Sub-sidebar -->
+                <div id="journey-overlay" style="position: fixed; top: 52px; left: 306px; right: 0; z-index: 9998; background: linear-gradient(135deg, #1B2A4A 0%, #2d3f66 100%); color: white; padding: 12px 24px; display: flex; align-items: center; justify-content: center; gap: 20px; font-family: 'Open Sans', sans-serif; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border-bottom: 2px solid #5BC0F0;">
+  <a href="page-2.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9664;</a>
+  <div style="text-align: center; flex: 1; max-width: 600px;">
+    <span style="color: #5BC0F0; font-weight: 600;">Step 3 of 3</span>
+    <span style="margin: 0 8px; color: rgba(255,255,255,0.4);">&mdash;</span>
+    <span style="color: rgba(255,255,255,0.9);">Specialist accepts TLE terms and receives confirmation: 'You're now in TLE suggestions'</span>
+  </div>
+  <a href="page-3.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center; visibility: hidden;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9654;</a>
+</div>
+<div class="sub-sidebar">
+                    <div class="sub-sidebar-item">Account Overview</div>
+                    <div class="sub-sidebar-item active">TLE & Expertise</div>
+                    <div class="sub-sidebar-item">Availability</div>
+                    <div class="sub-sidebar-item">Notifications</div>
+                </div>
+
+                <!-- Content Area -->
+                <div class="content-wrapper">
+                    <div class="content-header">
+                        <h2>TLE & Expertise</h2>
+                    </div>
+
+                    <div class="content-body">
+                        <div class="story-section">
+                            <div class="success-card">
+                                <span class="success-icon">✅</span>
+                                <div class="success-title">You're now in TLE</div>
+                                <div class="success-subtitle">Welcome to the Telehealth Specialists Network</div>
+                            </div>
+
+                            <div class="info-banner">
+                                <div class="info-banner-title">Activation confirmed</div>
+                                <div class="info-banner-text">Your TLE profile is now active. GPs can start referring cases to you based on your specialty and availability settings.</div>
+                            </div>
+
+                            <div class="confirmation-details">
+                                <div class="confirmation-item">
+                                    <span class="confirmation-label">Primary Specialty</span>
+                                    <span class="confirmation-value">Neurology</span>
+                                </div>
+                                <div class="confirmation-item">
+                                    <span class="confirmation-label">Status</span>
+                                    <span class="confirmation-value" style="color: var(--dtl-success);">Active</span>
+                                </div>
+                                <div class="confirmation-item">
+                                    <span class="confirmation-label">Availability</span>
+                                    <span class="confirmation-value">Available for consultation</span>
+                                </div>
+                                <div class="confirmation-item">
+                                    <span class="confirmation-label">Joined Date</span>
+                                    <span class="confirmation-value">March 24, 2026</span>
+                                </div>
+                            </div>
+
+                            <div class="next-steps">
+                                <h3>What's next?</h3>
+                                <div class="steps-list">
+                                    <div class="step-item">
+                                        <div class="step-number">1</div>
+                                        <div class="step-text">Check your email for an onboarding guide</div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number">2</div>
+                                        <div class="step-text">Optimize your availability and response times</div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number">3</div>
+                                        <div class="step-text">Start receiving TLE cases from GPs</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary" onclick="goToDashboard()">Back to Dashboard</button>
+                                <button class="btn btn-primary" onclick="continueToProfile()">Optimize Profile</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Journey Overlay -->
+    <div class="journey-overlay">
+        <div class="journey-step">Story Progress</div>
+        <div class="journey-progress">
+            <div class="progress-dot completed"></div>
+            <div class="progress-dot completed"></div>
+            <div class="progress-dot current"></div>
+        </div>
+    </div>
+
+    <!-- Story Navigation Bar -->
+    <div class="story-nav">
+        <div class="story-nav-group">
+            <div class="story-nav-label">O6 - Specialists Want to Join TLE</div>
+            <div class="story-nav-dots">
+                <div class="nav-dot completed" onclick="navigate('o6-us1/page-1.html')">
+                    <div class="nav-tooltip">US1 - Page 1</div>
+                </div>
+                <div class="nav-dot completed" onclick="navigate('o6-us1/page-2.html')">
+                    <div class="nav-tooltip">US1 - Page 2</div>
+                </div>
+                <div class="nav-dot active" onclick="navigate('o6-us1/page-3.html')">
+                    <div class="nav-tooltip">US1 - Page 3</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goToDashboard() {
+            window.location.href = '../page-1.html';
+        }
+
+        function continueToProfile() {
+            window.location.href = '../../o6-us2/page-1.html';
+        }
+
+        function navigate(url) {
+            window.location.href = '../../' + url;
+        }
+    </script>
+<!-- FLOATING NAV BAR -->
+<div id="story-nav-bar" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1B2A4A; border-radius: 24px; padding: 10px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; gap: 12px; align-items: center; z-index: 9999; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 500;">
+  <div style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.6);">
+    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #F59E0B;"></span>
+    O6
+  </div>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../index.html" style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">&larr; Home</a>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../o6-us1/page-1.html" title="As a French Specialist, I want to proactively opt-in to appear in TLE suggestion lists for my specialty, so that I can receive more expert consultation requests and grow my TLE practice without relying on Doctolib to manually enable me." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: #5BC0F0; background: rgba(5,150,222,0.3); font-weight: 600;">1</a>
+  <a href="../o6-us2/page-1.html" title="As a Specialist, I want to declare my expected availability (hours, days, response time SLA) in my TLE profile, so that GPs know when to expect a response and I can manage demand to match my capacity." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">2</a>
+  <a href="../o6-us4/page-1.html" title="As a Specialist not yet aware of TLE, I want to discover the TLE program through in-app notifications, emails, or education content, so that I can evaluate whether TLE aligns with my practice goals and learn about the earning opportunity." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">4</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Expert Pool - Doctolib GP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 76px;
+            background: #1a1a1a;
+            border-right: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            gap: 20px;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .sidebar-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #666;
+            font-size: 24px;
+        }
+
+        .sidebar-icon:hover {
+            background: #333;
+            color: #999;
+        }
+
+        .sidebar-icon.active {
+            background: #0066cc;
+            color: white;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 76px 230px 1fr;
+            grid-template-rows: 60px 1fr 60px;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 20px;
+            position: relative;
+            z-index: 99;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 18px;
+            color: #1a1a1a;
+            margin-left: 10px;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            height: 36px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 0 12px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            margin-left: auto;
+        }
+
+        .action-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            background: #f0f0f0;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: #e0e0e0;
+        }
+
+        /* Sub-sidebar */
+        .sub-sidebar {
+            grid-row: 2;
+            grid-column: 2;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .sub-sidebar-item {
+            padding: 12px 16px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+        }
+
+        .sub-sidebar-item:hover {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .sub-sidebar-item.active {
+            background: #f0f7ff;
+            color: #0066cc;
+            border-left-color: #0066cc;
+            font-weight: 600;
+        }
+
+        /* Content Area */
+        .content {
+            grid-row: 2;
+            grid-column: 3;
+            background: #f9fafb;
+            overflow-y: auto;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content-inner {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 60px 40px;
+            max-width: 500px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            color: #333;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #0066cc;
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #999;
+        }
+
+        .autocomplete-list {
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            max-height: 200px;
+            overflow-y: auto;
+            background: white;
+        }
+
+        .autocomplete-item {
+            padding: 12px;
+            color: #333;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.2s;
+        }
+
+        .autocomplete-item:hover {
+            background: #f9fafb;
+        }
+
+        .autocomplete-item.active {
+            background: #f0f7ff;
+            color: #0066cc;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: #0052a3;
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Journey Overlay */
+        .journey-overlay {
+            position: fixed;
+            bottom: 80px;
+            right: 30px;
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 50;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .journey-progress {
+            width: 100px;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .journey-progress-bar {
+            height: 100%;
+            background: #0066cc;
+            width: 33.33%;
+        }
+
+        /* Navigation Bar (Bottom) */
+        .nav-bar {
+            grid-column: 1 / -1;
+            grid-row: 3;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 0;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 0 20px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .nav-tab:hover {
+            color: #333;
+            background: #f9fafb;
+        }
+
+        .nav-tab.active {
+            color: #0066cc;
+            border-bottom-color: #0066cc;
+        }
+
+        .nav-tab-label {
+            display: inline-block;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nav-tab-tooltip {
+            position: absolute;
+            bottom: 65px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 101;
+        }
+
+        .nav-tab:hover .nav-tab-tooltip {
+            opacity: 1;
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 76px 1fr;
+            }
+
+            .sub-sidebar {
+                display: none;
+            }
+
+            .content {
+                grid-column: 2;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-icon">🏥</div>
+            <div class="sidebar-icon active">🔍</div>
+            <div class="sidebar-icon">📋</div>
+            <div class="sidebar-icon">📞</div>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">Doctolib GP Portal</div>
+            <input type="text" class="search-bar" placeholder="Search specialists, regions...">
+            <div class="header-actions">
+                <button class="action-btn">🔔</button>
+                <button class="action-btn">👤</button>
+            </div>
+        </div>
+
+        <!-- Sub-sidebar -->
+        <div id="journey-overlay" style="position: fixed; top: 52px; left: 306px; right: 0; z-index: 9998; background: linear-gradient(135deg, #1B2A4A 0%, #2d3f66 100%); color: white; padding: 12px 24px; display: flex; align-items: center; justify-content: center; gap: 20px; font-family: 'Open Sans', sans-serif; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border-bottom: 2px solid #5BC0F0;">
+  <a href="page-1.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center; visibility: hidden;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9664;</a>
+  <div style="text-align: center; flex: 1; max-width: 600px;">
+    <span style="color: #5BC0F0; font-weight: 600;">Step 1 of 3</span>
+    <span style="margin: 0 8px; color: rgba(255,255,255,0.4);">&mdash;</span>
+    <span style="color: rgba(255,255,255,0.9);">GP enters specialty in expert search</span>
+  </div>
+  <a href="page-2.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9654;</a>
+</div>
+<div class="sub-sidebar">
+            <div class="sub-sidebar-item active">Find Experts</div>
+            <div class="sub-sidebar-item">Referral History</div>
+            <div class="sub-sidebar-item">My Network</div>
+            <div class="sub-sidebar-item">Reports</div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="content-inner">
+                <div class="page-title">Find Expert Specialists</div>
+                <div class="page-subtitle">
+                    Search for specialists available for tele-expertise consultations in your area.
+                </div>
+
+                <form onsubmit="searchExperts(event)">
+                    <div class="form-group">
+                        <label class="form-label">Specialty</label>
+                        <input 
+                            type="text" 
+                            class="form-input" 
+                            id="specialtyInput" 
+                            placeholder="e.g., Cardiology, Dermatology, Neurology..." 
+                            autocomplete="off"
+                            onkeyup="showSpecialties()"
+                        >
+                        <div class="autocomplete-list" id="specialtyList" style="display: none;">
+                            <div class="autocomplete-item" onclick="selectSpecialty('Cardiology')">Cardiology</div>
+                            <div class="autocomplete-item" onclick="selectSpecialty('Dermatology')">Dermatology</div>
+                            <div class="autocomplete-item" onclick="selectSpecialty('Neurology')">Neurology</div>
+                            <div class="autocomplete-item" onclick="selectSpecialty('Ophthalmology')">Ophthalmology</div>
+                            <div class="autocomplete-item" onclick="selectSpecialty('Psychiatry')">Psychiatry</div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Search Experts</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Journey Overlay -->
+        <div class="journey-overlay">
+            <span>Step 1 of 3</span>
+            <div class="journey-progress">
+                <div class="journey-progress-bar"></div>
+            </div>
+        </div>
+
+        <!-- Navigation Bar -->
+        <div class="nav-bar">
+            <div class="nav-tab">
+                <span class="nav-tab-label">US1: Onboarding</span>
+                <div class="nav-tab-tooltip">Specialist Onboarding Journey</div>
+            </div>
+            <div class="nav-tab">
+                <span class="nav-tab-label">US2: Preferences</span>
+                <div class="nav-tab-tooltip">Specialist Preference Settings</div>
+            </div>
+            <div class="nav-tab">
+                <span class="nav-tab-label">US3: Admin Tool</span>
+                <div class="nav-tab-tooltip">Admin Bulk Update Tool</div>
+            </div>
+            <div class="nav-tab active">
+                <span class="nav-tab-label">US4: Expert Pool</span>
+                <div class="nav-tab-tooltip">GP Expert Pool Report</div>
+            </div>
+            <div class="nav-tab">
+                <span class="nav-tab-label">US5: Email Campaign</span>
+                <div class="nav-tab-tooltip">Product Team Email Campaign</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSpecialties() {
+            const input = document.getElementById('specialtyInput').value;
+            const list = document.getElementById('specialtyList');
+            
+            if (input.length > 0) {
+                list.style.display = 'block';
+            } else {
+                list.style.display = 'none';
+            }
+        }
+
+        function selectSpecialty(specialty) {
+            document.getElementById('specialtyInput').value = specialty;
+            document.getElementById('specialtyList').style.display = 'none';
+        }
+
+        function searchExperts(e) {
+            e.preventDefault();
+            const specialty = document.getElementById('specialtyInput').value;
+            if (specialty) {
+                window.location.href = '#search-results';
+            }
+        }
+    </script>
+<!-- FLOATING NAV BAR -->
+<div id="story-nav-bar" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1B2A4A; border-radius: 24px; padding: 10px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; gap: 12px; align-items: center; z-index: 9999; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 500;">
+  <div style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.6);">
+    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #0596DE;"></span>
+    O10
+  </div>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../index.html" style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">&larr; Home</a>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../o10-us1/page-1.html" title="As a French Specialist (Expert/Responder), I want to be explicitly asked during my initial account setup whether I accept tele-expertise requests via Doctolib Connect, so that I understand this service is available and deliberately enable or disable it, preventing silent defaults that leave me invisible to GPs." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">1</a>
+  <a href="../o10-us2/page-1.html" title="As a French Specialist (Expert/Responder), I want to see a prominent &#x27;Tele-Expertise&#x27; toggle in my account settings with a status badge showing &#x27;You are visible to GPs&#x27; or &#x27;You are not visible to GPs&#x27;, so that I can verify my tele-expertise status and change it at any time without confusion." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">2</a>
+  <a href="../o10-us3/page-1.html" title="As a Doctolib Admin / Support Team, I want to use a bulk settings update tool to enable allow_tele_expertise_request = true for all specialists affected by the July 2025 bug, so that hidden experts are immediately visible to GPs without requiring individual specialist action." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">3</a>
+  <a href="../o10-us4/page-1.html" title="As a French GP (Requester), I want to see a brief &#x27;Expert Pool Report&#x27; when I search for a specialty, showing how many specialists are available and hidden (if any) due to preference settings, so that if my search returns no results, I know whether it&#x27;s because no experts exist or they&#x27;re all hidden by preference." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: #5BC0F0; background: rgba(5,150,222,0.3); font-weight: 600;">4</a>
+  <a href="../o10-us5/page-1.html" title="As a Doctolib Support / Product Team, I want to send a reactivation email to all specialists registered since July 2025 with allow_tele_expertise_request = false, confirming their preference and offering to enable TLE, so that specialists who never deliberately opted out are given the opportunity to be visible to GPs." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">5</a>
+</div>
+<!-- Custom tooltip for nav bar story tabs -->
+<script>
+(function(){
+  var tip = document.createElement('div');
+  tip.id = 'nav-tooltip';
+  tip.style.cssText = 'position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#1B2A4A;color:rgba(255,255,255,0.95);padding:10px 16px;border-radius:8px;font-size:13px;max-width:420px;text-align:center;line-height:1.4;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:10000;pointer-events:none;opacity:0;transition:opacity 0.15s;font-family:Open Sans,sans-serif;border:1px solid rgba(91,192,240,0.3);';
+  document.body.appendChild(tip);
+  var bar = document.getElementById('story-nav-bar');
+  if(!bar) return;
+  bar.querySelectorAll('a[title]').forEach(function(a){
+    a.addEventListener('mouseenter', function(){
+      var t = this.getAttribute('title');
+      if(t && t.length > 5){ tip.textContent = t; tip.style.opacity = '1'; }
+    });
+    a.addEventListener('mouseleave', function(){ tip.style.opacity = '0'; });
+  });
+})();
+</script>
+</body>
+</html>

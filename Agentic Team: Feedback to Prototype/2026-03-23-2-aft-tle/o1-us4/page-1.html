@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctolib TLE - O1-US4 Page 1</title>
+    <style>
+        :root {
+            --dtl-navy: #1a2849;
+            --dtl-blue: #0066cc;
+            --dtl-blue-light: #e6f0ff;
+            --dtl-blue-lighter: #f0f5ff;
+            --dtl-gray-dark: #4a5568;
+            --dtl-gray-medium: #718096;
+            --dtl-gray-light: #cbd5e0;
+            --dtl-gray-lighter: #e2e8f0;
+            --dtl-gray-lightest: #f7fafc;
+            --dtl-red: #d32f2f;
+            --dtl-green: #2e7d32;
+            --dtl-white: #ffffff;
+            --dtl-border-radius: 4px;
+            --dtl-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            --dtl-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--dtl-gray-lightest);
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 76px;
+            background-color: var(--dtl-navy);
+            border-right: 1px solid var(--dtl-gray-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 0;
+            gap: 16px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            width: 44px;
+            height: 44px;
+            background-color: var(--dtl-white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--dtl-blue);
+            font-size: 20px;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .sidebar-nav-item {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--dtl-gray-light);
+        }
+
+        .sidebar-nav-item.active {
+            background-color: var(--dtl-white);
+            color: var(--dtl-blue);
+        }
+
+        /* Main wrapper */
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            height: 52px;
+            background-color: var(--dtl-white);
+            border-bottom: 1px solid var(--dtl-gray-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            flex-shrink: 0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 300px;
+            height: 36px;
+            border: 1px solid var(--dtl-gray-light);
+            border-radius: var(--dtl-border-radius);
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--dtl-white);
+            font-size: 14px;
+            color: var(--dtl-gray-medium);
+        }
+
+        .search-bar input {
+            border: none;
+            background: none;
+            flex: 1;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .insurance-chip {
+            height: 32px;
+            padding: 0 12px;
+            background-color: var(--dtl-blue-lighter);
+            border: 1px solid var(--dtl-blue-light);
+            border-radius: var(--dtl-border-radius);
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            color: var(--dtl-navy);
+            font-weight: 500;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--dtl-gray-medium);
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            background-color: var(--dtl-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dtl-white);
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* Content area */
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .sub-sidebar {
+            width: 230px;
+            background-color: var(--dtl-white);
+            border-right: 1px solid var(--dtl-gray-light);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            overflow-y: auto;
+        }
+
+        .sub-sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--dtl-gray-light);
+            display: flex;
+            gap: 8px;
+        }
+
+        .sub-sidebar-tab {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--dtl-gray-light);
+            border-radius: var(--dtl-border-radius);
+            font-size: 13px;
+            color: var(--dtl-gray-medium);
+            background-color: var(--dtl-gray-lightest);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .sub-sidebar-tab.active {
+            background-color: var(--dtl-blue-light);
+            color: var(--dtl-blue);
+            border-color: var(--dtl-blue-light);
+            font-weight: 500;
+        }
+
+        /* Scroll area */
+        .scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background-color: var(--dtl-gray-lightest);
+        }
+
+        .scroll-content {
+            padding: 24px;
+        }
+
+        /* Journey overlay */
+        .journey-overlay {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--dtl-white);
+            border: 1px solid var(--dtl-gray-light);
+            border-radius: 8px;
+            padding: 12px 16px;
+            box-shadow: var(--dtl-shadow-md);
+            z-index: 1000;
+            min-width: 200px;
+        }
+
+        .journey-header {
+            font-size: 12px;
+            color: var(--dtl-gray-medium);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .journey-step {
+            font-size: 14px;
+            color: var(--dtl-gray-dark);
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .journey-nav {
+            display: flex;
+            gap: 8px;
+        }
+
+        .journey-btn {
+            flex: 1;
+            padding: 6px 12px;
+            border: 1px solid var(--dtl-gray-light);
+            background-color: var(--dtl-gray-lightest);
+            border-radius: var(--dtl-border-radius);
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--dtl-gray-dark);
+            font-weight: 500;
+        }
+
+        .journey-btn:hover:not(:disabled) {
+            background-color: var(--dtl-gray-light);
+        }
+
+        .journey-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .journey-btn.primary {
+            background-color: var(--dtl-blue);
+            color: var(--dtl-white);
+            border-color: var(--dtl-blue);
+        }
+
+        .journey-btn.primary:hover:not(:disabled) {
+            background-color: #0052a3;
+        }
+
+        /* Story nav bar */
+        .story-nav-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--dtl-gray-light);
+        }
+
+        .story-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--dtl-gray-dark);
+        }
+
+        .story-badge .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--dtl-red);
+        }
+
+        .story-nav-item {
+            padding: 8px 16px;
+            background-color: var(--dtl-white);
+            border: 1px solid var(--dtl-gray-light);
+            border-radius: var(--dtl-border-radius);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--dtl-gray-medium);
+            cursor: pointer;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .story-nav-item:hover {
+            background-color: var(--dtl-gray-lightest);
+        }
+
+        .story-nav-item.active {
+            background-color: var(--dtl-blue-light);
+            color: var(--dtl-blue);
+            border-color: var(--dtl-blue);
+        }
+
+        .tooltip {
+            visibility: hidden;
+            width: 140px;
+            background-color: var(--dtl-navy);
+            color: var(--dtl-white);
+            text-align: center;
+            border-radius: 4px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -70px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+            font-weight: 400;
+            white-space: normal;
+        }
+
+        .story-nav-item:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Content */
+        .hero-banner {
+            background-color: var(--dtl-white);
+            border: 1px solid var(--dtl-gray-light);
+            border-radius: var(--dtl-border-radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--dtl-shadow);
+        }
+
+        .hero-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dtl-navy);
+            margin-bottom: 8px;
+        }
+
+        .hero-subtitle {
+            font-size: 14px;
+            color: var(--dtl-gray-medium);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .patient-info {
+            background-color: var(--dtl-blue-lighter);
+            border: 1px solid var(--dtl-blue-light);
+            border-radius: var(--dtl-border-radius);
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+
+        .patient-info-row {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--dtl-gray-dark);
+            margin-bottom: 8px;
+        }
+
+        .patient-info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .patient-info-label {
+            font-weight: 600;
+            color: var(--dtl-navy);
+        }
+
+        .section-header {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dtl-navy);
+            margin-bottom: 16px;
+            margin-top: 24px;
+        }
+
+        .search-prompt {
+            background-color: var(--dtl-white);
+            border: 1px solid var(--dtl-gray-light);
+            border-radius: var(--dtl-border-radius);
+            padding: 16px;
+            text-align: center;
+        }
+
+        .search-prompt-text {
+            font-size: 14px;
+            color: var(--dtl-gray-dark);
+            margin-bottom: 12px;
+        }
+
+        .search-box-prompt {
+            height: 44px;
+            border: 2px solid var(--dtl-blue);
+            border-radius: var(--dtl-border-radius);
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--dtl-white);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .search-box-prompt:hover {
+            border-color: #0052a3;
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+        }
+
+        .search-box-prompt input {
+            border: none;
+            background: none;
+            flex: 1;
+            font-size: 14px;
+            outline: none;
+            color: var(--dtl-gray-dark);
+        }
+
+        .search-box-prompt input::placeholder {
+            color: var(--dtl-gray-light);
+        }
+
+        .cta-button {
+            background-color: var(--dtl-blue);
+            color: var(--dtl-white);
+            border: none;
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: var(--dtl-border-radius);
+            cursor: pointer;
+            margin-top: 16px;
+            transition: background-color 0.2s;
+        }
+
+        .cta-button:hover {
+            background-color: #0052a3;
+        }
+
+        .cta-button:disabled {
+            background-color: var(--dtl-gray-light);
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">D</div>
+            <div class="sidebar-nav">
+                <div class="sidebar-nav-item active">💬</div>
+                <div class="sidebar-nav-item">📋</div>
+                <div class="sidebar-nav-item">⚙️</div>
+            </div>
+        </div>
+
+        <!-- Main wrapper -->
+        <div class="main-wrapper">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <div class="search-bar">
+                        <span>🔍</span>
+                        <input type="text" placeholder="Search patients, consultations...">
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="insurance-chip">Sécurité Sociale</div>
+                    <div class="header-icons">
+                        <button class="icon-btn">📹</button>
+                        <button class="icon-btn">🔔</button>
+                        <button class="icon-btn">⚙️</button>
+                    </div>
+                    <div class="avatar">JD</div>
+                </div>
+            </div>
+
+            <!-- Content area -->
+            <div class="content-wrapper">
+                <!-- Sub sidebar -->
+                <div id="journey-overlay" style="position: fixed; top: 52px; left: 306px; right: 0; z-index: 9998; background: linear-gradient(135deg, #1B2A4A 0%, #2d3f66 100%); color: white; padding: 12px 24px; display: flex; align-items: center; justify-content: center; gap: 20px; font-family: 'Open Sans', sans-serif; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border-bottom: 2px solid #5BC0F0;">
+  <a href="page-1.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center; visibility: hidden;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9664;</a>
+  <div style="text-align: center; flex: 1; max-width: 600px;">
+    <span style="color: #5BC0F0; font-weight: 600;">Step 1 of 3</span>
+    <span style="margin: 0 8px; color: rgba(255,255,255,0.4);">&mdash;</span>
+    <span style="color: rgba(255,255,255,0.9);">GP opens TLE creation form and clicks search box</span>
+  </div>
+  <a href="page-2.html" style="color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; background: rgba(255,255,255,0.1); font-size: 16px; display: flex; align-items: center;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&#9654;</a>
+</div>
+<div class="sub-sidebar">
+                    <div class="sub-sidebar-header">
+                        <button class="sub-sidebar-tab active">Discussions</button>
+                        <button class="sub-sidebar-tab">Tele-expertise <span style="color: var(--dtl-red); font-weight: 700;">(New)</span></button>
+                    </div>
+                </div>
+
+                <!-- Scroll area -->
+                <div class="scroll-area">
+                    <div class="scroll-content">
+                        <!-- Story navigation bar -->
+                        <div class="story-nav-bar">
+                            <div class="story-badge">
+                                <span class="dot"></span>
+                                <span>O1</span>
+                            </div>
+                            <a href="#" class="story-nav-item" onclick="navigateHome(); return false;">Home</a>
+                            <a href="../o1-us1/page-1.html" class="story-nav-item">
+                                1
+                                <div class="tooltip">Expert Suggestions Limited</div>
+                            </a>
+                            <a href="../o1-us2/page-1.html" class="story-nav-item">
+                                2
+                                <div class="tooltip">Expert Search (Limited Suggestions)</div>
+                            </a>
+                            <a href="../o1-us4/page-1.html" class="story-nav-item active">
+                                4
+                                <div class="tooltip">Auto-complete Specialty Search</div>
+                            </a>
+                            <a href="../o1-us5/page-1.html" class="story-nav-item">
+                                5
+                                <div class="tooltip">Directory Modal with Categories</div>
+                            </a>
+                        </div>
+
+                        <!-- Page content -->
+                        <div class="hero-banner">
+                            <div class="hero-title">Auto-complete Specialty Search</div>
+                            <div class="hero-subtitle">Find niche specialists in seconds by typing specialty names with instant auto-complete</div>
+                            
+                            <div class="patient-info">
+                                <div class="patient-info-row">
+                                    <span class="patient-info-label">Patient:</span>
+                                    <span>Marie Leclerc, 58 years old</span>
+                                </div>
+                                <div class="patient-info-row">
+                                    <span class="patient-info-label">Region:</span>
+                                    <span>Île-de-France</span>
+                                </div>
+                                <div class="patient-info-row">
+                                    <span class="patient-info-label">Chief complaint:</span>
+                                    <span>Progressive tremor, needs neurology evaluation</span>
+                                </div>
+                            </div>
+
+                            <div class="section-header">Find a specialist</div>
+                            <div class="search-prompt">
+                                <div class="search-prompt-text">Click the search box below to find a specialist. Start typing to see auto-complete suggestions with specialist counts.</div>
+                                <div class="search-box-prompt" onclick="navigateToPage2()">
+                                    <span>🔍</span>
+                                    <input type="text" placeholder="Search specialties (e.g., Neurology, Cardiology...)" readonly>
+                                </div>
+                                <button class="cta-button" onclick="navigateToPage2()">Continue</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Journey overlay -->
+    <div class="journey-overlay">
+        <div class="journey-header">O1-US4 JOURNEY</div>
+        <div class="journey-step">Step 1 of 3: Open TLE form</div>
+        <div class="journey-nav">
+            <button class="journey-btn" disabled>← Previous</button>
+            <button class="journey-btn primary" onclick="navigateToPage2()">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        function navigateToPage2() {
+            window.location.href = 'page-2.html';
+        }
+
+        function navigateHome() {
+            window.location.href = 'page-1.html';
+        }
+    </script>
+<!-- FLOATING NAV BAR -->
+<div id="story-nav-bar" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1B2A4A; border-radius: 24px; padding: 10px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; gap: 12px; align-items: center; z-index: 9999; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 500;">
+  <div style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.6);">
+    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #EF4444;"></span>
+    O1
+  </div>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../index.html" style="color: rgba(255,255,255,0.6); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">&larr; Home</a>
+  <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+  <a href="../o1-us1/page-1.html" title="As a French GP (Requester), I want to see suggestions for the top 10 specialties by TLE volume nationally, so that I find relevant specialists 60% faster without manually searching." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">1</a>
+  <a href="../o1-us2/page-1.html" title="As a French GP (Requester), I want to see a &#x27;Search for other specialties&#x27; help tooltip when I hover over the suggestion panel, so that I discover the search function and find niche specialists without abandonment." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">2</a>
+  <a href="../o1-us4/page-1.html" title="As a French GP (Requester), I want to type a specialty name and see instant auto-complete with specialist counts, so that I find niche specialists in &lt;10 seconds." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: #5BC0F0; background: rgba(5,150,222,0.3); font-weight: 600;">4</a>
+  <a href="../o1-us5/page-1.html" title="As a French GP (Requester), I want to click &#x27;View all specialties&#x27; and browse a lazy-loaded directory grouped by medical category, so that I discover specialists serendipitously." style="padding: 6px 12px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,0.6);" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">5</a>
+</div>
+<!-- Custom tooltip for nav bar story tabs -->
+<script>
+(function(){
+  var tip = document.createElement('div');
+  tip.id = 'nav-tooltip';
+  tip.style.cssText = 'position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#1B2A4A;color:rgba(255,255,255,0.95);padding:10px 16px;border-radius:8px;font-size:13px;max-width:420px;text-align:center;line-height:1.4;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:10000;pointer-events:none;opacity:0;transition:opacity 0.15s;font-family:Open Sans,sans-serif;border:1px solid rgba(91,192,240,0.3);';
+  document.body.appendChild(tip);
+  var bar = document.getElementById('story-nav-bar');
+  if(!bar) return;
+  bar.querySelectorAll('a[title]').forEach(function(a){
+    a.addEventListener('mouseenter', function(){
+      var t = this.getAttribute('title');
+      if(t && t.length > 5){ tip.textContent = t; tip.style.opacity = '1'; }
+    });
+    a.addEventListener('mouseleave', function(){ tip.style.opacity = '0'; });
+  });
+})();
+</script>
+</body>
+</html>
